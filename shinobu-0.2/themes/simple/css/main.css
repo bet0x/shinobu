@@ -1,0 +1,187 @@
+/* ---
+
+	Copyright (C) 2008 Frank Smit
+	http://code.google.com/p/shinobu/
+
+	This file is part of Shinobu.
+
+	Shinobu is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	Shinobu is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Shinobu. If not, see <http://www.gnu.org/licenses/>.
+
+--- */
+
+/* --- Misc
+---------------------------------------------------------*/
+
+#wrapper           { margin: 0 auto;width: 960px;text-align: left }
+html body .clear   { background: none;border: 0;clear: both;display: block;float: none;font-size: 0;list-style: none;
+                     margin: 0;padding: 0;overflow: hidden;visibility: hidden;width: 0;height: 0 }
+
+/* 2 Column definition list */
+* html .col-2 dd        { height: 1% }
+.col-2 dt               { float: left;background: #fff;width: 11em;text-align: right }
+.col-2 dt, .col-2 dd	{ padding: 3px }
+.col-2 dd               { margin-left: 11.3em;margin-bottom: 5px;padding-left: 1em }
+
+/* Message blocks */
+.warning, .success, .notice, .info { margin: 1.5em 0;padding: 5px;border-width: 1px;border-style: solid;font-weight: bold;text-align: center }
+
+.success    { background: #B6FF97;border-color: #6BFF2D }
+.warning    { background: #FFB9B9;border-color: #FF6A6A }
+.notice     { background: #FFFC77;border-color: #FFCF2D }
+.info       { background: #f9f9f9;border-color: #eee }
+
+/* Text style classes */
+.left    { text-align: left }
+.center  { text-align: center }
+.right   { text-align: right }
+
+/* --- Header
+---------------------------------------------------------*/
+
+/* Logo */
+#header      { background: url(../img/logo.png) no-repeat 1em 50%;padding: 1.5em 0 1.5em 80px; }
+#header h1,
+#header p    { margin: 0 }
+
+/* --- Menu
+---------------------------------------------------------*/
+
+#main-menu          { margin: 0 0 0.5em;color: #eee;font-size: 1.3em }
+#main-menu ul       { margin: 0;padding: 0 15px }
+#main-menu li       { display: inline;margin: 0 5px 0;padding: 0;line-height: 42px }
+#main-menu a        { color: #fff;text-decoration: none }
+#main-menu a:hover  { color: #ffecef }
+
+/* Menu backgrounds */
+#main-menu .tl  { background: url(../img/bar-01-tc.png) no-repeat -6px 0 }
+#main-menu .tr  { background: url(../img/bar-01-tc.png) no-repeat 954px 0 }
+#main-menu .bl  { background: url(../img/bar-01-bc.png) no-repeat -6px 100% }
+#main-menu .br  { background: url(../img/bar-01-bc.png) no-repeat 954px 100% }
+#main-menu .xbg { background: url(../img/bar-01-xbg.png) repeat-x 0 50% }
+
+/* --- Sidebar
+---------------------------------------------------------*/
+
+#sidebar    { float: right;margin: 0 0 0.5em;padding: 0 0 0 1em;border-left: 1px dotted #bbb;width: 200px }
+#sidebar h2 { padding: 0 0 4px;border-bottom: 1px dotted #ccc;font-size: 1.5em }
+
+/* User block */
+#sidebar #user-block ul      { margin: 0;padding: 0;list-style: none }
+#sidebar #user-block a       { background: url(../img/plus.gif) no-repeat 6px 50%;padding-left: 15px }
+#sidebar #user-block a:hover { background: url(../img/arrow.gif) no-repeat 6px 50% }
+
+/* --- Body
+---------------------------------------------------------*/
+
+#body                 { width: 730px;margin: 0 0 0.5em }
+#body h2:first-child  { font-size: 2.6em }
+#body .page-toolbox   { margin-bottom: 0.8em;padding: 0.8em 0.5em 0;border-top: 1px dotted #aaa;text-align: right;font-size: 0.8em }
+
+#user-profile h3      { padding-bottom: 0.2em;border-bottom: 1px dotted #ccc }
+#user-profile form h3 { padding-bottom: 0;border-bottom: 0 }
+.no-users-found       { text-align: center }
+#userlist-search      { background: #f9f9f9;margin: 0 0 1.5em;padding: 1em;border: 1px solid #eee;overflow: auto }
+
+/* --- Footer
+---------------------------------------------------------*/
+
+#footer            { clear: both;padding: 10px 0;border-top: 1px dotted #bbb }
+#footer #poweredby { float: right }
+
+/* --- Tables
+---------------------------------------------------------*/
+
+/* Userlist */
+#userlist table { width: 100% }
+#userlist th    { text-align: left }
+
+#userlist .ul-username  { width: 28% }
+#userlist .ul-realname  { width: 20% }
+#userlist .ul-usergroup { width: 20% }
+#userlist .ul-regdate   { width: 32% }
+
+/* Darker table columns */
+#userlist td.ul-realname,
+#userlist td.ul-regdate { background-color: #F0F0F0 }
+
+/* Table bottom margin fix */
+table + p { margin-top: 0 }
+
+/* --- Forms
+---------------------------------------------------------*/
+
+/* Form elements */
+input, textarea, select { padding: 0.3em;border-width: 1px;border-style: solid;border-color: #7c7c7c #c3c3c3 #ddd;
+                          background: #fff url(../img/fieldbg.gif) repeat-x 0% 0%;color: #000 }
+textarea                { overflow: auto }
+
+select                  { padding: 0.3em 0.3em 0.2em }
+option                  { background-color: #fff }
+
+input.text, input[type=text],
+input[type=password]    { width: 15em }
+
+input.button, input[type=submit], input[type=reset],
+input[type=button]      { background: #222 url(../img/button-bg.png);padding: 5px 10px;color: #fff;cursor: pointer }
+
+label[for]              { cursor: pointer }
+
+imput.disabled          { background: #eee }
+
+/* Vertical form layout styling */
+.frm-vc                 { margin: 0;padding: 0;list-style: none }
+.frm-vc .frm-block      { clear: left;margin: 0 0 1em;overflow: auto }
+.frm-vc .frm-buttons    { padding: 1.1em 0 0;border-top: 1px dotted #ccc }
+
+.frm-vc .fld-label, .fld-input, .frm-vc .fld-text, .frm-vc
+.fld-error-message      { display: inline;float: left;margin: 0 10px 0 0 }
+.frm-vc .fld-label,
+.fld-error-message      { padding: 0.1em 0 0 }
+.fld-text               { padding: 0.2em 0 0 }
+
+.frm-vc .fld-label       { width: 17%;text-align: right }
+.frm-vc .fld-label label { font-weight: bold }
+
+.frm-vc .frm-hr         { clear: left;margin: 0 0 1em;border-top: 1px dotted #aaa;height: 0 }
+
+.frm-vc .frm-title      { margin-bottom: 1em;border-bottom: 1px dotted #aaa }
+.frm-vc .frm-title h3   { margin: 1em 0 0.3em 17%;padding: 0 0 0 10px }
+
+.fld-text select        { margin-top: -0.2em }
+
+/* Horizontal form layout */
+.frm-hc                 { margin: 0;padding: 0;list-style: none;overflow: auto }
+.hc-box                 { background: #f9f9f9;margin: 0 0 1.5em;padding: 1em;border: 1px solid #eee }
+.hc-inline-box          { display: inline-block }
+.frm-hc .frm-block      { float: left;margin: 0 0.5em 0 0;overflow: auto }
+.frm-hc .frm-buttons    { clear: left;margin: 1em 0 0 }
+
+.frm-hc .fld-label       { margin: 0 0 0.2em }
+.frm-hc .fld-label label { font-weight: bold }
+
+/* Error styling */
+.frm-vc .form-error input,
+.frm-hc .form-error input  { border-width: 1px;border-style: solid;border-color: #D72626 #D72626 #F44343 #ED3B3B }
+.frm-hc .fld-error-message { clear: left;margin: 1em 0 0 }
+
+/* --- Debug block
+---------------------------------------------------------*/
+
+#system-debug    { background: #111;margin: 0 auto 1em;border: 2px solid #000;width: 960px;color: #eee }
+#system-debug h2 { background: #000;margin: 0;padding: 0.5em;border-bottom: 2px ridge #222;color: #ccc;font-size: 1.1em;font-weight: bold }
+
+#system-debug .query-time,
+#system-debug .row         { font: 1em Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace }
+#system-debug .query-time  { float: left;clear: left;margin: 0 0.5em 0 0;color: #aaa }
+#system-debug .row         { padding: 0.4em 0.4em;border-bottom: 1px solid #222; }

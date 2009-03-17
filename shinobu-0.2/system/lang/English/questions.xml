@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<captcha>
+	<item>
+		<q>What color is the sky?</q>
+		<a>Blue</a>
+	</item>
+	<item>
+		<q>How do you spell "Hello"?</q>
+		<a>Hello</a>
+	</item>
+	<item>
+		<q>What color is grass? Green or purple?</q>
+		<a>Green</a>
+	</item>
+	<item>
+		<q>Type yes if you are a human.</q>
+		<a>Yes</a>
+	</item>
+	<item>
+		<q>What is the first letter of the alphabet?</q>
+		<a>A</a>
+	</item>
+	<item>
+		<q>What is the last letter of the alphabet?</q>
+		<a>Z</a>
+	</item>
+	<item>
+		<q>All humans should type "human". Robots can go away.</q>
+		<a>Human</a>
+	</item>
+	<item>
+		<q>What is 2 + 10?</q>
+		<a>12</a>
+	</item>
+	<item>
+		<q>Is the earth round or flat?</q>
+		<a>Round</a>
+	</item>
+	<item>
+		<q>What color is snow?</q>
+		<a>White</a>
+	</item>
+	<item>
+		<q>How do you spell? hint:"H-U-M-A-N"</q>
+		<a>Human</a>
+	</item>
+	<item>
+		<q>Are you a robot? yes or no?</q>
+		<a>No</a>
+	</item>
+	<item>
+		<q>What is 1 + 1?</q>
+		<a>2</a>
+	</item>
+	<item>
+		<q>On a standard keyboard what letter is to the left of "U"?</q>
+		<a>Y</a>
+	</item>
+	<item>
+		<q>What planet do you live on?</q>
+		<a>earth</a>
+	</item>
+</captcha>

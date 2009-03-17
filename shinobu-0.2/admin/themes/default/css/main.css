@@ -1,0 +1,223 @@
+/* ---
+
+	Copyright (C) 2008 Frank Smit
+	http://code.google.com/p/shinobu/
+
+	This file is part of Shinobu.
+
+	Shinobu is free software: you can redistribute it and/or modify
+	it under the terms of the GNU General Public License as published by
+	the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
+
+	Shinobu is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU General Public License for more details.
+
+	You should have received a copy of the GNU General Public License
+	along with Shinobu. If not, see <http://www.gnu.org/licenses/>.
+
+--- */
+
+/* --- Misc
+---------------------------------------------------------*/
+
+body     { padding: 0 0 2em }
+#wrapper { background: #fff;margin: 0 auto;width: 960px }
+
+#menu, #body, #footer { display: inline;float: left;margin-left: 10px;margin-right: 10px }
+#wrapper #menu        { width: 140px }
+#wrapper #body        { width: 780px }
+#wrapper #footer      { width: 940px }
+
+/* 2 Column definition list */
+* html .col-2 dd     { height: 1% }
+.col-2 dt            { float: left;background: #fff;width: 8em;text-align: right }
+.col-2 dt, .col-2 dd { padding: 3px }
+.col-2 dd            { margin-left: 8.3em;margin-bottom: 5px;padding-left: 1em }
+
+/* Message blocks */
+.warning, .success, .notice, .info { margin: 1.5em 0;padding: 5px;border-width: 1px;border-style: solid;
+                                     font-weight: bold;text-align: center }
+
+.success { background: #B6FF97;border-color: #6BFF2D }
+.warning { background: #FFB9B9;border-color: #FF6A6A }
+.notice  { background: #FFFC77;border-color: #FFCF2D }
+.info    { background: #f5f5f5;border-color: #ddd }
+
+/* Text style classes */
+.left   { text-align: left }
+.center { text-align: center }
+.right  { text-align: right }
+
+/* http://sonspring.com/journal/clearing-floats */
+html body div.clear,
+html body span.clear { background: none;border: 0;clear: both;display: block;float: none;font-size: 0;
+                       margin: 0;padding: 0;overflow: hidden;visibility: hidden;width: 0;height: 0 }
+
+/* --- Top bar
+---------------------------------------------------------*/
+
+#topbar     { background: #000;padding: 0.5em 0;border-bottom: 0.8em solid #fff;color: #f9f9f9 }
+#topbar div { margin: 0 auto;width: 960px }
+#top-links  { float: right;margin-right: 10px }
+#logo       { background: url(../img/logo.png) no-repeat 0 50%;margin: 0 0 0 11px;padding: 1px 0 2px 22px;font-size: 18px }
+
+/* Link styling of the topbar */
+#top-links a:link, #top-links a:visited { color: #eee;text-decoration: none }
+#top-links a:hover, #top-links a:active { color: #aaa }
+
+/* --- Main menu
+---------------------------------------------------------*/
+
+.menu-title { background: url(../img/g00.png) repeat-x 0 0;padding: 0.3em 0.5em 0.4em;margin: 0;color: #f1f1f1;font-size: 1.2em }
+.menu-items { margin: 0 0 1em;padding: 0;list-style: none }
+
+/* menu item links */
+.menu-items a:link,
+.menu-items a:visited { display: block;background: url(../img/g01.png) repeat-x 0 0;margin: 2px 0 0;
+                        padding: 0.3em 0.6em;border: 1px solid #ddd;text-decoration: none }
+
+.menu-items a:hover,
+.menu-items a:active  { border-color: #D21313 }
+.menu-items a.current { border-color: #888;color: #000 }
+
+.menu-items a:first-letter,
+.menu-items a:first-letter { background: url(../img/arrow.png) no-repeat 0 51%;padding: 0 0 0 9px }
+
+/* --- Body
+---------------------------------------------------------*/
+
+#body h2:first-child    { margin-top: 0.2em }
+#body .warning:first-child,
+#body .success:first-child,
+#body .notice:first-child,
+#body .info:first-child { margin-top: 0 }
+
+/* --- Footer
+---------------------------------------------------------*/
+
+#footer    { padding: 0.7em 0;border-top: 1px dotted #aaa }
+#poweredby { float: right }
+#poweredby,
+#copyright { padding: 0 0.5em }
+
+/* --- Tables
+---------------------------------------------------------*/
+
+/* Userlist */
+#userlist              { width: 100% }
+#userlist .td-username { width: 20% }
+#userlist .td-realname { width: 20% }
+#userlist .td-group    { width: 17% }
+#userlist .td-date     { width: 28% }
+#userlist .td-actions  { width: 15% }
+
+/* Grouplist */
+#grouplist               { width: 80% }
+#grouplist .td-groupname { width: 40% }
+#grouplist .td-usertitle { width: 40% }
+#grouplist .td-actions   { width: 20% }
+
+/* Menu Item list */
+#navigation-list              { width: 80% }
+#navigation-list .td-name     { width: 34% }
+#navigation-list .td-url      { width: 34% }
+#navigation-list .td-position { width: 12%;text-align: center }
+#navigation-list .td-actions  { width: 20% }
+
+/* Page list */
+#pagelist               { width: 100% }
+#pagelist .td-title     { width: 22% }
+#pagelist .td-author    { width: 15% }
+#pagelist .td-creation  { width: 22% }
+#pagelist .td-last-edit { width: 22% }
+#pagelist .td-actions   { width: 15% }
+
+/* Darker table columns */
+#userlist td.td-realname, #userlist td.td-date, #grouplist td.td-usertitle, #navigation-list td.td-url,
+#navigation-list td.td-actions, #pagelist td.td-author, #pagelist td.td-last-edit  { background-color: #F0F0F0 }
+
+/* Misc */
+#userlist .td-inactive a,
+#pagelist .td-draft { color: red;font-weight: bold }
+table + p           { margin-top: 0 }
+
+/* --- Forms
+---------------------------------------------------------*/
+
+/* Form elements */
+input, textarea, select	{ padding: 0.3em;border-width: 1px;border-style: solid;border-color: #7c7c7c #c3c3c3 #ddd;
+                          background: #fff url(../img/fieldbg.gif) repeat-x 0 0;color: #000 }
+textarea                { overflow: auto }
+
+select                  { padding: 0.3em 0.3em 0.2em }
+option                  { background: #fff }
+
+input.text, input[type=text],
+input[type=password]    { width: 15em }
+
+input.button, input[type=submit], input[type=reset],
+input[type=button]      { background: #222 url(../img/button-bg.png);padding: 5px 10px;color: #fff;cursor: pointer }
+
+label[for]              { cursor: pointer }
+
+imput.disabled          { background: #eee }
+textarea.big            { width: 98%;height: 400px }
+textarea.pre            { font-family: Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace;white-space: pre }
+
+/* Vertical form layout */
+.frm-vc                 { margin: 0;padding: 0;list-style: none }
+.frm-vc .frm-block      { clear: left;margin: 0 0 1em;overflow: auto }
+.frm-vc .frm-buttons    { padding: 1.1em 0 0;border-top: 1px dotted #ccc }
+
+.frm-vc .fld-error-message, .frm-vc .fld-label, .fld-input,
+.frm-vc .fld-text       { display: inline;float: left;margin: 0 10px 0 0 }
+.frm-vc .fld-label,
+.fld-error-message      { padding: 0.1em 0 0 }
+.fld-text	            { padding: 0.2em 0 0 }
+
+.frm-vc .fld-label       { width: 17%;text-align: right }
+.frm-vc .fld-label label { font-weight: bold }
+
+.frm-vc .frm-hr         { clear: left;margin: 0 0 1em;border-top: 1px dotted #aaa;height: 0 }
+
+.frm-vc .frm-title      { margin-bottom: 1em;border-bottom: 1px dotted #aaa }
+.frm-vc .frm-title h3   { margin: 1em 0 0.3em 17%;padding: 0 0 0 10px }
+
+.fld-text select { margin-top: -0.2em }
+
+/* Horizontal form layout */
+.frm-hc					{ margin: 0;padding: 0;list-style: none;overflow: auto }
+.hc-box					{ background: #f5f5f5;margin: 0 0 1.5em;padding: 1em;border: 1px solid #ddd }
+.hc-inline-box			{ display: inline-block }
+.frm-hc .frm-block		{ float: left;margin: 0 0.5em 0 0;overflow: auto }
+.frm-hc .frm-buttons	{ clear: left;margin: 1em 0 0 }
+
+.frm-hc .fld-label			{ margin: 0 0 0.2em }
+.frm-hc .fld-label label	{ font-weight: bold }
+
+/* Alternative vertical form layout */
+.frm-avc				{ margin: 0;padding: 0;list-style: none }
+.frm-avc .frm-block		{ clear: left;margin: 1.5em 0 0;overflow: auto }
+.frm-avc .frm-buttons	{ margin: 0.5em 0 1.5em }
+.frm-avc .frm-block .fld-input { width: 98% }
+
+.frm-avc .fld-label			{ margin: 0 0 0.2em }
+.frm-avc .fld-label label	{ font-weight: bold }
+
+/* Error styling */
+.frm-vc .form-error input, .frm-avc .form-error input,
+.frm-hc .form-error input	{ border-width: 1px;border-style: solid;border-color: #D72626 #D72626 #F44343 #ED3B3B }
+.frm-hc .fld-error-message	{ clear: left;margin: 1em 0 0 }
+
+/* --- Debug block
+---------------------------------------------------------*/
+
+#system-debug { background: #111;margin: 2em auto 0;border: 2px solid #000;width: 960px;color: #eee }
+#system-debug h2 { background: #000;margin: 0;padding: 0.5em;border-bottom: 2px ridge #222;color: #ccc;font-size: 1.1em;font-weight: bold }
+
+#system-debug .query-time, #system-debug .row { font: 1em Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace }
+#system-debug .query-time { float: left;clear: left;margin: 0 0.5em 0 0;color: #aaa }
+#system-debug .row { padding: 0.4em 0.4em;border-bottom: 1px solid #222; }

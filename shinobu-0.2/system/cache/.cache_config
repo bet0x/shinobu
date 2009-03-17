@@ -1,0 +1,22 @@
+<?php
+
+$sys_config = array (
+  'website_description' => 'Manga Scanlations',
+  'theme' => 'simple',
+  'website_title' => 'Geisha',
+  'welcome_message_body' => '<p>Shinobu is a website management system aimed to be simple, easy to administrate and easy to extend.</p>',
+  'welcome_message_display' => 1,
+  'welcome_message_title' => 'Welcome!',
+  'timezone' => 0,
+  'dst' => 1,
+  'allow_username_change' => 1,
+  'default_usergroup' => 3,
+  'visit_timeout' => 300,
+  'user_online_stats' => 1,
+  'admin_theme' => 'default',
+  'language' => 'English',
+  'show_who_is_online' => 1,
+  'allow_new_registrations' => 1,
+);
+
+?>

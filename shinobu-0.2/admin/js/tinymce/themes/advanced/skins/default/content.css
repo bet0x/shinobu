@@ -1,0 +1,72 @@
+/* --- TinyMCE content css
+---------------------------------------------------------*/
+
+html, body              { padding: 0;margin: 0 }
+body					{ background-color: #fff;margin: 8px;font-size: 80%;line-height: 1.4em;color: #000 }
+body, textarea, input	{ font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
+
+input, textarea         { padding: 2px;border-width: 1px;border-style: solid;border-color: #7c7c7c #c3c3c3 #ddd }
+textarea                { font-size: 1em;overflow: auto }
+
+a:link, a:visited		{ color: #A52B2A;text-decoration: underline }
+a:hover, a:active		{ color: #521414 }
+a img					{ border: 1px solid #222 }
+
+p						{ margin: 1.5em 0 }
+img						{ margin: 0;padding: 0 }
+
+h1,h2,h3,h4,h5,h6		{ font-weight: normal;color: #333 }
+
+h1						{ margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
+h2						{ margin: 0.75em 0;font-size: 2em }
+h3						{ margin: 1em 0;font-size: 1.5em;line-height: 1em }
+h4						{ margin: 1.25em 0;font-size: 1.2em;line-height: 1.25 }
+h5						{ margin: 1.5em 0;font-size: 1em;font-weight: bold }
+h6						{ font-weight: bold;font-size: 1em }
+
+ul, ol					{ margin:0 0.5em 1.5em;padding-left: 2.5em }
+ul						{ list-style-type: square }
+ol						{ list-style-type: decimal }
+dl						{ margin: 0 0 1.5em 0 }
+dl dt					{ font-weight: bold }
+dd						{ margin: 0.2em 0 0 1.5em }
+
+blockquote				{ display:block;margin: 0 1em;font-style: italic;font-size: 0.9em;color: #555 }
+
+pre						{ margin: 1.5em 0 1.5em;padding: 0.5em;color: #222;background-color: #f9f9f9;white-space: pre }
+pre, code				{ background: #f6f6f6;font-family: Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace }
+pre code				{ display: block;overflow-x: auto;white-space: pre }
+
+hr						{ margin: 0 0.5em 0;border-width: 1px 0 0;border-style: dotted;border-color: #999;height: 0px }
+
+.mceItemTable,
+.mceItemTable td,
+.mceItemTable th,
+.mceItemTable caption,
+.mceItemVisualAid		{ border: 1px dashed #bbb }
+
+a.mceItemAnchor			{ width: 12px;line-height: 6px;overflow: hidden;padding-left: 12px;background: url(img/items.gif) no-repeat 0 100% }
+img.mceItemAnchor		{ width: 12px;height: 12px;background: url(img/items.gif) no-repeat }
+img						{ border: 0 }
+
+table					{ cursor: default }
+table td, table th		{ cursor: text }
+
+ins						{ border-bottom: 1px solid green;text-decoration: none;color: green }
+del						{ color: red;text-decoration: line-through }
+cite					{ border-bottom: 1px dashed blue }
+acronym					{ border-bottom: 1px dotted #CCC;cursor: help }
+abbr, html\:abbr		{ border-bottom: 1px dashed #CCC;cursor: help }
+
+/* IE */
+* html body
+{
+	scrollbar-3dlight-color: #F0F0EE;
+	scrollbar-arrow-color: #676662;
+	scrollbar-base-color: #F0F0EE;
+	scrollbar-darkshadow-color: #DDD;
+	scrollbar-face-color: #E0E0DD;
+	scrollbar-highlight-color: #F0F0EE;
+	scrollbar-shadow-color: #F0F0EE;
+	scrollbar-track-color: #F5F5F5;
+}
