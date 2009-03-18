@@ -1,0 +1,16 @@
+# Update Shinobu 0.2.1 to 0.2.2
+
+Run the following sql commands in the database where Shinobu is installed.
+Be sure to change the names of the tables when you have a table prefix.
+
+ALTER TABLE `users` ADD `language` VARCHAR( 25 ) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT 'English';
+
+ALTER TABLE `usergroups` CHANGE `p_manage_plugins` `p_manage_pages` TINYINT( 1 ) UNSIGNED NOT NULL DEFAULT '0';
+
+DELETE FROM `config` WHERE `name` = 'users_per_page' LIMIT 1;
+
+ALTER TABLE `content_types` ADD UNIQUE (`id`);
+
+ALTER TABLE `content_types` DROP PRIMARY KEY;
+
+ALTER TABLE `content_types` CHANGE `id` `id` INT( 10 ) UNSIGNED NOT NULL ;
