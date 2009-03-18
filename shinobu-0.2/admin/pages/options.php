@@ -74,7 +74,7 @@ else
 		else if (utf8_strlen($form['welcome_message_body']) > 65535)
 			$errors['welcome_message_body'] = 'Your welcome message is too long.';
 
-		if (is_float($form['timezone']))
+		if (!is_numeric($form['timezone']))
 			$form['timezone'] = 0;
 
 		$form['dst'] = isset($form['dst']) && $form['dst'] == 1 ? 1 : 0;
@@ -83,11 +83,8 @@ else
 			$form['language'] = $sys_config['language'];
 
 		$form['user_online_stats'] = isset($form['user_online_stats']) && $form['user_online_stats'] == 1 ? 1 : 0;
-
 		$form['show_who_is_online'] = isset($form['show_who_is_online']) && $form['show_who_is_online'] == 1 ? 1 : 0;
-
 		$form['allow_new_registrations'] = isset($form['allow_new_registrations']) && $form['allow_new_registrations'] == 1 ? 1 : 0;
-
 		$form['allow_username_change'] = isset($form['allow_username_change']) && $form['allow_username_change'] == 1 ? 1 : 0;
 
 		// Usergroup check

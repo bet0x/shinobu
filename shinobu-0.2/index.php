@@ -101,8 +101,7 @@ $sys_tpl->assign(
 		'<a href="http://code.google.com/p/shinobu/">Shinobu</a> '.SHINOBU_VERSION)
 	);
 
-if ($sys_config['user_online_stats'] === 1)
-	$sys_tpl->assign('whoisonline_block', generate_whoisonline_block());
+$sys_tpl->assign('whoisonline_block', ($sys_config['user_online_stats'] === 1 ? generate_whoisonline_block() : null));
 
 // Global system messages
 if (isset($_GET['login']))

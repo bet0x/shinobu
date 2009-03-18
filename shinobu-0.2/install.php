@@ -126,7 +126,7 @@ require SYS_CORE_DIR.'/db_layer/'.$db_type.'.php';
 $sys_db = new database($db_host, $db_user, $db_password, $db_name, $db_persistent);
 
 // Set variables
-$shinobu_version = '0.2.3';
+$shinobu_version = '0.2.3-dev';
 $post_install_errors = false;
 
 // Check PHP version
@@ -335,6 +335,7 @@ NULL, 0, 0, 0, 0, 0,
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(50) collate utf8_unicode_ci NOT NULL,
   `url` varchar(255) collate utf8_unicode_ci NOT NULL,
+  `visibility` tinyint(1) unsigned NOT NULL default \'1\',
   `position` tinyint(3) unsigned NOT NULL default 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=1 ;') or exit($sys_db->error().'<br /><br />'.__FILE__.'<br />'.__LINE__);
@@ -375,39 +376,39 @@ echo '<?xml version="1.0" encoding="utf-8"?>'."\n";
 		/* --- Reset
 		---------------------------------------------------------*/
 
-		html, body              { padding:0;margin:0 }
-		body					{ background-color: #fff;font-size: 83%;line-height: 1.4em;color: #222 }
-		body, input				{ font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
+		html, body  { padding:0;margin:0 }
+		body        { background-color: #fff;font-size: 83%;line-height: 1.4em;color: #222 }
+		body, input { font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
 
-		input			        { padding: 2px;border-width: 1px;border-style: solid;border-color: #7c7c7c #c3c3c3 #ddd }
-		input[type="submit"]	{ background: #222;padding: 5px;color: #fff }
+		input                { padding: 2px;border-width: 1px;border-style: solid;border-color: #7c7c7c #c3c3c3 #ddd }
+		input[type="submit"] { background: #222;padding: 5px;color: #fff }
 
-		a:link, a:visited		{ color: #A52B2A;text-decoration: underline }
-		a:hover, a:active		{ color: #521414 }
+		a:link, a:visited { color: #A52B2A;text-decoration: underline }
+		a:hover, a:active { color: #521414 }
 
-		p						{ margin: 1.5em 0 }
+		p { margin: 1.5em 0 }
 
-		h1,h2					{ font-family: "Chaparral Pro", Georgia, serif;font-weight: normal;color: #444 }
-		h1						{ margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
-		h2						{ margin: 0.75em 0;font-size: 2em }
+		h1,h2 { font-family: "Chaparral Pro", Georgia, serif;font-weight: normal;color: #444 }
+		h1    { margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
+		h2    { margin: 0.75em 0;font-size: 2em }
 
-		ul						{ margin:0 0.5em 1.5em;padding-left: 2.5em;list-style-type: square }
+		ul { margin:0 0.5em 1.5em;padding-left: 2.5em;list-style-type: square }
 
-		hr						{ margin: 0;border-width: 1px 0 0;border-style: dotted;border-color: #0090EC;height: 0px }
+		hr { margin: 0;border-width: 1px 0 0;border-style: dotted;border-color: #0090EC;height: 0px }
 
 		/* --- Misc
 		---------------------------------------------------------*/
 
-		#wrapper { margin: 2em auto;width: 500px }
+		#wrapper  { margin: 2em auto;width: 500px }
 		h1, h2, p { margin-left: 10px;margin-right: 10px }
 
-		label { display: block;float: left;padding: 1px 10px 0 0;width: 100px;text-align: right }
+		label  { display: block;float: left;padding: 1px 10px 0 0;width: 100px;text-align: right }
 		.clear { clear: both;height: 0px }
 
-		h1 { text-align: center }
-		p.fld { background: #f6f6f6;padding: 5px }
+		h1          { text-align: center }
+		p.fld       { background: #f6f6f6;padding: 5px }
 		p.fld input { width: 200px }
-		p.error { background: #FFB9B9;border: 1px solid #FF6A6A }
+		p.error     { background: #FFB9B9;border: 1px solid #FF6A6A }
 
 		p.error span { display: block;margin-left: 110px }
 	</style>
@@ -421,12 +422,11 @@ echo '<?xml version="1.0" encoding="utf-8"?>'."\n";
 
 		<?php
 
-		if (is_array($post_install_errors))
+		if (is_array($post_install_errors)):
 			echo '<p><strong>Some errors occured:</strong></p>'."\n\n".'<ul><li>'.implode('</li><li>', $post_install_errors).'</li></ul>'."\n\n".'<p>You have to resolve these issues to install Shinobu.</p>';
-		else if (isset($_GET['installed']))
+		elseif (isset($_GET['installed'])):
 			echo '<p>Shinobu has been installed and is now ready to use.</p>'."\n\n".'<p><strong>Do NOT FORGET to remove this file</strong></p>';
-		else
-		{
+		else:
 
 		?>
 
@@ -486,11 +486,7 @@ echo '<?xml version="1.0" encoding="utf-8"?>'."\n";
 			</p>
 		</form>
 
-		<?php
-
-		}
-
-		?>
+		<?php endif; ?>
 	</div>
 
 </body>

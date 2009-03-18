@@ -120,12 +120,13 @@ html body span.clear { background: none;border: 0;clear: both;display: block;flo
 #grouplist .td-usertitle { width: 40% }
 #grouplist .td-actions   { width: 20% }
 
-/* Menu Item list */
-#navigation-list              { width: 80% }
-#navigation-list .td-name     { width: 34% }
-#navigation-list .td-url      { width: 34% }
-#navigation-list .td-position { width: 12%;text-align: center }
-#navigation-list .td-actions  { width: 20% }
+/* Navigation Item list */
+#navigation-list                { width: 100% }
+#navigation-list .td-name       { width: 29% }
+#navigation-list .td-url        { width: 29% }
+#navigation-list .td-visibility { width: 10%;text-align: center }
+#navigation-list .td-position   { width: 12%;text-align: center }
+#navigation-list .td-actions    { width: 20% }
 
 /* Page list */
 #pagelist               { width: 100% }
@@ -137,7 +138,7 @@ html body span.clear { background: none;border: 0;clear: both;display: block;flo
 
 /* Darker table columns */
 #userlist td.td-realname, #userlist td.td-date, #grouplist td.td-usertitle, #navigation-list td.td-url,
-#navigation-list td.td-actions, #pagelist td.td-author, #pagelist td.td-last-edit  { background-color: #F0F0F0 }
+#navigation-list td.td-position, #pagelist td.td-author, #pagelist td.td-last-edit  { background-color: #F0F0F0 }
 
 /* Misc */
 #userlist .td-inactive a,

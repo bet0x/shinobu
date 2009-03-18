@@ -104,7 +104,7 @@ $sys_tpl->assign(
 		$sys_config['website_title'].' Admin',
 		'You are logged in as <a href="'.WEBSITE_URL.URI_PREFIX.'profile/'.$sys_user['id'].URI_SUFFIX.'" rel="external"><em>'.$sys_user['username'].'</em></a> |
 		<a href="'.WEBSITE_URL.URI_PREFIX.'login'.URI_SUFFIX.'&amp;token='.SYS_TOKEN.'">Logout</a> |
-		<a href="'.WEBSITE_URL.'" rel="external">Go to website</a>',
+		<a href="'.WEBSITE_URL.'" rel="external" title="Opens in a new window/tab">Go to website</a>',
 		generate_admin_navigation(),
 		'<a href="http://code.google.com/p/shinobu/" rel="blank">Shinobu</a> '.SHINOBU_VERSION)
 	);

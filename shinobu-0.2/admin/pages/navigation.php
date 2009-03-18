@@ -70,6 +70,8 @@ else if (isset($sys_request[2]) && $sys_request[2] == 'edit')
 			else if (utf8_strlen($form['url']) > 255)
 				$errors['url'] = 'The url is too long.';
 
+			$form['visibility'] = $form['visibility'] == 1 ? 1 : 0;
+
 			// Check/filter position
 			if (empty($form['position']))
 				$form['position'] = 0;
@@ -78,7 +80,7 @@ else if (isset($sys_request[2]) && $sys_request[2] == 'edit')
 
 			if ($errors === false)
 			{
-				$sys_db->query('UPDATE '.DB_PREFIX.'navigation SET name=\''.$sys_db->escape($form['name']).'\', url=\''.$sys_db->escape($form['url']).'\', position='.intval($form['position']).' WHERE id='.$sys_request[3]) or error($sys_db->error(), __FILE__, __LINE__);
+				$sys_db->query('UPDATE '.DB_PREFIX.'navigation SET name=\''.$sys_db->escape($form['name']).'\', url=\''.$sys_db->escape($form['url']).'\', visibility='.$form['visibility'].', position='.intval($form['position']).' WHERE id='.$sys_request[3]) or error($sys_db->error(), __FILE__, __LINE__);
 				generate_navigation(true);
 				header('location: '.ADMIN_URL.URI_PREFIX.'navigation'.URI_SUFFIX.'&edited'); exit;
 			}
@@ -113,9 +115,17 @@ else if (isset($sys_request[2]) && $sys_request[2] == 'edit')
 		</li>
 
 		<li class="frm-block">
-			<div class="fld-label"><label for="fld-2">Position:</label></div>
+			<div class="fld-label"><label>Visibility:</label></div>
+			<div class="fld-text">
+				<div><label for="fld-2"><input type="radio" id="fld-2" name="form[visibility]" value="1" <?php echo $navigation_item['visibility'] == 1 ? 'checked="checked"' : NULL; ?> /> Visible</label></div>
+				<div><label for="fld-3"><input type="radio" id="fld-3" name="form[visibility]" value="0" <?php echo $navigation_item['visibility'] == 0 ? 'checked="checked"' : NULL; ?> /> Hidden</label></div>
+			</div>
+		</li>
+
+		<li class="frm-block">
+			<div class="fld-label"><label for="fld-4">Position:</label></div>
 			<div class="fld-input">
-				<select name="form[position]" id="fld-2">
+				<select name="form[position]" id="fld-4">
 					<option value="<?php echo $navigation_item['position']; ?>"><?php echo $navigation_item['position']; ?></option>
 					<option value="0">0</option>
 					<option value="1">1</option>
@@ -320,6 +330,7 @@ else
 		<tr>
 			<th class="td-name">Name</th>
 			<th class="td-url">Url</th>
+			<th class="td-position">Visibility</th>
 			<th class="td-position">Position</th>
 			<th class="td-actions">Actions</th>
 		</tr>
@@ -339,6 +350,7 @@ else
 		<tr>
 			<td class="td-name"><?php echo $row['name']; ?></td>
 			<td class="td-url"><?php echo $row['url']; ?></td>
+			<td class="td-visibility"><?php echo $row['visibility'] == 1 ? 'Visible' : 'Hidden'; ?></td>
 			<td class="td-position"><?php echo $row['position']; ?></td>
 			<td class="td-actions"><a href="<?php echo ADMIN_URL.URI_PREFIX.'navigation/edit/'.$row['id'].URI_SUFFIX; ?>">Edit</a> - <a class="confirm" href="<?php echo ADMIN_URL.'/'.URI_PREFIX.'navigation'.URI_SUFFIX.'&amp;delete='.$row['id'].'&amp;token='.SYS_TOKEN; ?>">Delete</a></td>
 		</tr>
