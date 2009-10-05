@@ -1,0 +1,73 @@
+/* --- Reset
+---------------------------------------------------------*/
+
+html, body        { background-color: #fff;padding: 0;margin: 0 }
+body              { font-size: 85%;line-height: 1.5em;color: #222 }
+body              { font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
+
+a:link, a:visited { color: #A52B2A;text-decoration: underline }
+a:hover, a:active { color: #521414 }
+a img             { border: 1px solid #222 }
+
+p                 { margin: 1.5em 0 }
+img               { margin: 0;padding: 0 }
+
+h1,h2,h3,h4,h5,h6 { font-weight: normal;color: #333 }
+
+h1                { margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
+h2                { margin: 0.75em 0;font-size: 2em }
+h3                { margin: 1em 0;font-size: 1.5em;line-height: 1em }
+h4                { margin: 1.25em 0;font-size: 1.2em;line-height: 1.25 }
+h5                { margin: 1.5em 0;font-size: 1em;font-weight: bold }
+h6                { font-weight: bold;font-size: 1em }
+
+blockquote        { margin: 0 1em;font-style: italic;font-size: 0.9em;color: #555 }
+
+pre               { margin: 1.5em 0 1.5em;padding: 0.5em;background: #fefefe;border: 1px dashed #444 }
+pre, code         { font-family: Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace;color: #555 }
+pre code          { display: block;overflow-x: auto;white-space: pre }
+
+table, th, td     { border-color: #bbb;border-style: solid }
+table             { border-collapse: separate;border-spacing: 0;border-width: 0 0 1px 1px }
+th, td            { padding: 0.3em 1em;border-width: 1px;border-left-color: #f1f1f1;text-align: left }
+th                { background: #eee;border-bottom-color: #ddd;font-weight: bold }
+td                { border-bottom-color: #efefef;font-weight: normal }
+
+/* --- Layout
+---------------------------------------------------------*/
+
+#header, #body, #footer { margin: 0 auto;width: 800px }
+#body { margin-top: 1.5em }
+
+/* --- Header, menu & footer
+---------------------------------------------------------*/
+
+#header ul { margin: 0;padding: 0;list-style: none }
+#header ul li { display: inline }
+#header ul li a { background: #4E5368;padding: 0.4em 0.8em;color: #fff;text-decoration: none }
+
+#footer { clear: both;border-top: 1px solid #4E5368;font-size: 0.8em;color: #777 }
+#footer p { margin: 0.5em 0 }
+
+/* --- Sidebar & content
+---------------------------------------------------------*/
+
+#sidebar { float: left;background: #eee;padding: 0 1em;width: 20% }
+
+#content { float: right;width: 74% }
+
+#content *:first-child { margin-top: 0 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
