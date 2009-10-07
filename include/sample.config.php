@@ -11,7 +11,7 @@ $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $
 define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/'));
 
 // Database settings
-$db_type       = ''; // Only 'mysql' or 'pgsql' are supported at this moment
+$db_type       = ''; // mysql, pgsql, sqlite2 or sqlite (sqlite3)
 $db_host       = '';
 $db_name       = '';
 $db_user       = ''; // This variable is unset after the DB connection has been made

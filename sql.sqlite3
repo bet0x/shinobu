@@ -1,0 +1,10 @@
+#
+# Table structure for table: users
+#
+CREATE TABLE users ( id INT(10) PRIMARY KEY, group_id INT(10) NOT NULL DEFAULT '2', username VARCHAR(20) NOT NULL, password VARCHAR(40) NOT NULL, salt VARCHAR(20) NOT NULL, hash VARCHAR(40) NOT NULL, email VARCHAR(255) NOT NULL );
+CREATE UNIQUE INDEX users_username ON users(username);
+
+#
+# Dumping data for table: users
+#
+INSERT INTO users VALUES ('1', '1', 'Frank', 'd65c4e4ccf8118baf64877e8ad0b8496805525b1', '/z{!j2Xn<q=:I"Tnd;,_', 'ad311415064cf8742acf52f4c731c4f3dccc4769', 'example@example.com');

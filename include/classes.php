@@ -17,25 +17,26 @@ class db
 		if (self::$connected === true)
 			return false;
 
-		// Verify database type
-		switch ($db_type)
-		{
-			case 'mysql':
-				$db_type = 'mysql';
-				break;
-			case 'pgsql':
-				$db_type = 'pgsql';
-				break;
-			default:
-				error('There is no support for the specified database type, "'.$db_type.'".');
-		}
-
-		// Connect to database
 		try
 		{
-			self::$c = new PDO(
-				$db_type.':host='.$db_host.';dbname='.$db_name, $db_user, $db_password,
-				array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+			switch ($db_type)
+			{
+				case 'mysql':
+					self::$c = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password,
+						array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+					break;
+				case 'pgsql':
+					self::$c = new PDO('pgsql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password);
+					break;
+				case 'sqlite2':
+					self::$c = new PDO('sqlite2:'.$db_name);
+					break;
+				case 'sqlite':
+					self::$c = new PDO('sqlite:'.$db_name);
+					break;
+				default:
+					error('There is no support for the specified database type, "'.$db_type.'".');
+			}
 		}
 		catch (PDOException $e)
 		{
