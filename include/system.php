@@ -57,8 +57,11 @@ class system
 	}
 
 	// Get request type (POST or GET) (defaults to GET)
-	static private function _get_request_type()
+	static private function _get_request_method()
 	{
+		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+			return 'AJAX';
+
 		switch ($_SERVER['REQUEST_METHOD'])
 		{
 			case 'GET':
@@ -66,6 +69,15 @@ class system
 				break;
 			case 'POST':
 				$request_method = 'POST';
+				break;
+			case 'PUT':
+				$request_method = 'PUT';
+				break;
+			case 'DELETE':
+				$request_method = 'DELETE';
+				break;
+			case 'HEAD':
+				$request_method = 'HEAD';
 				break;
 			default:
 				$request_method = 'GET';
@@ -127,7 +139,7 @@ class system
 			require $controller_path;
 
 			$class_name = pathinfo($controller_path, PATHINFO_FILENAME);
-			$request_type = self::_get_request_type();
+			$request_type = self::_get_request_method();
 			$args = false;
 
 			if ($request_type == 'POST')
@@ -151,13 +163,10 @@ abstract class controller
 		$this->request = $request;
 	}
 
-	public function GET($args)
-	{
-		return 'None';
-	}
-
-	public function POST($args)
-	{
-		return 'None';
-	}
+	public function GET($args) {}
+	public function POST($args) {}
+	public function PUT($args) {}
+	public function DELETE($args) {}
+	public function HEAD($args) {}
+	public function AJAX($args) {}
 }
