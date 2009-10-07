@@ -1,5 +1,11 @@
+= Installation
+
+1. Import sql.pgsql or sql.mysql into your database.
+2. Rename include/sample.config.php to include/config.php
+3. Adjust all the needed variables in include/config.php
 
 = Requirements
 
- * PHP >= 5.1.0
+ * PHP >= 5.1.0 (tested on 5.2 and 5.3)
  * PDO >= 0.1.0
+   - With MySQL or PostgreSQL support.

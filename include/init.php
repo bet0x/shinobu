@@ -21,8 +21,8 @@ unregister_globals();
 // Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
 setlocale(LC_CTYPE, 'C');
 
-// Make database connection with PDO MySQL
-db::initialize($db_host, $db_name, $db_user, $db_password);
+// Make database connection with PDO
+db::initialize($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
 
 // Check user cookie

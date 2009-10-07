@@ -2,7 +2,7 @@
 
 defined('SYS') or exit;
 
-// Get protocol (http/https) and port for SYSTEM_BASE_URL
+// Get protocol (http/https) and port (80/443) for SYSTEM_BASE_URL
 $protocol = !isset($_SERVER['HTTPS']) || strtolower($_SERVER['HTTPS']) == 'off' ? 'http://' : 'https://';
 $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $protocol == 'http://') ||
         ($_SERVER['SERVER_PORT'] != '443' && $protocol == 'https://')) ? ':'.$_SERVER['SERVER_PORT'] : '';
@@ -11,10 +11,11 @@ $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $
 define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/'));
 
 // Database settings
+$db_type       = ''; // Only 'mysql' or 'pgsql' are supported at this moment
 $db_host       = '';
 $db_name       = '';
-$db_user       = '';
-$db_password   = '';
+$db_user       = ''; // This variable is unset after the DB connection has been made
+$db_password   = ''; // This variable is unset after the DB connection has been made
 
 define('DB_PREFIX', '');
 

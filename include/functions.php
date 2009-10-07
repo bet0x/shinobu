@@ -57,7 +57,7 @@ function unregister_globals()
 }
 
 // Sends an error message. Used by database and cache functions
-function error($messages, $file, $line)
+function error($messages, $file = false, $line = false)
 {
 	ob_end_clean();
 
@@ -74,7 +74,8 @@ function error($messages, $file, $line)
 	else
 		echo $messages, "\n";
 
-	echo "\n", 'File: ', $file, "\n", 'Line: ', $line;
+	echo ($file !== false) ? "\n".'File: '.$file : null;
+	echo ($file !== false) ? "\n".'Line: '.$line : null;
 
 	exit;
 }

@@ -12,15 +12,29 @@ class db
 {
 	static public $connected = false, $c = false;
 
-	static public function initialize($db_host, $db_name, $db_user, $db_password)
+	static public function initialize($db_type, $db_host, $db_name, $db_user, $db_password)
 	{
 		if (self::$connected === true)
 			return false;
 
+		// Verify database type
+		switch ($db_type)
+		{
+			case 'mysql':
+				$db_type = 'mysql';
+				break;
+			case 'pgsql':
+				$db_type = 'pgsql';
+				break;
+			default:
+				error('There is no support for the specified database type, "'.$db_type.'".');
+		}
+
+		// Connect to database
 		try
 		{
 			self::$c = new PDO(
-				'mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password,
+				$db_type.':host='.$db_host.';dbname='.$db_name, $db_user, $db_password,
 				array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
 		}
 		catch (PDOException $e)
