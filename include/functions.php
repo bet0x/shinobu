@@ -144,3 +144,9 @@ function convert_linebreaks($str)
 {
 	return str_replace(array("\r\n", "\r"), array("\n"), $str);
 }
+
+// Get extension from filename (returns the extension without the dot)
+function get_ext($file_name)
+{
+	return strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+}

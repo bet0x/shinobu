@@ -178,6 +178,11 @@ class tpl
 		self::$vars = array();
 	}
 
+	static public function url($relative_path='')
+	{
+		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL === false ? '?q=' : null).$relative_path;
+	}
+
 	static public function render($template_name, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
