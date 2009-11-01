@@ -1,11 +1,11 @@
 <?php
 
 // defaultc (default controller) is used, because 'default' is a reserved keyword
-class defaultc extends controller
+class default_controller extends BaseController
 {
 	public function GET($args)
 	{
-		system::set_type('html');
+		system::set_mimetype('html');
 
 		tpl::set('page_title', 'Hello world!');
 
