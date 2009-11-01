@@ -31,6 +31,7 @@ $sys_cookie_seed   = '&^7hyY&*88uhY&'; // Some random characters should be enter
 define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
+define('SYS_PLUGIN', SYS.'/plugins');
 
 // Hardcode usergroup IDs
 define('ADMIN_ID', 1);

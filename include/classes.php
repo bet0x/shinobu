@@ -243,7 +243,7 @@ class user
 		}
 	}
 
-	/* Log in. Returns true on success and int when an error occurs.
+	/* Log in. Returns 1 on success and the following when an error occurs.
 	   2 = already logged in, 3 = username or password not provided,
 	   4 = wrong password, 5 = wrong username. */
 	static public function login($username, $password)
@@ -276,7 +276,7 @@ class user
 		else
 			return 5;
 
-		return true;
+		return 1;
 	}
 
 	// Log the user out by letting the cookie expire
@@ -327,6 +327,45 @@ class user
 	}
 }
 
+// Plugin class
+class plugin
+{
+	static public $initialize = false, $plugins = array();
+
+	static public function initialize()
+	{
+		if (self::$initialize === true)
+			return false;
+
+		$handle = opendir(SYS_PLUGIN);
+
+		while (($file = readdir($handle)) !== false)
+		{
+			if (!is_file(SYS_PLUGIN.'/'.$file) || get_ext($file) != 'php')
+				continue;
+
+			require SYS_PLUGIN.'/'.$file;
+			self::$plugins[] = pathinfo($file, PATHINFO_FILENAME);
+		}
+	}
+
+	static private function load($plugin_name)
+	{
+		if (array_search($plugin_name, self::$plugins) !== false)
+			return false;
+		else
+			self::$plugins[] = $plugin_name;
+
+		$filename = strtolower($plugin_name).'.php';
+		$filepath = SYS_PLUGIN.'/'.$filename;
+
+		if (!file_exists($filepath))
+			return false;
+
+		require $filepath;
+	}
+}
+
 // The template class
 class tpl
 {
@@ -347,7 +386,7 @@ class tpl
 		self::$vars = array();
 	}
 
-	static public function url($relative_path='')
+	static public function url($relative_path = null)
 	{
 		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL === false ? '?q=' : null).$relative_path;
 	}

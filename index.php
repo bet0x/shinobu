@@ -30,8 +30,12 @@ unset($db_user, $db_password);
 // Initiate user system
 user::initialize();
 
+// Plugin loader
+plugin::initialize();
+
 // For testing. Uncomment to login.
 //var_export(user::login('Frank', 'password'));
 
+// Run
 system::run();
 db::close();
