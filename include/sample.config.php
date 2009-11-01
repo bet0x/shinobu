@@ -32,6 +32,7 @@ define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
 define('SYS_PLUGIN', SYS.'/plugins');
+define('SYS_CACHE', SYS.'/cache');
 
 // Hardcode usergroup IDs
 define('ADMIN_ID', 1);

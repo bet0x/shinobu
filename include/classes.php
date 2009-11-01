@@ -347,6 +347,8 @@ class plugin
 			require SYS_PLUGIN.'/'.$file;
 			self::$plugins[] = pathinfo($file, PATHINFO_FILENAME);
 		}
+
+		closedir($handle);
 	}
 
 	static private function load($plugin_name)
@@ -363,6 +365,57 @@ class plugin
 			return false;
 
 		require $filepath;
+	}
+}
+
+// Cache class
+class cache
+{
+	static public function exists($filename)
+	{
+		return is_file(SYS_CACHE.'/'.$filename);
+	}
+
+	static public function store($filename, $data)
+	{
+		$handle = fopen(SYS_CACHE.'/'.$filename, 'wb');
+
+		if (!$handle)
+			error('Can not open cache file: '.$filename, __FILE__, __LINE__);
+
+		fwrite($handle, $data);
+		fclose($handle);
+
+		return true;
+	}
+
+	static public function get($filename)
+	{
+		if (!self::exists($filename))
+			error('The file, "'.$filename.'", is not cached.', __FILE__, __LINE__);
+
+		return file_get_contents(SYS_CACHE.'/'.$filename);
+	}
+
+	static public function path($filename)
+	{
+		if (!self::exists($filename))
+			error('The file, "'.$filename.'", is not cached.', __FILE__, __LINE__);
+
+		return SYS_CACHE.'/'.$filename;
+	}
+
+	static public function clear($pattern = '.*')
+	{
+		$glob = glob(SYS_CACHE.'/'.$pattern);
+
+		if (!is_array($glob))
+			error('The pattern, "'.$pattern.'", is not valid.', __FILE, __LINE__);
+
+		foreach ($glob as $filename)
+			unlink($filename);
+
+		return true;
 	}
 }
 
