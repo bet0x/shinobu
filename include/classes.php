@@ -444,10 +444,13 @@ class tpl
 		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL === false ? '?q=' : null).$relative_path;
 	}
 
-	static public function render($template_name, $clear = true)
+	static public function render($template_name, $local_vars=false, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
 		{
+			if (is_array($local_vars))
+				self::$vars = array_merge(self::$vars, $local_vars);
+
 			extract(self::$vars);
 			ob_start();
 
