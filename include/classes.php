@@ -9,8 +9,10 @@
 
 // The system class processes the request and creates a controller object
 // and executes the right controller method (GET, POST etc.).
+// All variables prefixed with an _ (underscore) are for internal use.
 class system
 {
+	static public $request = false, $controller_path = false;
 	static private $_custom_fourofour = false;
 	static private $mimetypes = array(
 		'text'  => 'text/plain',
@@ -90,18 +92,13 @@ class system
 	}
 
 	// Get the contents of $_GET['q'] and filter and split it.
-	// If $_GET['q'] is not set false is returned
 	static private function _parse_request()
 	{
-		if (isset($_GET['q']) && !empty($_GET['q']))
-		{
-			$request_string = str_replace('..', '', trim($_GET['q'], '/ '));
-			$request = explode('/', $request_string);
-		}
-		else
-			$request = false;
+		if (!isset($_GET['q']) || empty($_GET['q']))
+			return false;
 
-		return $request;
+		$request_path = str_replace('..', '', trim($_GET['q'], '/ '));
+		return explode('/', $request_path);
 	}
 
 	// Set 404 page
@@ -130,24 +127,29 @@ class system
 			header('Content-type: text/html; charset=utf-8');
 	}
 
+	// Prepare
+	static public function prepare()
+	{
+		self::$request = self::_parse_request();
+		self::$controller_path = self::_find_controller(self::$request);
+	}
+
 	// Run, Forrest, run!!
 	static public function run()
 	{
-		$request = self::_parse_request();
-		$controller_path = self::_find_controller($request);
-
-		if ($controller_path !== false)
+		if (self::$controller_path !== false)
 		{
-			require $controller_path;
+			require self::$controller_path;
 
-			$class_name = pathinfo($controller_path, PATHINFO_FILENAME).'_controller';
+			$class_name = pathinfo(self::$controller_path, PATHINFO_FILENAME).'_controller';
 			$request_type = self::_get_request_method();
-			$args = false;
 
 			if ($request_type == 'POST')
-				$args = $_POST;
+				$args =& $_POST;
+			else
+				$args = null;
 
-			$c_instance = new $class_name($request);
+			$c_instance = new $class_name(self::$request);
 			echo $c_instance->$request_type($args);
 		}
 		else
@@ -298,11 +300,11 @@ class user
 				(group_id, username, password, salt, hash, email)
 			VALUES(
 				'.intval($group_id).',
-				\''.sys_db::escape($username).'\',
-				\''.sys_db::escape($password).'\',
-				\''.sys_db::escape($salt).'\',
-				\''.sys_db::escape($hash).'\',
-				\''.sys_db::escape($email).'\')') or error('Could not add new user to the database.', __FILE__, __LINE__);
+				'.db::$c->quote($username).',
+				'.db::$c->quote($password).',
+				'.db::$c->quote($salt).',
+				'.db::$c->quote($hash).',
+				'.db::$c->quote($email).')') or error('Could not add new user to the database.', __FILE__, __LINE__);
 
 		return db::$c->lastInsertId();
 	}
@@ -327,44 +329,85 @@ class user
 	}
 }
 
-// Plugin class
-class plugin
+// Extension class
+class extensions
 {
-	static public $initialize = false, $plugins = array();
+	static private $initialize = false, $hooks = array();
+	static public $extensions = array();
 
 	static public function initialize()
 	{
 		if (self::$initialize === true)
 			return false;
+		else
+			self::$initialize = true;
 
-		$handle = opendir(SYS_PLUGIN);
+		$request_path = system::$request === false || empty(system::$request[0]) ? '/' : implode('/', system::$request);
 
-		while (($file = readdir($handle)) !== false)
+		$result = db::$c->query('
+			SELECT f.file, e.dir FROM '.DB_PREFIX.'ext_files AS f, '.DB_PREFIX.'extensions AS e
+			WHERE f.extension_id=e.id AND e.enabled=1 AND f.request_path='.db::$c->quote($request_path).'', PDO::FETCH_ASSOC);
+
+		foreach ($result as $row)
 		{
-			if (!is_file(SYS_PLUGIN.'/'.$file) || get_ext($file) != 'php')
-				continue;
-
-			require SYS_PLUGIN.'/'.$file;
-			self::$plugins[] = pathinfo($file, PATHINFO_FILENAME);
+			require SYS_EXTENSION.'/'.$row['dir'].'/r_'.$row['file'].'.php';
+			self::$extensions[] = $row['dir'];
 		}
 
-		closedir($handle);
+		//system::$request;
 	}
 
-	static private function load($plugin_name)
+	static public function add_action($hook, $function, $priority = 100, $accepted_args = 1)
 	{
-		if (array_search($plugin_name, self::$plugins) !== false)
-			return false;
+		$action_id = md5(implode(func_get_args()));
+		self::$hooks[$hook][$priority][$action_id] = array($function, $accepted_args);
+
+		return $action_id;
+	}
+
+	// Example: $actions = array(array('hook' => '', 'function' => '', 'priority' => 100, 'accepted_args' => 1));
+	static public function add_actions($actions)
+	{
+		$action_ids = array();
+
+		if (count($actions) > 0)
+		{
+			foreach ($actions as $k => $action)
+			{
+				$action_ids[$k] = md5(implode($action));
+				self::$hooks[$action['hook']][$action['priority']][$action_ids[$k]] = array($action['function'], $action['accepted_args']);
+			}
+		}
+
+		return $action_ids;
+	}
+
+	static public function remove_action($hook, $priority, $action_id)
+	{
+		unset(self::$hooks[$hook][$priority][$action_id]);
+	}
+
+	static public function run_hook($hook)
+	{
+		if (!array_key_exists($hook, self::$hooks))
+			return;
+
+		krsort(self::$hooks[$hook]);
+
+		if (func_num_args() > 1)
+			$args = array_slice(func_get_args(), 1);
 		else
-			self::$plugins[] = $plugin_name;
+			$args = null;
 
-		$filename = strtolower($plugin_name).'.php';
-		$filepath = SYS_PLUGIN.'/'.$filename;
+		foreach(self::$hooks[$hook] as $k => $actions)
+		{
+			// echo '<pre>', $k, ' - ', print_r($actions, true), '</pre><br />'; // For testing
 
-		if (!file_exists($filepath))
-			return false;
-
-		require $filepath;
+			foreach ($actions as $function)
+			{
+				call_user_func_array($function[0], array_slice($args, 0, $function[1]));
+			}
+		}
 	}
 }
 

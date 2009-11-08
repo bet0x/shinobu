@@ -8,12 +8,13 @@ class default_controller extends BaseController
 	{
 		system::set_mimetype('html');
 
-		tpl::set('page_title', 'Hello!');
-
 		if (user::$logged_in === true)
 			tpl::set('test', 'I\'m logged in!');
 		else
 			tpl::set('test', 'I\'m not logged in.');
+
+		// Run all the actions for this hook and pass some arguments
+		extensions::run_hook('test_hook', 'arg1', 3, 5.2, true);
 
 		return tpl::render('basic',
 			array(

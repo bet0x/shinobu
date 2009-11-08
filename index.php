@@ -23,6 +23,9 @@ unregister_globals();
 // Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
 setlocale(LC_CTYPE, 'C');
 
+// Prepare for the request
+system::prepare();
+
 // Make database connection with PDO
 db::initialize($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
@@ -30,8 +33,8 @@ unset($db_user, $db_password);
 // Initiate user system
 user::initialize();
 
-// Plugin loader
-plugin::initialize();
+// Load extensions
+extensions::initialize();
 
 // For testing. Uncomment to login.
 //var_export(user::login('Frank', 'password'));

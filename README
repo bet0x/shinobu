@@ -3,9 +3,11 @@
 1. Import sql.pgsql, sql.mysql, sql.sqlite2 or sql.sqlite3 into your database.
 2. Rename include/sample.config.php to include/config.php
 3. Adjust all the needed variables in include/config.php
+4. Make a directory called "cache" in the root directory of the application
+   if it isn't already there.
 
 = Requirements
 
- * PHP >= 5.1.0 (tested on 5.2 and 5.3)
+ * PHP >= 5.1.0 (tested on 5.3)
  * PDO >= 0.1.0
-   - With MySQL or PostgreSQL support.
+   - With MySQL, PostgreSQL or SQLite (3) support.
