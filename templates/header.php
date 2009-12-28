@@ -11,7 +11,10 @@
 <body>
 
 <div id="header">
-	<h1><a href="<?php echo SYSTEM_BASE_URL ?>"><?php echo u_htmlencode($website_title) ?></a></h1>
+	<h1>
+		<a href="<?php echo SYSTEM_BASE_URL ?>"><?php echo u_htmlencode($website_title) ?></a>
+		<span><?php echo u_htmlencode($page_title) ?></span>
+	</h1>
 
 	<div id="main-navigation">
 		<ul>

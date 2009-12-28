@@ -46,6 +46,7 @@ td                { border-bottom-color: #efefef;font-weight: normal }
 #header h1 { margin: 0 }
 #header h1 a:link, #header h1 a:visited { color: #222;text-decoration: none }
 #header h1 a:hover, #header h1 a:active { border-bottom: 2px solid #000 }
+#header h1 span { font-size: 0.5em;color: #555 }
 
 /* Top navigation bar */
 #main-navigation
@@ -103,6 +104,8 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 	{ background: #eee;padding: 0.4em 0.5em;cursor: pointer;
 	  border-width: 1px;border-style: solid;
 	  border-color: #aaa #595959 #565656 #ababab }
+.form-style-one input[type=submit]:focus
+	{ background: #dcdcdc }
 
 .form-style-one label.error-field input
 	{ background: #ffdada }
