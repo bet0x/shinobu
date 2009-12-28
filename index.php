@@ -7,6 +7,8 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
+$start_timer = microtime();
+
 ob_start();
 error_reporting(E_ALL);
 define('SYS', dirname(__FILE__));
@@ -23,22 +25,17 @@ unregister_globals();
 // Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
 setlocale(LC_CTYPE, 'C');
 
-// Prepare for the request
-system::prepare();
-
-// Make database connection with PDO
-db::initialize($db_type, $db_host, $db_name, $db_user, $db_password);
+// Make the primary connection with the database
+db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
 
-// Initiate user system
+#echo print_r(db::$c->info());
+
+// Check user cookie
 user::initialize();
 
-// Load extensions
-extensions::initialize();
-
-// For testing. Uncomment to login.
 //var_export(user::login('Frank', 'password'));
 
-// Run
-system::run();
-db::close();
+echo request::answer();
+#echo round(get_microtime(microtime()) - get_microtime($start_timer), 5), 'ms - ', file_size(memory_get_usage()), ' - ',
+#     file_size(memory_get_peak_usage());

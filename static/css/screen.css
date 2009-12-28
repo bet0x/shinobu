@@ -1,7 +1,7 @@
 /* --- Reset
 ---------------------------------------------------------*/
 
-html, body        { background-color: #fff;padding: 0;margin: 0 }
+html, body        { background-color: #fff;padding: 0;margin: 0;height: 100% }
 body              { font-size: 85%;line-height: 1.5em;color: #222 }
 body              { font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
 
@@ -33,41 +33,84 @@ th, td            { padding: 0.3em 1em;border-width: 1px;border-left-color: #f1f
 th                { background: #eee;border-bottom-color: #ddd;font-weight: bold }
 td                { border-bottom-color: #efefef;font-weight: normal }
 
-/* --- Layout
+/* --- Layouts
 ---------------------------------------------------------*/
 
 #header, #body, #footer { margin: 0 auto;width: 800px }
-#body { margin-top: 1.5em }
 
-/* --- Header, menu & footer
+/* --- Header, and main navigation
 ---------------------------------------------------------*/
 
-#header ul { margin: 0;padding: 0;list-style: none }
-#header ul li { display: inline }
-#header ul li a { background: #4E5368;padding: 0.4em 0.8em;color: #fff;text-decoration: none }
+/* Header */
+#header { position: relative;padding: 55px 0 0 }
+#header h1 { margin: 0 }
 
-#footer { clear: both;border-top: 1px solid #4E5368;font-size: 0.8em;color: #777 }
-#footer p { margin: 0.5em 0 }
+/* Top navigation bar */
+#main-navigation
+	{ position: absolute;top: 0;right: 0;background: #403b36;padding: 0.5em 1em;
+	  color: #807b74;font-size: 0.8em;border-bottom-left-radius: 4px;
+	  -moz-border-radius-bottomleft: 4px;-webkit-border-bottom-left-radius: 3px;
+	  border-bottom-right-radius: 4px;-moz-border-radius-bottomright: 4px;
+	  -webkit-border-bottom-right-radius: 3px;
+	  border: 1px solid #26221F }
+#main-navigation ul { margin: 0;padding: 0;list-style: none }
+#main-navigation li { display: inline }
 
-/* --- Sidebar & content
+#main-navigation a:link, #main-navigation a:visited
+	{ color: #fff;text-decoration: none;text-shadow: 1px 1px 1px #000 }
+#main-navigation a:hover, #main-navigation a:active { color: #bbb }
+
+/* --- Footer
 ---------------------------------------------------------*/
 
-#sidebar { float: left;background: #eee;padding: 0 1em;width: 20% }
+#footer { margin-top: 1.5em;border-top: 1px solid #ddd;clear: both }
+#footer p { margin: 0;padding: 1em 0;font-size: 0.9em }
 
-#content { float: right;width: 74% }
+/* --- Forms
+---------------------------------------------------------*/
 
-#content *:first-child { margin-top: 0 }
+input, textarea, select
+	{ border-width: 1px;border-style: solid;
+	  border-color: #9a9a9a #ededed #eee #9b9b9b }
+input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 
+.form-style-one { margin: 1.5em 0;width: 72% }
+.form-style-one p { clear: left;overflow: auto }
+.form-style-one p.description, .form-style-one p.note
+	{ margin-top: -1.2em;font-size:0.8em;width: 75% }
+.form-style-one p.note
+	{ font-family: "DejaVu Serif", "Bitstream Vera Serif", Serif;color: #555 }
+.form-style-one span.description
+	{ display: block;margin: 0.5em 0;font-size:0.8em;width: 75% }
+.form-style-one .confirm-field { color: #666 }
+.form-style-one p.multiple-fields label { float: left;margin-right: 1.5em }
+.form-style-one p.non-text-fields label
+	{ display: block;margin-top: 0.3em;cursor: pointer }
+.form-style-one label strong, .form-style-one p.non-text-fields strong
+	{ display: block;cursor: pointer }
+.form-style-one label strong span
+	{ position: relative;top: -0.6em;font-weight: normal;font-size: 0.65em;
+	  color: #971010;cursor: auto }
+.form-style-one label input[type=text],
+.form-style-one label input[type=password]
+	{ padding: 0.3em 0.4em;width: 19em }
 
+.form-style-one p.buttons
+	{ margin: 1.5em 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
+.form-style-one input[type=submit]
+	{ background: #eee;padding: 0.4em 0.5em;cursor: pointer;
+	  border-width: 1px;border-style: solid;
+	  border-color: #aaa #595959 #565656 #ababab }
 
+.form-style-one label.error-field input
+	{ background: #ffdada }
+.form-style-one label.error-field input:focus
+	{ background: #ffb1b1 }
 
+/* --- Redirect
+---------------------------------------------------------*/
 
-
-
-
-
-
-
-
-
-
+.redirect-box
+	{ margin: 1.5em auto;padding: 0 1.5em;width: 50% }
+.redirect-box h1 { font-size: 1.5em }
+.redirect-box .skip-redirect { font-size: 0.8em }

@@ -4,26 +4,29 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
-	<title><?php echo $page_title ?></title>
+	<title><?php echo u_htmlencode($page_title) ?> - <?php echo u_htmlencode($website_title) ?></title>
 
 	<link rel="stylesheet" type="text/css" media="all" href="<?php echo SYSTEM_BASE_URL ?>/static/css/screen.css" />
 </head>
 <body>
 
 <div id="header">
-	<h1>Shinobu</h1>
+	<div id="main-navigation">
+		<ul>
+			<?php if (user::$logged_in === true): ?>
+			<li class="txts-one"><a href="<?php self::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
+			<li>&middot;</li>
+			<li><a href="<?php self::url('user/logout') ?>">Log out</a></li>
+			<?php else: ?>
+			<li><a href="<?php self::url('user/login') ?>">Log in</a></li>
+			<li>&middot;</li>
+			<li><a href="<?php self::url('user/register') ?>">Register</a></li>
+			<?php endif ?>
+		</ul>
+	</div>
 
-	<ul>
-		<li><a href="#">Home</a></li>
-		<li><a href="#">Admin</a></li>
-		<li><a href="#">Sitemap</a></li>
-	</ul>
+	<h1><span><?php echo u_htmlencode($website_title) ?></span></h1>
 </div>
 
 <div id="body">
-
-	<div id="sidebar">
-		<p><?php echo $test ?></p>
-	</div>
-
 	<div id="content">

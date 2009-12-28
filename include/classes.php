@@ -7,10 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// The system class processes the request and creates a controller object
-// and executes the right controller method (GET, POST etc.).
-// All variables prefixed with an _ (underscore) are for internal use.
-class system
+class request
 {
 	static public $request = false, $controller_path = false;
 	static private $_custom_fourofour = false;
@@ -27,21 +24,33 @@ class system
 		'png'   => 'image/png',
 		'jpg'   => 'image/jpeg'
 		);
+	static private $status_codes = array(
+		303 => 'HTTP/1.1 See Other',
+		400 => 'HTTP/1.1 Bad Request',
+		401 => 'HTTP/1.1 Unauthorized',
+		402 => 'HTTP/1.1 Payment Required',
+		403 => 'HTTP/1.1 Forbidden',
+		404 => 'HTTP/1.1 Not Found',
+		405 => 'HTTP/1.1 Method Not Allowed',
+		406 => 'HTTP/1.1 Not Acceptable',
+		408 => 'HTTP/1.1 Request Timeout',
+		409 => 'HTTP/1.1 Conflict',
+		410 => 'HTTP/1.1 Gone'
+		);
 
 	// Find controller and return the path
-	static private function _find_controller($request)
+	static private function _find_controller($request_path)
 	{
-		if ($request === false)
+		if ($request_path === false)
 		{
 			return SYS_CONTROL.'/default.php';
 		}
 		else
 		{
 			$include_dir = SYS_CONTROL;
-			$has_looped = false; // Necessary to loop at least once not to get
-			                     // default controller if there is actually no match.
+			$has_looped = false;
 
-			foreach ($request as $include)
+			foreach ($request_path as $include)
 			{
 				if (is_file($include_dir.'/'.$include.'.php'))
 					return $include_dir.'/'.$include.'.php';
@@ -92,6 +101,7 @@ class system
 	}
 
 	// Get the contents of $_GET['q'] and filter and split it.
+	// If $_GET['q'] is not set false is returned
 	static private function _parse_request()
 	{
 		if (!isset($_GET['q']) || empty($_GET['q']))
@@ -101,19 +111,31 @@ class system
 		return explode('/', $request_path);
 	}
 
+	// Send status header
+	static public function set_status($status_code)
+	{
+		if (array_key_exists($status_code, self::$status_codes))
+		{
+			header(self::$status_codes[$status_code]);
+			return true;
+		}
+		else
+			return false;
+	}
+
 	// Set 404 page
 	static public function set_fourofour($contents)
 	{
 		self::$_custom_fourofour = $contents;
 	}
 
-	// Send 404 page
+	// Set 404 page
 	static public function send_fourofour()
 	{
-		header('HTTP/1.1 404 Not Found', true, 404);
+		self::set_status(404);
 
 		if (self::$_custom_fourofour === false)
-			return 'Didn\'t found the page you requested.';
+			return 'The page you requested could not be found.';
 		else
 			return self::$_custom_fourofour;
 	}
@@ -127,33 +149,30 @@ class system
 			header('Content-type: text/html; charset=utf-8');
 	}
 
-	// Prepare
-	static public function prepare()
+	static public function answer()
 	{
-		self::$request = self::_parse_request();
-		self::$controller_path = self::_find_controller(self::$request);
-	}
+		$request = self::_parse_request();
+		$controller_path = self::_find_controller($request);
 
-	// Run, Forrest, run!!
-	static public function run()
-	{
-		if (self::$controller_path !== false)
-		{
-			require self::$controller_path;
+		if (!$controller_path)
+			return self::send_fourofour();
 
-			$class_name = pathinfo(self::$controller_path, PATHINFO_FILENAME).'_controller';
-			$request_type = self::_get_request_method();
+		require $controller_path;
 
-			if ($request_type == 'POST')
-				$args =& $_POST;
-			else
-				$args = null;
+		$class_name = pathinfo($controller_path, PATHINFO_FILENAME).'_controller';
+		$request_type = self::_get_request_method();
 
-			$c_instance = new $class_name(self::$request);
-			echo $c_instance->$request_type($args);
-		}
+		if ($request_type == 'POST')
+			$args =& $_POST;
 		else
-			echo self::send_fourofour();
+			$args = null;
+
+		// Start de controller
+		if (!class_exists($class_name))
+			return self::send_fourofour();
+
+		$controller_instance = new $class_name($request);
+		return $controller_instance->$request_type($args);
 	}
 }
 
@@ -177,13 +196,26 @@ abstract class BaseController
 	public function AJAX($args) {}
 }
 
+abstract class BaseWebController extends BaseController
+{
+	protected $request = false;
+
+	public function __construct($request)
+	{
+		parent::__construct($request);
+		tpl::set('website_title', 'Shinobu');
+
+		request::set_mimetype('html');
+	}
+}
+
 // This is a wrapper class for PDO
 // It's possible that this wrapper is going to be replaced in the future
 class db
 {
 	static public $connected = false, $c = false;
 
-	static public function initialize($db_type, $db_host, $db_name, $db_user, $db_password)
+	static public function connect($db_type, $db_host, $db_name, $db_user, $db_password)
 	{
 		if (self::$connected === true)
 			return false;
@@ -227,95 +259,137 @@ class db
 class user
 {
 	static public $logged_in = false, $data = false;
+	static private $user_fields = array('id', 'username', 'password', 'salt', 'hash', 'email');
 
 	// Check user cookie
+	// Only affects the current user/visitor
 	static public function initialize()
 	{
 		if (($cookie = get_cookie('user')) !== false)
 		{
-			$result = db::$c->query('SELECT id, group_id, username, salt, hash FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
+			// Get user data
+			$result = db::$c->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
 				or error('Could not fetch user information.', __FILE__, __LINE__);
 			self::$data = $result->fetch(PDO::FETCH_ASSOC);
 
 			if (self::$data !== false)
 			{
+				// Check cookie key
 				if ($cookie['key'] == sha1(self::$data['salt'].self::$data['hash']))
 					self::$logged_in = true;
 			}
 		}
 	}
 
-	/* Log in. Returns 1 on success and the following when an error occurs.
-	   2 = already logged in, 3 = username or password not provided,
-	   4 = wrong password, 5 = wrong username. */
+	// Get more data of the user
+	static public function get_info($id, $fields = array(), $store = false)
+	{
+		if (count(array_diff($fields, self::$user_fields)) > 0)
+			return false;
+
+		$fields = implode(', ', $fields);
+
+		// Fetch user data
+		$result = db::$c->query('SELECT '.$fields.' FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
+			or error('Could not fetch user data.', __FILE__, __LINE__);
+
+		return $result->fetch(PDO::FETCH_ASSOC);
+	}
+
+	/* Create a login cookie for the user
+	   Only affects the current user/visitor
+	   1 = successful login, 2 = already logged in,
+	   3 = user does not exist, 4 = wrong password */
 	static public function login($username, $password)
 	{
-		if (get_cookie('user') !== false && self::$logged_in === true)
+		if (get_cookie('user') !== false && self::$logged_in)
 			return 2;
 
-		if (empty($username) || empty($password))
-			return 3;
-
+		// Escape username and password
 		$username = trim(db::$c->quote($username));
 		$password = trim($password);
 
+		// Fetch user data
 		$result = db::$c->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username='.$username.' LIMIT 1')
 			or error('Could not fetch login information.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
 
-		if ($fetch !== false)
-		{
-			list($user_id, $user_password, $user_salt, $user_hash) = $fetch;
+		if (!$fetch)
+			return 3;
 
-			if ($user_password == generate_hash($password, $user_salt))
-			{
-				// 1209600: 2 weeks - 43200: 12 hours
-				set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
-			}
-			else
-				return 4;
-		}
-		else
-			return 5;
+		// Check password hashes
+		list($user_id, $user_password, $user_salt, $user_hash) = $fetch;
+
+		if ($user_password != generate_hash($password, $user_salt))
+			return 4;
+
+		// 1209600: 2 weeks - 43200: 12 hours
+		set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
 
 		return 1;
 	}
 
-	// Log the user out by letting the cookie expire
+	// Let the user cookie expire
+	// Only affects the current user/visitor
 	static public function logout()
 	{
 		set_cookie('user', null, time()-3600);
 	}
 
-	// Add a new user to the database
-	// TODO: Test this function
-	public static function add($group_id, $username, $password, $email)
+	// Add new user
+	public static function add($username, $password, $email)
 	{
+		// Create hashes for the password
 		$salt = generate_salt();
 		$password = generate_hash($password, $salt);
 		$hash = generate_hash($username, $salt);
 
 		db::$c->exec('
 			INSERT INTO '.DB_PREFIX.'users
-				(group_id, username, password, salt, hash, email)
+				(username, password, salt, hash, email, enable_gravatar, allow_email)
 			VALUES(
-				'.intval($group_id).',
 				'.db::$c->quote($username).',
 				'.db::$c->quote($password).',
 				'.db::$c->quote($salt).',
 				'.db::$c->quote($hash).',
 				'.db::$c->quote($email).')') or error('Could not add new user to the database.', __FILE__, __LINE__);
 
+		// Return the ID of the added user
 		return db::$c->lastInsertId();
 	}
 
-	/* Removes the user with the given ID number.
-	   If the action fails, false is returned
-	   True is returned upon success. */
-	// TODO: Test this function
+	// Update user data
+	// Warning: `$keys` is not escaped
+	public static function update($id, $data = array())
+	{
+		$keys = $values = array();
+
+		// Create hashes when the password is updated
+		if (isset($data['password']))
+		{
+			$data['salt'] = generate_salt();
+			$data['password'] = generate_hash($password, $salt);
+			$data['hash'] = generate_hash($username, $salt);
+		}
+
+		// Generate the keys for the query
+		foreach($data as $k => $v)
+		{
+			$keys[] = $k.'=:'.$k;
+			$values[':'.$k] = $v;
+		}
+		$values[':user_id'] = $id;
+
+		// Execute query
+		$sql = 'UPDATE '.DB_PREFIX.'users SET '.implode(', ', $keys).' WHERE id=:user_id';
+		$sth = db::$c->prepare($sql);
+		$sth->execute($values);
+	}
+
+	// Remove a user
 	static public function remove($id)
 	{
-		$result = $sys_db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
+		$result = db::$c->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not check user existance.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
 
@@ -324,139 +398,6 @@ class user
 
 		db::$c->exec('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
-
-		return true;
-	}
-}
-
-// Extension class
-class extensions
-{
-	static private $initialize = false, $hooks = array();
-	static public $extensions = array();
-
-	static public function initialize()
-	{
-		if (self::$initialize === true)
-			return false;
-		else
-			self::$initialize = true;
-
-		$request_path = system::$request === false || empty(system::$request[0]) ? '/' : implode('/', system::$request);
-
-		$result = db::$c->query('
-			SELECT f.file, e.dir FROM '.DB_PREFIX.'ext_files AS f, '.DB_PREFIX.'extensions AS e
-			WHERE f.extension_id=e.id AND e.enabled=1 AND f.request_path='.db::$c->quote($request_path).'', PDO::FETCH_ASSOC);
-
-		foreach ($result as $row)
-		{
-			require SYS_EXTENSION.'/'.$row['dir'].'/r_'.$row['file'].'.php';
-			self::$extensions[] = $row['dir'];
-		}
-
-		//system::$request;
-	}
-
-	static public function add_action($hook, $function, $priority = 100, $accepted_args = 1)
-	{
-		$action_id = md5(implode(func_get_args()));
-		self::$hooks[$hook][$priority][$action_id] = array($function, $accepted_args);
-
-		return $action_id;
-	}
-
-	// Example: $actions = array(array('hook' => '', 'function' => '', 'priority' => 100, 'accepted_args' => 1));
-	static public function add_actions($actions)
-	{
-		$action_ids = array();
-
-		if (count($actions) > 0)
-		{
-			foreach ($actions as $k => $action)
-			{
-				$action_ids[$k] = md5(implode($action));
-				self::$hooks[$action['hook']][$action['priority']][$action_ids[$k]] = array($action['function'], $action['accepted_args']);
-			}
-		}
-
-		return $action_ids;
-	}
-
-	static public function remove_action($hook, $priority, $action_id)
-	{
-		unset(self::$hooks[$hook][$priority][$action_id]);
-	}
-
-	static public function run_hook($hook)
-	{
-		if (!array_key_exists($hook, self::$hooks))
-			return;
-
-		krsort(self::$hooks[$hook]);
-
-		if (func_num_args() > 1)
-			$args = array_slice(func_get_args(), 1);
-		else
-			$args = null;
-
-		foreach(self::$hooks[$hook] as $k => $actions)
-		{
-			// echo '<pre>', $k, ' - ', print_r($actions, true), '</pre><br />'; // For testing
-
-			foreach ($actions as $function)
-			{
-				call_user_func_array($function[0], array_slice($args, 0, $function[1]));
-			}
-		}
-	}
-}
-
-// Cache class
-class cache
-{
-	static public function exists($filename)
-	{
-		return is_file(SYS_CACHE.'/'.$filename);
-	}
-
-	static public function store($filename, $data)
-	{
-		$handle = fopen(SYS_CACHE.'/'.$filename, 'wb');
-
-		if (!$handle)
-			error('Can not open cache file: '.$filename, __FILE__, __LINE__);
-
-		fwrite($handle, $data);
-		fclose($handle);
-
-		return true;
-	}
-
-	static public function get($filename)
-	{
-		if (!self::exists($filename))
-			error('The file, "'.$filename.'", is not cached.', __FILE__, __LINE__);
-
-		return file_get_contents(SYS_CACHE.'/'.$filename);
-	}
-
-	static public function path($filename)
-	{
-		if (!self::exists($filename))
-			error('The file, "'.$filename.'", is not cached.', __FILE__, __LINE__);
-
-		return SYS_CACHE.'/'.$filename;
-	}
-
-	static public function clear($pattern = '.*')
-	{
-		$glob = glob(SYS_CACHE.'/'.$pattern);
-
-		if (!is_array($glob))
-			error('The pattern, "'.$pattern.'", is not valid.', __FILE, __LINE__);
-
-		foreach ($glob as $filename)
-			unlink($filename);
 
 		return true;
 	}
@@ -482,12 +423,15 @@ class tpl
 		self::$vars = array();
 	}
 
-	static public function url($relative_path = null)
+	static public function url($relative_path = null, $return = false)
 	{
-		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL === false ? '?q=' : null).$relative_path;
+		if ($return)
+			return SYSTEM_BASE_URL.'/?q='.$relative_path;
+
+		echo SYSTEM_BASE_URL.'/?q='.$relative_path;
 	}
 
-	static public function render($template_name, $local_vars=false, $clear = true)
+	static public function render($template_name, $local_vars = false, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
 		{
@@ -504,7 +448,7 @@ class tpl
 		else
 			error('Template could not be found!', __FILE__, __LINE__);
 
-		if ($clear === true)
+		if ($clear)
 			self::clear();
 	}
 }

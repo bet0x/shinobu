@@ -74,8 +74,11 @@ function error($messages, $file = false, $line = false)
 	else
 		echo $messages, "\n";
 
-	echo ($file !== false) ? "\n".'File: '.$file : null;
-	echo ($file !== false) ? "\n".'Line: '.$line : null;
+	if (SYSTEM_DEBUG)
+	{
+		echo ($file !== false) ? "\n".'File: '.$file : null;
+		echo ($file !== false) ? "\n".'Line: '.$line : null;
+	}
 
 	exit;
 }
@@ -149,4 +152,24 @@ function convert_linebreaks($str)
 function get_ext($file_name)
 {
 	return strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+}
+
+// Converts the
+function file_size($size)
+{
+	$units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+
+	for ($i = 0; $size > 1024; $i++)
+		$size /= 1024;
+
+	return round($size, 2).' '.$units[$i];
+}
+
+function get_microtime($microtime=false)
+{
+	if ($microtime === false)
+		$microtime = microtime();
+
+	list($usec, $sec) = explode(' ', $microtime);
+	return ((float)$usec + (float)$sec);
 }
