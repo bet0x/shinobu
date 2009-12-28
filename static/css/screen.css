@@ -44,6 +44,8 @@ td                { border-bottom-color: #efefef;font-weight: normal }
 /* Header */
 #header { position: relative;padding: 55px 0 0 }
 #header h1 { margin: 0 }
+#header h1 a:link, #header h1 a:visited { color: #222;text-decoration: none }
+#header h1 a:hover, #header h1 a:active { border-bottom: 2px solid #000 }
 
 /* Top navigation bar */
 #main-navigation

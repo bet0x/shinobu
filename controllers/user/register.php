@@ -42,9 +42,9 @@ class register_controller extends BaseWebController
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
 			if ($result->rowCount() > 0)
-				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'.
-									   The username you entered is too similar. The username must differ from that by at least one
-									   alphanumerical character (a-z or 0-9). Please choose a different username.';
+				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
+									  'The username you entered is too similar. The username must differ from that by at least one '.
+									  'alphanumerical character (a-z or 0-9). Please choose a different username.';
 		}
 
 		// Check password
@@ -77,9 +77,9 @@ class register_controller extends BaseWebController
 				$args['form']['email']);
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>You have been successfully registered.'.
-				                      ' You will be redirected to the homepage in 5 seconds.</p>',
-				'redirect_delay' => 5,
+				'redirect_message' => '<p>You have been successfully registered. You will be redirected to the homepage in 2 seconds '.
+				                      'where you can log in.</p>',
+				'redirect_delay' => 2,
 				'destination_url' => SYSTEM_BASE_URL
 				));
 		}

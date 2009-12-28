@@ -11,6 +11,8 @@
 <body>
 
 <div id="header">
+	<h1><a href="<?php echo SYSTEM_BASE_URL ?>"><?php echo u_htmlencode($website_title) ?></a></h1>
+
 	<div id="main-navigation">
 		<ul>
 			<?php if (user::$logged_in === true): ?>
@@ -24,8 +26,6 @@
 			<?php endif ?>
 		</ul>
 	</div>
-
-	<h1><span><?php echo u_htmlencode($website_title) ?></span></h1>
 </div>
 
 <div id="body">

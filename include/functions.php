@@ -74,7 +74,7 @@ function error($messages, $file = false, $line = false)
 	else
 		echo $messages, "\n";
 
-	if (SYSTEM_DEBUG)
+	if (SYSTEM_DEVEL)
 	{
 		echo ($file !== false) ? "\n".'File: '.$file : null;
 		echo ($file !== false) ? "\n".'Line: '.$line : null;

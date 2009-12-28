@@ -10,6 +10,7 @@ $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $
 // System settings
 define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/'));
 define('REWRITE_URL', false);
+define('SYSTEM_DEVEL', true); // Development mode
 
 // Database settings
 $db_type       = ''; // mysql, pgsql, sqlite2 or sqlite (sqlite3)

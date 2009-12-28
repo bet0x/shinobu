@@ -346,7 +346,7 @@ class user
 
 		db::$c->exec('
 			INSERT INTO '.DB_PREFIX.'users
-				(username, password, salt, hash, email, enable_gravatar, allow_email)
+				(username, password, salt, hash, email)
 			VALUES(
 				'.db::$c->quote($username).',
 				'.db::$c->quote($password).',
