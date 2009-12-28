@@ -1,10 +1,9 @@
 <?php require 'header.php' ?>
 
 <?php if ($error): ?>
-<p>The username or password you have entered is not correct, please try again. You can
-   <a href="<?php tpl::url('user/requestpassword') ?>">request a new password</a> if you forgot your current password.</p>
+<p>The username or password you have entered is not correct, please try again.</p>
 <?php else: ?>
-<p>You can <a href="<?php tpl::url('user/requestpassword') ?>">request a new password</a> if you forgot your current password.</p>
+<p>Fill in both fields and click <em>Log in</em>.</p>
 <?php endif ?>
 
 <?php if (!user::$logged_in): ?>
