@@ -1,0 +1,9 @@
+TODO
+====
+
+ - User rights system (ACL).
+ - Administration panel.
+ - Extension system (?).
+ - Language system (?).
+ - Navigation and page management.
+ - Separate database layers.
