@@ -5,7 +5,7 @@ class logout_controller extends BaseWebController
 	public function GET($args)
 	{
 		if (!user::$logged_in)
-			redirect(SYSTEM_BASE_URL);
+			$this->redirect(SYSTEM_BASE_URL);
 
 		user::logout();
 

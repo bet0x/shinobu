@@ -83,12 +83,6 @@ function error($messages, $file = false, $line = false)
 	exit;
 }
 
-// Redirect to specified page
-function redirect($location)
-{
-	header('location: '.$location); exit;
-}
-
 // Generates a sha1 hash from a string
 function generate_hash($str, $salt=false)
 {

@@ -2,6 +2,12 @@
 
 class login_controller extends BaseWebController
 {
+	protected function prepare()
+	{
+		if (user::$logged_in)
+			$this->redirect(SYSTEM_BASE_URL);
+	}
+
 	public function GET($args)
 	{
 		return tpl::render('user_login', array(
@@ -13,7 +19,7 @@ class login_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_login']))
-			redirect(tpl::url('user/login', true));
+			$this->redirect(utils::url('user/login', true));
 
 		if (user::login($args['form']['username'], $args['form']['password']) === 1)
 		{

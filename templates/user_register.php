@@ -7,11 +7,11 @@ click <em>register</em>.</p>
 <h4><strong>The following errors need to be corrected before you can register:</strong></h4>
 
 <ul class="form-errors">
-	<?php foreach ($errors as $e) echo '<li>'.$e.'</li>'."\n" ?>
+<?php foreach ($errors as $e) echo "\t", '<li>', $e, '</li>', "\n" ?>
 </ul>
 <?php endif ?>
 
-<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php tpl::url('user/register') ?>">
+<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php utils::url('user/register') ?>">
 	<p>
 		<label<?php if (isset($errors['username'])) echo ' class="error-field"' ?>>
 			<strong>Username <span>(required)</span></strong>

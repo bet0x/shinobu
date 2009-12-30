@@ -2,12 +2,10 @@
 
 class default_controller extends BaseWebController
 {
-	public function __construct($request)
+	public function prepare()
 	{
-		parent::__construct($request);
-
 		if (!user::$logged_in)
-			redirect(tpl::url('user/login', true));
+			$this->redirect(utils::url('user/login', true));
 	}
 
 	public function GET($args)
@@ -24,7 +22,7 @@ class default_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_profile']))
-			redirect(tpl::url('user/register', true));
+			$this->redirect(utils::url('user/register', true));
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();
@@ -89,7 +87,7 @@ class default_controller extends BaseWebController
 				'redirect_message' => '<p>Your profile has been updated.'.
 				                      ' You will be redirected to the homepage in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => tpl::url('user', true)
+				'destination_url' => utils::url('user', true)
 				));
 		}
 

@@ -181,6 +181,12 @@ class BaseController
 	public function __construct($request)
 	{
 		$this->request = $request;
+		$this->prepare();
+	}
+
+	protected function prepare()
+	{
+		// This is an empty function that's always executed by the constructor
 	}
 
 	// Send content type header
@@ -443,15 +449,6 @@ class tpl
 		self::$vars = array();
 	}
 
-	// Marked for deletion
-	static public function url($relative_path = null, $return = false)
-	{
-		if ($return)
-			return SYSTEM_BASE_URL.'/?q='.$relative_path;
-
-		echo SYSTEM_BASE_URL.'/?q='.$relative_path;
-	}
-
 	static public function render($template_name, $local_vars = false, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
@@ -480,8 +477,8 @@ class utils
 	static public function url($relative_path = null, $return = false)
 	{
 		if ($return)
-			return SYSTEM_BASE_URL.'/?q='.$relative_path;
+			return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
 
-		echo SYSTEM_BASE_URL.'/?q='.$relative_path;
+		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
 	}
 }
