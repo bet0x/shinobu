@@ -1,5 +1,5 @@
 <?php require 'header.php' ?>
 
-<p>This is the homepage</p>
+<?php echo $page_body ?>
 
 <?php require 'footer.php' ?>

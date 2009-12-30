@@ -11,7 +11,7 @@ Please read those texts.</p>
 </ul>
 <?php endif ?>
 
-<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php tpl::url('user') ?>">
+<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php utils::url('user') ?>">
 	<p>
 		<label>
 			<strong>Username</strong>

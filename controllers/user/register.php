@@ -2,12 +2,10 @@
 
 class register_controller extends BaseWebController
 {
-	public function __construct($request)
+	public function prepare()
 	{
-		parent::__construct($request);
-
 		if (user::$logged_in)
-			redirect(SYSTEM_BASE_URL);
+			$this->redirect(SYSTEM_BASE_URL);
 	}
 
 	public function GET($args)
@@ -24,7 +22,7 @@ class register_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_register']))
-			redirect(tpl::url('user/register', true));
+			$this->redirect(utils::url('user/register', true));
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();

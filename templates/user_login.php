@@ -6,8 +6,7 @@
 <p>Fill in both fields and click <em>Log in</em>.</p>
 <?php endif ?>
 
-<?php if (!user::$logged_in): ?>
-<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php tpl::url('user/login') ?>">
+<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php utils::url('user/login') ?>">
 	<p>
 		<label<?php if ($error) echo ' class="error-field"' ?>>
 			<strong>Username <span>(required)</span></strong>
@@ -22,6 +21,5 @@
 	</p>
 	<p><input type="submit" value="Log in" name="form_login" /></p>
 </form>
-<?php endif ?>
 
 <?php require 'footer.php' ?>

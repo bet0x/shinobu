@@ -22,20 +22,18 @@ require SYS_INCLUDE.'/classes.php';
 disable_magic_quotes();
 unregister_globals();
 
-// Force POSIX locale (to prevent functions such as strtolower() from messing up UTF-8 strings)
+// Force POSIX locale (to prevent functions such as
+// strtolower() from messing up UTF-8 strings)
 setlocale(LC_CTYPE, 'C');
 
 // Make the primary connection with the database
 db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
 
-#echo print_r(db::$c->info());
-
 // Check user cookie
 user::initialize();
 
-//var_export(user::login('Frank', 'password'));
-
 echo request::answer();
-#echo round(get_microtime(microtime()) - get_microtime($start_timer), 5), 'ms - ', file_size(memory_get_usage()), ' - ',
+#echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
+#     'ms - ', file_size(memory_get_usage()), ' - ',
 #     file_size(memory_get_peak_usage());

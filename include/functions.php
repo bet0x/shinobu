@@ -83,12 +83,6 @@ function error($messages, $file = false, $line = false)
 	exit;
 }
 
-// Redirect to specified page
-function redirect($location)
-{
-	header('location: '.$location); exit;
-}
-
 // Generates a sha1 hash from a string
 function generate_hash($str, $salt=false)
 {
@@ -165,9 +159,10 @@ function file_size($size)
 	return round($size, 2).' '.$units[$i];
 }
 
+// Get microtime
 function get_microtime($microtime=false)
 {
-	if ($microtime === false)
+	if (!$microtime)
 		$microtime = microtime();
 
 	list($usec, $sec) = explode(' ', $microtime);

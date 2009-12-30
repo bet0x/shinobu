@@ -19,13 +19,13 @@
 	<div id="main-navigation">
 		<ul>
 			<?php if (user::$logged_in === true): ?>
-			<li class="txts-one"><a href="<?php self::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
+			<li class="txts-one"><a href="<?php utils::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
 			<li>&middot;</li>
-			<li><a href="<?php self::url('user/logout') ?>">Log out</a></li>
+			<li><a href="<?php utils::url('user/logout') ?>">Log out</a></li>
 			<?php else: ?>
-			<li><a href="<?php self::url('user/login') ?>">Log in</a></li>
+			<li><a href="<?php utils::url('user/login') ?>">Log in</a></li>
 			<li>&middot;</li>
-			<li><a href="<?php self::url('user/register') ?>">Register</a></li>
+			<li><a href="<?php utils::url('user/register') ?>">Register</a></li>
 			<?php endif ?>
 		</ul>
 	</div>
