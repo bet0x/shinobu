@@ -7,36 +7,14 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
+// Note: All methods that are prefixed with an _ are meant for internal use.
+// That means they are not used outside the class.
+
+// This class handles the request.  It calls the controller and the
+// method/function that fits the request method.
 class request
 {
 	static public $request = false, $controller_path = false;
-	static private $_custom_fourofour = false;
-	static private $mimetypes = array(
-		'text'  => 'text/plain',
-		'html'  => 'text/html',
-		'xml'   => 'text/xml',
-		'xhtml' => 'application/xhtml+xml',
-		'atom'  => 'application/atom+xml',
-		'rss'   => 'application/rss+xml',
-		'json'  => 'application/json',
-		'svg'   => 'image/svg+xml',
-		'gif'   => 'image/gif',
-		'png'   => 'image/png',
-		'jpg'   => 'image/jpeg'
-		);
-	static private $status_codes = array(
-		303 => 'HTTP/1.1 See Other',
-		400 => 'HTTP/1.1 Bad Request',
-		401 => 'HTTP/1.1 Unauthorized',
-		402 => 'HTTP/1.1 Payment Required',
-		403 => 'HTTP/1.1 Forbidden',
-		404 => 'HTTP/1.1 Not Found',
-		405 => 'HTTP/1.1 Method Not Allowed',
-		406 => 'HTTP/1.1 Not Acceptable',
-		408 => 'HTTP/1.1 Request Timeout',
-		409 => 'HTTP/1.1 Conflict',
-		410 => 'HTTP/1.1 Gone'
-		);
 
 	// Find controller and return the path
 	static private function _find_controller($request_path)
@@ -102,7 +80,7 @@ class request
 
 	// Get the contents of $_GET['q'] and filter and split it.
 	// If $_GET['q'] is not set false is returned
-	static private function _parse_request()
+	static private function _parse_request_string()
 	{
 		if (!isset($_GET['q']) || empty($_GET['q']))
 			return false;
@@ -111,51 +89,18 @@ class request
 		return explode('/', $request_path);
 	}
 
-	// Send status header
-	static public function set_status($status_code)
-	{
-		if (array_key_exists($status_code, self::$status_codes))
-		{
-			header(self::$status_codes[$status_code]);
-			return true;
-		}
-		else
-			return false;
-	}
-
-	// Set 404 page
-	static public function set_fourofour($contents)
-	{
-		self::$_custom_fourofour = $contents;
-	}
-
-	// Set 404 page
-	static public function send_fourofour()
-	{
-		self::set_status(404);
-
-		if (self::$_custom_fourofour === false)
-			return 'The page you requested could not be found.';
-		else
-			return self::$_custom_fourofour;
-	}
-
-	// Send content type header
-	static public function set_mimetype($type='html')
-	{
-		if (in_array($type, self::$mimetypes))
-			header('Content-type: '.self::$mimetypes[$type].'; charset=utf-8');
-		else
-			header('Content-type: text/html; charset=utf-8');
-	}
-
 	static public function answer()
 	{
-		$request = self::_parse_request();
+		$request = self::_parse_request_string();
 		$controller_path = self::_find_controller($request);
 
 		if (!$controller_path)
-			return self::send_fourofour();
+		{
+			global $SYSTEM_DEFAULT_CONTROLLER;
+
+			$controller_instance = new $SYSTEM_DEFAULT_CONTROLLER($request);
+			return $controller_instance->send_error(404);
+		}
 
 		require $controller_path;
 
@@ -167,33 +112,108 @@ class request
 		else
 			$args = null;
 
-		// Start de controller
-		if (!class_exists($class_name))
-			return self::send_fourofour();
-
 		$controller_instance = new $class_name($request);
 		return $controller_instance->$request_type($args);
 	}
 }
 
-// Abstract class for controllers
+// A base class for controllers
 // This class contains all the supported requests methods
 // Sublassing is also possible
-abstract class BaseController
+class BaseController
 {
 	protected $request = false;
+	protected $_mimetypes = array(
+		'text'  => 'text/plain',
+		'html'  => 'text/html',
+		'xml'   => 'text/xml',
+		'xhtml' => 'application/xhtml+xml',
+		'atom'  => 'application/atom+xml',
+		'rss'   => 'application/rss+xml',
+		'json'  => 'application/json',
+		'svg'   => 'image/svg+xml',
+		'gif'   => 'image/gif',
+		'png'   => 'image/png',
+		'jpg'   => 'image/jpeg');
+	protected $_status_codes = array(
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		306 => '(Unused)',
+		307 => 'Temporary Redirect',
+		400 => 'Bad Request',
+		401 => 'Unauthorized',
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Timeout',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Request Entity Too Large',
+		414 => 'Request-URI Too Long',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested Range Not Satisfiable',
+		417 => 'Expectation Failed',
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Timeout',
+		505 => 'HTTP Version Not Supported');
 
 	public function __construct($request)
 	{
 		$this->request = $request;
 	}
 
-	public function GET($args) {}
-	public function POST($args) {}
-	public function PUT($args) {}
-	public function DELETE($args) {}
-	public function HEAD($args) {}
-	public function AJAX($args) {}
+	// Send content type header
+	protected function set_mimetype($type)
+	{
+		if (array_key_exists($type, $this->_mimetypes))
+			header('Content-type: '.$this->_mimetypes.'; charset=utf-8');
+		else
+			header('Content-type: text/plain; charset=utf-8');
+	}
+
+	public function send_error($status_code)
+	{
+		if (!array_key_exists($status_code, $this->_status_codes))
+			$status_code = 500;
+
+		header('HTTP/1.1 '.$status_code.' '.$this->_status_codes[$status_code]);
+		$this->set_mimetype('text');
+
+		return $status_code.': '.$this->_status_codes[$status_code];
+	}
+
+	protected function redirect($location)
+	{
+		header('location: '.$location); exit;
+	}
+
+	public function GET($args) { return $this->send_error(405); }
+	public function POST($args) { return $this->send_error(405); }
+	public function PUT($args) { return $this->send_error(405); }
+	public function DELETE($args) { return $this->send_error(405); }
+	public function HEAD($args) { return $this->send_error(405); }
+	public function AJAX($args) { return $this->send_error(405); }
 }
 
 abstract class BaseWebController extends BaseController
@@ -205,7 +225,7 @@ abstract class BaseWebController extends BaseController
 		parent::__construct($request);
 		tpl::set('website_title', 'Shinobu');
 
-		request::set_mimetype('html');
+		$this->set_mimetype('html');
 	}
 }
 
@@ -423,6 +443,7 @@ class tpl
 		self::$vars = array();
 	}
 
+	// Marked for deletion
 	static public function url($relative_path = null, $return = false)
 	{
 		if ($return)
@@ -450,5 +471,17 @@ class tpl
 
 		if ($clear)
 			self::clear();
+	}
+}
+
+// A class with some useful functions
+class utils
+{
+	static public function url($relative_path = null, $return = false)
+	{
+		if ($return)
+			return SYSTEM_BASE_URL.'/?q='.$relative_path;
+
+		echo SYSTEM_BASE_URL.'/?q='.$relative_path;
 	}
 }

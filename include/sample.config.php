@@ -12,6 +12,8 @@ define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname(
 define('REWRITE_URL', false);
 define('SYSTEM_DEVEL', true); // Development mode
 
+$SYSTEM_DEFAULT_CONTROLLER = 'BaseController';
+
 // Database settings
 $db_type       = ''; // mysql, pgsql, sqlite2 or sqlite (sqlite3)
 $db_host       = '';

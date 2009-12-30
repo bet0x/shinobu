@@ -165,9 +165,10 @@ function file_size($size)
 	return round($size, 2).' '.$units[$i];
 }
 
+// Get microtime
 function get_microtime($microtime=false)
 {
-	if ($microtime === false)
+	if (!$microtime)
 		$microtime = microtime();
 
 	list($usec, $sec) = explode(' ', $microtime);
