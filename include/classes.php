@@ -526,11 +526,13 @@ class utils
 		return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
 	}
 
-	static public function url($relative_path = null, $return = false)
+	static public function url($relative_path = null)
 	{
-		if ($return)
-			return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
+		return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
+	}
 
-		echo SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
+	static public function static_url($file_path)
+	{
+		return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
 	}
 }

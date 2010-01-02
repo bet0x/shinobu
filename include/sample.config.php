@@ -9,7 +9,7 @@ $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $
 
 // System settings
 define('SHINOBU', '0.4-dev');
-define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/'));
+define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/\\'));
 define('REWRITE_URL', false);
 define('SYSTEM_DEVEL', true); // Development mode
 
@@ -36,3 +36,4 @@ $sys_cookie_lifetime = 34560000; // 400 days
 define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
+define('SYS_STATIC', SYS.'/static');

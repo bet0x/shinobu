@@ -22,7 +22,7 @@ class register_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_register']))
-			$this->redirect(utils::url('user/register', true));
+			$this->redirect(utils::url('user/register'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);

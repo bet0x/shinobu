@@ -19,7 +19,7 @@ class login_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_login']))
-			$this->redirect(utils::url('user/login', true));
+			$this->redirect(utils::url('user/login'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);

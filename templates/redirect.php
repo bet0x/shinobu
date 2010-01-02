@@ -7,7 +7,7 @@
 
 	<title>Redirecting... - <?php echo u_htmlencode($website_title) ?></title>
 
-	<link rel="stylesheet" type="text/css" media="all" href="<?php echo SYSTEM_BASE_URL ?>/static/css/screen.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="<?php echo utils::static_url('css/screen.css') ?>" />
 </head>
 <body>
 

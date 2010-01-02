@@ -6,7 +6,7 @@
 
 	<title><?php echo u_htmlencode($page_title) ?> - <?php echo u_htmlencode($website_title) ?></title>
 
-	<link rel="stylesheet" type="text/css" media="all" href="<?php echo SYSTEM_BASE_URL ?>/static/css/screen.css" />
+	<link rel="stylesheet" type="text/css" media="all" href="<?php echo utils::static_url('css/screen.css') ?>" />
 </head>
 <body>
 
@@ -19,13 +19,13 @@
 	<div id="main-navigation">
 		<ul>
 			<?php if (user::$logged_in === true): ?>
-			<li class="txts-one"><a href="<?php utils::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
+			<li class="txts-one"><a href="<?php echo utils::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
 			<li>&middot;</li>
-			<li><a href="<?php utils::url('user/logout/'.utils::xsrf_token()) ?>">Log out</a></li>
+			<li><a href="<?php echo utils::url('user/logout/'.utils::xsrf_token()) ?>">Log out</a></li>
 			<?php else: ?>
-			<li><a href="<?php utils::url('user/login') ?>">Log in</a></li>
+			<li><a href="<?php echo utils::url('user/login') ?>">Log in</a></li>
 			<li>&middot;</li>
-			<li><a href="<?php utils::url('user/register') ?>">Register</a></li>
+			<li><a href="<?php echo utils::url('user/register') ?>">Register</a></li>
 			<?php endif ?>
 		</ul>
 	</div>

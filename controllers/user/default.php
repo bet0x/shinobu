@@ -5,7 +5,7 @@ class default_controller extends BaseWebController
 	public function prepare()
 	{
 		if (!user::$logged_in)
-			$this->redirect(utils::url('user/login', true));
+			$this->redirect(utils::url('user/login'));
 	}
 
 	public function GET($args)
@@ -22,7 +22,7 @@ class default_controller extends BaseWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_profile']))
-			$this->redirect(utils::url('user/register', true));
+			$this->redirect(utils::url('user/register'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
