@@ -31,7 +31,7 @@ db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
 
 // Check user cookie
-user::initialize();
+user::authenticate();
 
 echo request::answer();
 #echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),

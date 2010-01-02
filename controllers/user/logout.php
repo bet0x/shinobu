@@ -7,6 +7,9 @@ class logout_controller extends BaseWebController
 		if (!user::$logged_in)
 			$this->redirect(SYSTEM_BASE_URL);
 
+		if (!isset($this->request[2]) || !utils::check_xsrf_cookie($this->request[2]))
+			return $this->send_error(403);
+
 		user::logout();
 
 		return tpl::render('redirect', array(

@@ -289,7 +289,7 @@ class user
 
 	// Check user cookie
 	// Only affects the current user/visitor
-	static public function initialize()
+	static public function authenticate()
 	{
 		if (($cookie = utils::get_cookie('user')) !== false)
 		{
