@@ -17,6 +17,7 @@ define('SYS', dirname(__FILE__));
 require SYS.'/include/config.php';
 require SYS_INCLUDE.'/functions.php';
 require SYS_INCLUDE.'/classes.php';
+require SYS_INCLUDE.'/auth.php';
 
 // Disable evil stuff
 disable_magic_quotes();
@@ -34,6 +35,6 @@ unset($db_user, $db_password);
 user::authenticate();
 
 echo request::answer();
-#echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
-#     'ms - ', file_size(memory_get_usage()), ' - ',
-#     file_size(memory_get_peak_usage());
+echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
+     'ms - ', file_size(memory_get_usage()), ' - ',
+     file_size(memory_get_peak_usage());
