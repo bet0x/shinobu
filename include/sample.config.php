@@ -25,17 +25,14 @@ $db_password   = ''; // This variable is unset after the DB connection has been 
 define('DB_PREFIX', '');
 
 // Cookie settings
-$sys_cookie_name   = 'system_cookie';
-$sys_cookie_domain = '';
-$sys_cookie_path   = '/';
-$sys_cookie_secure = 0;
-$sys_cookie_seed   = '&^7hyY&*88uhY&'; // Some random characters should be entered here. Example: &^7hyY&*88uhY&
+$sys_cookie_name     = 'shinobu04_cookie';
+$sys_cookie_domain   = '';
+$sys_cookie_path     = '/';
+$sys_cookie_secure   = 0;
+$sys_cookie_seed     = '&^7hyY&*88uhY&'; // Some random characters should be entered here. Example: &^7hyY&*88uhY&
+$sys_cookie_lifetime = 34560000; // 400 days
 
 // Paths
 define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
-
-// Hardcode usergroup IDs (temperary)
-define('ADMIN_ID', 1);
-define('MEMBER_ID', 2);

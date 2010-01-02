@@ -24,6 +24,9 @@ class default_controller extends BaseWebController
 		if (!isset($args['form_profile']))
 			$this->redirect(utils::url('user/register', true));
 
+		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+			return $this->send_error(403);
+
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();
 		$new_password = $new_email = false;

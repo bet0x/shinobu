@@ -19,7 +19,7 @@ class request
 	// Find controller and return the path
 	static private function _find_controller($request_path)
 	{
-		if ($request_path === false)
+		if (!$request_path)
 		{
 			return SYS_CONTROL.'/default.php';
 		}
@@ -229,9 +229,9 @@ abstract class BaseWebController extends BaseController
 	public function __construct($request)
 	{
 		parent::__construct($request);
-		tpl::set('website_title', 'Shinobu');
-
 		$this->set_mimetype('html');
+
+		tpl::set('website_title', 'Shinobu');
 	}
 }
 
@@ -243,7 +243,7 @@ class db
 
 	static public function connect($db_type, $db_host, $db_name, $db_user, $db_password)
 	{
-		if (self::$connected === true)
+		if (self::$connected)
 			return false;
 
 		try
@@ -291,7 +291,7 @@ class user
 	// Only affects the current user/visitor
 	static public function initialize()
 	{
-		if (($cookie = get_cookie('user')) !== false)
+		if (($cookie = utils::get_cookie('user')) !== false)
 		{
 			// Get user data
 			$result = db::$c->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
@@ -328,7 +328,7 @@ class user
 	   3 = user does not exist, 4 = wrong password */
 	static public function login($username, $password)
 	{
-		if (get_cookie('user') !== false && self::$logged_in)
+		if (utils::get_cookie('user') !== false && self::$logged_in)
 			return 2;
 
 		// Escape username and password
@@ -350,7 +350,7 @@ class user
 			return 4;
 
 		// 1209600: 2 weeks - 43200: 12 hours
-		set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
+		utils::set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
 
 		return 1;
 	}
@@ -359,7 +359,7 @@ class user
 	// Only affects the current user/visitor
 	static public function logout()
 	{
-		set_cookie('user', null, time()-3600);
+		utils::set_cookie('user', null, time()-3600);
 	}
 
 	// Add new user
@@ -471,9 +471,61 @@ class tpl
 	}
 }
 
-// A class with some useful functions
+// A class with web related functions
 class utils
 {
+	static private $_xsrf_token = false;
+
+	static function xsrf_token()
+	{
+		if (($token = utils::get_cookie('xsrf')) !== false)
+			self::$_xsrf_token =& $token;
+		elseif (!self::$_xsrf_token)
+		{
+			self::$_xsrf_token = generate_hash(generate_salt());
+			utils::set_cookie('xsrf', self::$_xsrf_token);
+		}
+
+		return self::$_xsrf_token;
+	}
+
+	static function check_xsrf_cookie($token)
+	{
+		if (!self::$_xsrf_token)
+			self::xsrf_token();
+
+		return $token == self::$_xsrf_token;
+	}
+
+	static function xsrf_form_html()
+	{
+		if (!self::$_xsrf_token)
+			self::xsrf_token();
+
+		return '<input type="hidden" name="xsrf_token" value="'.self::$_xsrf_token.'" />';
+	}
+
+	// Set a cookie
+	static public function set_cookie($name, $value, $expire = 0)
+	{
+		global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
+
+		header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
+
+		if (version_compare(PHP_VERSION, '5.2.0', '>='))
+			setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure, true);
+		else
+			setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly', $sys_cookie_domain, $sys_cookie_secure);
+	}
+
+	// Get a cookie
+	static public function get_cookie($name)
+	{
+		global $sys_cookie_name;
+
+		return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
+	}
+
 	static public function url($relative_path = null, $return = false)
 	{
 		if ($return)

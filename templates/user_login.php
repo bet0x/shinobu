@@ -7,6 +7,9 @@
 <?php endif ?>
 
 <form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php utils::url('user/login') ?>">
+	<div>
+		<?php echo utils::xsrf_form_html(), "\n" ?>
+	</div>
 	<p>
 		<label<?php if ($error) echo ' class="error-field"' ?>>
 			<strong>Username <span>(required)</span></strong>

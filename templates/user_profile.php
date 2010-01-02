@@ -12,6 +12,9 @@ Please read those texts.</p>
 <?php endif ?>
 
 <form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php utils::url('user') ?>">
+	<div>
+		<?php echo utils::xsrf_form_html(), "\n" ?>
+	</div>
 	<p>
 		<label>
 			<strong>Username</strong>

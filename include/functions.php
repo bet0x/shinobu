@@ -77,16 +77,16 @@ function error($messages, $file = false, $line = false)
 	if (SYSTEM_DEVEL)
 	{
 		echo ($file !== false) ? "\n".'File: '.$file : null;
-		echo ($file !== false) ? "\n".'Line: '.$line : null;
+		echo ($line !== false) ? "\n".'Line: '.$line : null;
 	}
 
 	exit;
 }
 
 // Generates a sha1 hash from a string
-function generate_hash($str, $salt=false)
+function generate_hash($str, $salt = false)
 {
-	if ($str === false || strlen($salt) === 0)
+	if (!$str || strlen($salt) === 0)
 		$salt = generate_salt();
 
 	return sha1($salt.sha1($str)); // Returns a 40 character long hash
@@ -101,27 +101,6 @@ function generate_salt()
 		$key .= chr(mt_rand(33, 126));
 
 	return $key; // Returns a 20 character long salt
-}
-
-// Set a cookie
-function set_cookie($name, $value, $expire)
-{
-	global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
-
-	header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
-
-	if (version_compare(PHP_VERSION, '5.2.0', '>='))
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure, true);
-	else
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly', $sys_cookie_domain, $sys_cookie_secure);
-}
-
-// Get a cookie
-function get_cookie($name)
-{
-	global $sys_cookie_name;
-
-	return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
 }
 
 // Get the IP address from the visitor

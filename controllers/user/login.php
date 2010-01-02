@@ -21,6 +21,9 @@ class login_controller extends BaseWebController
 		if (!isset($args['form_login']))
 			$this->redirect(utils::url('user/login', true));
 
+		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+			return $this->send_error(403);
+
 		if (user::login($args['form']['username'], $args['form']['password']) === 1)
 		{
 			return tpl::render('redirect', array(
