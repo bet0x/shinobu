@@ -9,11 +9,10 @@
 
 $start_timer = microtime();
 
-ob_start();
 error_reporting(E_ALL);
 define('SYS', dirname(__FILE__));
 
-// Load configuration and functions
+// Load configuration, functions and libraries
 require SYS.'/include/config.php';
 require SYS_INCLUDE.'/functions.php';
 require SYS_INCLUDE.'/classes.php';
@@ -34,6 +33,7 @@ unset($db_user, $db_password);
 // Check user cookie
 user::authenticate();
 
+// Return content to the visitor
 echo request::answer();
 echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
      'ms - ', file_size(memory_get_usage()), ' - ',

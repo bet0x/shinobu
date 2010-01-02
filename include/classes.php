@@ -10,8 +10,8 @@
 // Note: All methods that are prefixed with an _ are meant for internal use.
 // That means they are not used outside the class.
 
-// This class handles the request.  It calls the controller and the
-// method/function that fits the request method.
+// This class handles the request.  It processes the request string and calls
+// the controller and the method that needs to respond to the request.
 class request
 {
 	static public $request = false, $controller_path = false;
@@ -89,6 +89,7 @@ class request
 		return explode('/', $request_path);
 	}
 
+	// Call the controller and echo the output
 	static public function answer()
 	{
 		$request = self::_parse_request_string();
@@ -222,6 +223,7 @@ class BaseController
 	public function AJAX($args) { return $this->send_error(405); }
 }
 
+// A controller for web pages
 abstract class BaseWebController extends BaseController
 {
 	protected $request = false;
@@ -286,21 +288,25 @@ class tpl
 {
 	static private $vars = array();
 
+	// Set a variable
 	static public function set($ident, $value)
 	{
 		self::$vars[$ident] = $value;
 	}
 
+	// Get a variable.  Returns false if it doesn't exist.
 	static public function get($ident)
 	{
 		return isset(self::$vars[$ident]) ? self::$vars[$ident] : false;
 	}
 
+	// Clear all variables
 	static public function clear()
 	{
 		self::$vars = array();
 	}
 
+	// Render the template
 	static public function render($template_name, $local_vars = false, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
@@ -328,6 +334,9 @@ class utils
 {
 	static private $_xsrf_token = false;
 
+	// Generate an XSRF token and store it in a cookie, but first check if the
+	// cookie already exists or if the token is already generated.  Then return it.
+	// See: http://en.wikipedia.org/wiki/Cross-site_request_forgery
 	static function xsrf_token()
 	{
 		if (($token = utils::get_cookie('xsrf')) !== false)
@@ -341,6 +350,8 @@ class utils
 		return self::$_xsrf_token;
 	}
 
+	// Compare $token with the XSRF token.  Generate an XSRF token if self::$_xsrf_token
+	// is false.
 	static function check_xsrf_cookie($token)
 	{
 		if (!self::$_xsrf_token)
@@ -349,6 +360,8 @@ class utils
 		return $token == self::$_xsrf_token;
 	}
 
+	// Return a hidden form field with the XSRF token.  Generate an XSRF token
+	// if self::$_xsrf_token is false.
 	static function xsrf_form_html()
 	{
 		if (!self::$_xsrf_token)
@@ -378,11 +391,13 @@ class utils
 		return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
 	}
 
+	// Generate and return an url to a controller
 	static public function url($relative_path = null)
 	{
 		return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
 	}
 
+	// Append a ?v=<timestamp of last modification> to a static file
 	static public function static_url($file_path)
 	{
 		return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);

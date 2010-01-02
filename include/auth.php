@@ -34,7 +34,7 @@ class user
 	}
 
 	// Get more data of the user
-	static public function get_info($id, $fields = array(), $store = false)
+	static public function get_info($id, $fields = array())
 	{
 		if (count(array_diff($fields, self::$user_fields)) > 0)
 			return false;
@@ -44,8 +44,13 @@ class user
 		// Fetch user data
 		$result = db::$c->query('SELECT '.$fields.' FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not fetch user data.', __FILE__, __LINE__);
+		$info = $result->fetch(PDO::FETCH_ASSOC);
 
-		return $result->fetch(PDO::FETCH_ASSOC);
+		// Store the user information if the user asked for information about him/herself
+		if ($id == self::$data['id'] && $info)
+			self::$data = array_merge(self::$data, $info);
+
+		return $info;
 	}
 
 	/* Create a login cookie for the user
@@ -54,6 +59,7 @@ class user
 	   3 = user does not exist, 4 = wrong password */
 	static public function login($username, $password)
 	{
+		// Check if user is logged in
 		if (utils::get_cookie('user') !== false && self::$logged_in)
 			return 2;
 
@@ -61,7 +67,7 @@ class user
 		$username = trim(db::$c->quote($username));
 		$password = trim($password);
 
-		// Fetch user data
+		// Check if user exists and fetch data
 		$result = db::$c->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username='.$username.' LIMIT 1')
 			or error('Could not fetch login information.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
@@ -75,14 +81,13 @@ class user
 		if ($user_password != generate_hash($password, $user_salt))
 			return 4;
 
-		// 1209600: 2 weeks - 43200: 12 hours
+		// 1209600: 2 weeks
 		utils::set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
 
 		return 1;
 	}
 
-	// Let the user cookie expire
-	// Only affects the current user/visitor
+	// Let the user cookie expire.  Only affects the current user/visitor.
 	static public function logout()
 	{
 		utils::set_cookie('user', null, time()-3600);
@@ -111,9 +116,11 @@ class user
 	}
 
 	// Update user data
-	// Warning: `$keys` is not escaped
 	public static function update($id, $data = array())
 	{
+		if (count(array_diff(array_keys($data), self::$user_fields)) > 0)
+			return false;
+
 		$keys = $values = array();
 
 		// Create hashes when the password is updated
@@ -141,13 +148,15 @@ class user
 	// Remove a user
 	static public function remove($id)
 	{
+		// Check if user exists
 		$result = db::$c->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not check user existance.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
 
-		if ($fetch === false)
+		if (!$fetch)
 			return false;
 
+		// Remove user
 		db::$c->exec('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
 

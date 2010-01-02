@@ -12,7 +12,7 @@ function disable_magic_quotes()
 {
 	// Turn off magic_quotes_runtime
 	if (get_magic_quotes_runtime())
-		set_magic_quotes_runtime(0);
+		set_magic_quotes_runtime(false);
 
 	// Strip slashes from GET/POST/COOKIE (if magic_quotes_gpc is enabled)
 	if (get_magic_quotes_gpc())
@@ -59,8 +59,6 @@ function unregister_globals()
 // Sends an error message. Used by database and cache functions
 function error($messages, $file = false, $line = false)
 {
-	ob_end_clean();
-
 	// Send (no-cache) headers
 	header('Expires: Thu, 21 Jul 1977 07:30:00 GMT');
 	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
@@ -74,6 +72,7 @@ function error($messages, $file = false, $line = false)
 	else
 		echo $messages, "\n";
 
+	// Show the file name and line number when development mode is enabled
 	if (SYSTEM_DEVEL)
 	{
 		echo ($file !== false) ? "\n".'File: '.$file : null;
@@ -115,7 +114,7 @@ function u_htmlencode($str)
 	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-// Convert linebreakes to unix linebreaks
+// Convert all linebreakes (Windows, Mac) to Unix linebreaks
 function convert_linebreaks($str)
 {
 	return str_replace(array("\r\n", "\r"), array("\n"), $str);
@@ -127,7 +126,7 @@ function get_ext($file_name)
 	return strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 }
 
-// Converts the
+// Converts the file size in bytes to a human readable file size
 function file_size($size)
 {
 	$units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
