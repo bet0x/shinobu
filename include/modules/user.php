@@ -99,9 +99,9 @@ class user
 		return db::$c->lastInsertId();
 	}
 
-	/* Return the stored user data or fetch extra user data from the database. Extra data can
-	   be requested by adding arguments to the function. Example: user::data('username', 'email', 'salt');
-	   This function will return `false` if the requested data is not in the user::$data_fields array.
+	/* Returns all the stored user data when no arguments are given.  When an argument (or more)
+	   only the selected data will be returned. When the requested data was not stored it will
+	   be fetched from the database.
 	*/
 	public function data()
 	{
@@ -109,6 +109,7 @@ class user
 		{
 			$extra_data = func_get_args();
 
+			// First check if the requested data is already available
 			if (count(array_diff($extra_data, array_keys($this->data))) < 1)
 			{
 				if ($func_num_args === 1)
@@ -118,14 +119,13 @@ class user
 					$selected_data = array();
 
 					foreach ($extra_data as $k)
-					{
-						$extra_data[$k] = $this->data[$k];
-					}
+						$selected_data[$k] = $this->data[$k];
 
-					return $extra_data;
+					return $selected_data;
 				}
 			}
 
+			// Check if fields are valid
 			if (count(array_diff($extra_data, $this->data_fields)) > 0)
 				return false;
 
@@ -139,6 +139,8 @@ class user
 			// Store the user data
 			if ($db_data)
 				$this->data = array_merge($this->data, $db_data);
+
+			return $db_data;
 		}
 
 		return $this->data;
@@ -190,20 +192,5 @@ class user
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
 
 		return true;
-	}
-}
-
-// The user class
-class user2
-{
-	static public $logged_in = false, $data = false;
-	static private $user_fields = array('id', 'username', 'password', 'salt', 'hash', 'email');
-
-	// Get more data of the user
-	static public function get_info($id, $fields = array())
-	{
-
-
-		return $info;
 	}
 }
