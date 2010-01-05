@@ -1,10 +1,10 @@
 <?php
 
-class register_controller extends BaseWebController
+class register_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (user::$logged_in)
+		if ($this->user->authenticated())
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -72,7 +72,7 @@ class register_controller extends BaseWebController
 
 		if (count($errors) === 0)
 		{
-			user::add(
+			$this->user->add(
 				$args['form']['username'],
 				$args['form']['password'],
 				$args['form']['email']);

@@ -16,7 +16,7 @@ define('SYS', dirname(__FILE__));
 require SYS.'/include/config.php';
 require SYS_INCLUDE.'/functions.php';
 require SYS_INCLUDE.'/classes.php';
-require SYS_INCLUDE.'/auth.php';
+require SYS_INCLUDE.'/controllers.php';
 
 // Disable evil stuff
 disable_magic_quotes();
@@ -30,11 +30,8 @@ setlocale(LC_CTYPE, 'C');
 db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
 unset($db_user, $db_password);
 
-// Check user cookie
-user::authenticate();
-
 // Return content to the visitor
 echo request::answer();
 echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
-     'ms - ', file_size(memory_get_usage()), ' - ',
+     's - ', file_size(memory_get_usage()), ' - ',
      file_size(memory_get_peak_usage());

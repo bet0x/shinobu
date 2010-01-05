@@ -1,6 +1,6 @@
 <?php
 
-class default_controller extends BaseWebController
+class default_controller extends AuthWebController
 {
 	public function GET($args)
 	{

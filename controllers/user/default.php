@@ -1,10 +1,10 @@
 <?php
 
-class default_controller extends BaseWebController
+class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!user::$logged_in)
+		if (!$this->user->authenticated())
 			$this->redirect(utils::url('user/login'));
 	}
 
@@ -13,9 +13,7 @@ class default_controller extends BaseWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => array(),
-			'values' => array(
-				'username' => user::$data['username'],
-				'email' => user::$data['email'])
+			'values' => $this->user->data('username', 'email')
 			));
 	}
 
@@ -42,7 +40,7 @@ class default_controller extends BaseWebController
 				$errors['password'] = 'Passwords do not match.';
 			else
 			{
-				$cur_auth = user::get_info(user::$data['id'], array('password', 'salt'));
+				$cur_auth = $this->user->data('password', 'salt');
 
 				if ($cur_auth['password'] == generate_hash($args['form']['changed_password'], $cur_auth['salt']))
 					$errors['password'] = 'The given password is the same as the old password.';
@@ -53,7 +51,7 @@ class default_controller extends BaseWebController
 		}
 
 		// Check e-mail address
-		if ($args['form']['email'] != user::$data['email'])
+		if ($args['form']['email'] != $this->user->data('email'))
 		{
 			if (!filter_var($args['form']['email'], FILTER_VALIDATE_EMAIL))
 				$errors['email'] = 'You have entered an invalid e-mail address.';
@@ -84,7 +82,7 @@ class default_controller extends BaseWebController
 			if (!$new_email)
 				unset($args['form']['email']);
 
-			user::update(user::$data['id'], $args['form']);
+			$this->user->update($this->user->data('id'), $args['form']);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>Your profile has been updated.'.
@@ -97,9 +95,7 @@ class default_controller extends BaseWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => array(),
-			'values' => array(
-				'username' => user::$data['username'],
-				'email' => user::$data['email'])
+			'values' => $this->user->data('username', 'email')
 			));
 	}
 }

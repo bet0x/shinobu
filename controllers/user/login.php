@@ -1,10 +1,10 @@
 <?php
 
-class login_controller extends BaseWebController
+class login_controller extends AuthWebController
 {
 	protected function prepare()
 	{
-		if (user::$logged_in)
+		if ($this->user->authenticated())
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -24,7 +24,7 @@ class login_controller extends BaseWebController
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
-		if (user::login($args['form']['username'], $args['form']['password']) === 1)
+		if ($this->user->login($args['form']['username'], $args['form']['password']) === 1)
 		{
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>You have been successfully logged in. You will be redirected to the homepage in 2 seconds.</p>',

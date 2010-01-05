@@ -1,66 +1,50 @@
 <?php
 
 # =============================================================================
-# include/auth.php
+# include/modules/auth.php
 #
 # Copyright (c) 2009 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// The user class
 class user
 {
-	static public $logged_in = false, $data = false;
-	static private $user_fields = array('id', 'username', 'password', 'salt', 'hash', 'email');
+	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email'),
+	        $authenticated = false, $data = array();
 
-	// Check user cookie
-	// Only affects the current user/visitor
-	static public function authenticate()
+	// Check user cookie (only affects the current user/visitor)
+	public function authenticate()
 	{
 		if (($cookie = utils::get_cookie('user')) !== false)
 		{
 			// Get user data
 			$result = db::$c->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
 				or error('Could not fetch user information.', __FILE__, __LINE__);
-			self::$data = $result->fetch(PDO::FETCH_ASSOC);
+			$this->data = $result->fetch(PDO::FETCH_ASSOC);
 
-			if (self::$data !== false)
+			if ($this->data !== false)
 			{
 				// Check cookie key
-				if ($cookie['key'] == sha1(self::$data['salt'].self::$data['hash']))
-					self::$logged_in = true;
+				if ($cookie['key'] == sha1($this->data['salt'].$this->data['hash']))
+					$this->authenticated = true;
 			}
 		}
 	}
 
-	// Get more data of the user
-	static public function get_info($id, $fields = array())
+	// Check if user if user is authenticated/logged in
+	public function authenticated()
 	{
-		if (count(array_diff($fields, self::$user_fields)) > 0)
-			return false;
-
-		$fields = implode(', ', $fields);
-
-		// Fetch user data
-		$result = db::$c->query('SELECT '.$fields.' FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
-			or error('Could not fetch user data.', __FILE__, __LINE__);
-		$info = $result->fetch(PDO::FETCH_ASSOC);
-
-		// Store the user information if the user asked for information about him/herself
-		if ($id == self::$data['id'] && $info)
-			self::$data = array_merge(self::$data, $info);
-
-		return $info;
+		return $this->authenticated;
 	}
 
-	/* Create a login cookie for the user
-	   Only affects the current user/visitor
-	   1 = successful login, 2 = already logged in,
-	   3 = user does not exist, 4 = wrong password */
-	static public function login($username, $password)
+	/* Create a login cookie for the user (only affects the current user/visitor)
+	   1 = successful login, 2 = already logged in, 3 = user does not exist,
+	   4 = wrong password
+	*/
+	public function login($username, $password)
 	{
 		// Check if user is logged in
-		if (utils::get_cookie('user') !== false && self::$logged_in)
+		if (utils::get_cookie('user') !== false && $this->authenticated)
 			return 2;
 
 		// Escape username and password
@@ -88,18 +72,18 @@ class user
 	}
 
 	// Let the user cookie expire.  Only affects the current user/visitor.
-	static public function logout()
+	public function logout()
 	{
 		utils::set_cookie('user', null, time()-3600);
 	}
 
 	// Add new user
-	public static function add($username, $password, $email)
+	public function add($username, $password, $email)
 	{
 		// Create hashes for the password
 		$salt = generate_salt();
 		$password = generate_hash($password, $salt);
-		$hash = generate_hash($username, $salt);
+		$hash = generate_hash(generate_salt(), $salt);
 
 		db::$c->exec('
 			INSERT INTO '.DB_PREFIX.'users
@@ -115,24 +99,69 @@ class user
 		return db::$c->lastInsertId();
 	}
 
-	// Update user data
-	public static function update($id, $data = array())
+	/* Return the stored user data or fetch extra user data from the database. Extra data can
+	   be requested by adding arguments to the function. Example: user::data('username', 'email', 'salt');
+	   This function will return `false` if the requested data is not in the user::$data_fields array.
+	*/
+	public function data()
 	{
-		if (count(array_diff(array_keys($data), self::$user_fields)) > 0)
+		if (($func_num_args = func_num_args()) > 0)
+		{
+			$extra_data = func_get_args();
+
+			if (count(array_diff($extra_data, array_keys($this->data))) < 1)
+			{
+				if ($func_num_args === 1)
+					return $this->data[$extra_data[0]];
+				else
+				{
+					$selected_data = array();
+
+					foreach ($extra_data as $k)
+					{
+						$extra_data[$k] = $this->data[$k];
+					}
+
+					return $extra_data;
+				}
+			}
+
+			if (count(array_diff($extra_data, $this->data_fields)) > 0)
+				return false;
+
+			$extra_data = implode(', ', $extra_data);
+
+			// Fetch user data
+			$result = db::$c->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
+				or error('Could not fetch user data.', __FILE__, __LINE__);
+			$db_data = $result->fetch(PDO::FETCH_ASSOC);
+
+			// Store the user data
+			if ($db_data)
+				$this->data = array_merge($this->data, $db_data);
+		}
+
+		return $this->data;
+	}
+
+	// Update user data
+	public function update($id, $new_data = array())
+	{
+		if (count(array_diff(array_keys($new_data), $this->data_fields)) > 0)
 			return false;
 
 		$keys = $values = array();
 
 		// Create hashes when the password is updated
-		if (isset($data['password']))
+		if (isset($new_data['password']))
 		{
-			$data['salt'] = generate_salt();
-			$data['password'] = generate_hash($password, $salt);
-			$data['hash'] = generate_hash($username, $salt);
+			$new_data['salt'] = generate_salt();
+			$new_data['password'] = generate_hash($new_data['password'], $salt);
+			$new_data['hash'] = generate_hash(generate_salt(), $salt);
 		}
 
 		// Generate the keys for the query
-		foreach($data as $k => $v)
+		foreach($new_data as $k => $v)
 		{
 			$keys[] = $k.'=:'.$k;
 			$values[':'.$k] = $v;
@@ -146,7 +175,7 @@ class user
 	}
 
 	// Remove a user
-	static public function remove($id)
+	public function remove($id)
 	{
 		// Check if user exists
 		$result = db::$c->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
@@ -161,5 +190,20 @@ class user
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
 
 		return true;
+	}
+}
+
+// The user class
+class user2
+{
+	static public $logged_in = false, $data = false;
+	static private $user_fields = array('id', 'username', 'password', 'salt', 'hash', 'email');
+
+	// Get more data of the user
+	static public function get_info($id, $fields = array())
+	{
+
+
+		return $info;
 	}
 }

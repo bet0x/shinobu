@@ -18,8 +18,8 @@
 
 	<div id="main-navigation">
 		<ul>
-			<?php if (user::$logged_in === true): ?>
-			<li class="txts-one"><a href="<?php echo utils::url('user') ?>"><?php echo user::$data['username'] ?> (Profile)</a></li>
+			<?php if ($authenticated): ?>
+			<li class="txts-one"><a href="<?php echo utils::url('user') ?>"><?php echo $user['username'] ?> (Profile)</a></li>
 			<li>&middot;</li>
 			<li><a href="<?php echo utils::url('user/logout/'.utils::xsrf_token()) ?>">Log out</a></li>
 			<?php else: ?>
