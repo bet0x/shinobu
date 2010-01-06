@@ -66,7 +66,7 @@ class default_controller extends AuthWebController
 				$errors['email'] = 'You have entered an invalid e-mail address.';
 			else
 			{
-				$result = $this->dbc->c->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->c->quote($args['form']['email']).'')
+				$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->quote($args['form']['email']).'')
 					or error('Unable to fetch user info', __FILE__, __LINE__);
 
 				if ($result->rowCount() > 0)

@@ -47,9 +47,9 @@ class register_controller extends AuthWebController
 		else
 		{
 			// Check that the username (or a too similar username) is not already registered
-			$result = $this->dbc->c->query('SELECT id FROM '.DB_PREFIX.'users WHERE UPPER(username)=UPPER('.
-			                               $this->dbc->c->quote($args['form']['username']).')'.
-			                               'OR UPPER(username)=UPPER('.$this->dbc->c->quote(preg_replace('/[^\w]/', '',
+			$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE UPPER(username)=UPPER('.
+			                               $this->dbc->quote($args['form']['username']).')'.
+			                               'OR UPPER(username)=UPPER('.$this->dbc->quote(preg_replace('/[^\w]/', '',
 			                               $args['form']['username'])).')')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
@@ -74,7 +74,7 @@ class register_controller extends AuthWebController
 			$errors['email'] = 'E-mail addresses do not match.';
 		else
 		{
-			$result = $this->dbc->c->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->c->quote($args['form']['email']).'')
+			$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->quote($args['form']['email']).'')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
 			if ($result->rowCount() > 0)

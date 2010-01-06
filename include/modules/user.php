@@ -24,7 +24,7 @@ class user
 		if (($cookie = utils::get_cookie('user')) !== false)
 		{
 			// Get user data
-			$result = $this->dbc->c->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
+			$result = $this->dbc->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
 				or error('Could not fetch user information.', __FILE__, __LINE__);
 			$this->data = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -54,11 +54,11 @@ class user
 			return 2;
 
 		// Escape username and password
-		$username = trim($this->dbc->c->quote($username));
+		$username = trim($this->dbc->quote($username));
 		$password = trim($password);
 
 		// Check if user exists and fetch data
-		$result = $this->dbc->c->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username='.$username.' LIMIT 1')
+		$result = $this->dbc->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username='.$username.' LIMIT 1')
 			or error('Could not fetch login information.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
 
@@ -91,18 +91,18 @@ class user
 		$password = generate_hash($password, $salt);
 		$hash = generate_hash(generate_salt(), $salt);
 
-		$this->dbc->c->exec('
+		$this->dbc->exec('
 			INSERT INTO '.DB_PREFIX.'users
 				(username, password, salt, hash, email)
 			VALUES(
-				'.$this->dbc->c->quote($username).',
-				'.$this->dbc->c->quote($password).',
-				'.$this->dbc->c->quote($salt).',
-				'.$this->dbc->c->quote($hash).',
-				'.$this->dbc->c->quote($email).')') or error('Could not add new user to the database.', __FILE__, __LINE__);
+				'.$this->dbc->quote($username).',
+				'.$this->dbc->quote($password).',
+				'.$this->dbc->quote($salt).',
+				'.$this->dbc->quote($hash).',
+				'.$this->dbc->quote($email).')') or error('Could not add new user to the database.', __FILE__, __LINE__);
 
 		// Return the ID of the added user
-		return $this->dbc->c->lastInsertId();
+		return $this->dbc->lastInsertId();
 	}
 
 	/* Returns all the stored user data when no arguments are given.  When an argument (or more)
@@ -138,7 +138,7 @@ class user
 			$extra_data = implode(', ', $extra_data);
 
 			// Fetch user data
-			$result = $this->dbc->c->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
+			$result = $this->dbc->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
 				or error('Could not fetch user data.', __FILE__, __LINE__);
 			$db_data = $result->fetch(PDO::FETCH_ASSOC);
 
@@ -178,7 +178,7 @@ class user
 
 		// Execute query
 		$sql = 'UPDATE '.DB_PREFIX.'users SET '.implode(', ', $keys).' WHERE id=:user_id';
-		$sth = $this->dbc->c->prepare($sql);
+		$sth = $this->dbc->prepare($sql);
 		$sth->execute($values);
 	}
 
@@ -186,7 +186,7 @@ class user
 	public function remove($id)
 	{
 		// Check if user exists
-		$result = $this->dbc->c->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
+		$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not check user existance.', __FILE__, __LINE__);
 		$fetch = $result->fetch(PDO::FETCH_NUM);
 
@@ -194,7 +194,7 @@ class user
 			return false;
 
 		// Remove user
-		$this->dbc->c->exec('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
+		$this->dbc->exec('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
 
 		return true;

@@ -1,7 +1,7 @@
 TODO
 ====
 
- - User rights system (ACL).
+ - ACL, Access Control List, for users.
  - Administration panel.
  - Extension system (?).
  - Language system (?).
