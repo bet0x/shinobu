@@ -1,5 +1,12 @@
 <?php
 
+# =============================================================================
+# controllers/user/login.php
+#
+# Copyright (c) 2009 Frank Smit
+# License: zlib/libpng, see the COPYING file for details
+# =============================================================================
+
 class login_controller extends AuthWebController
 {
 	protected function prepare()

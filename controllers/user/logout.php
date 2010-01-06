@@ -1,5 +1,12 @@
 <?php
 
+# =============================================================================
+# controllers/user/logout.php
+#
+# Copyright (c) 2009 Frank Smit
+# License: zlib/libpng, see the COPYING file for details
+# =============================================================================
+
 class logout_controller extends AuthWebController
 {
 	public function GET($args)

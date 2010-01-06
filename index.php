@@ -27,8 +27,7 @@ unregister_globals();
 setlocale(LC_CTYPE, 'C');
 
 // Make the primary connection with the database
-db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
-unset($db_user, $db_password);
+//db::connect($db_type, $db_host, $db_name, $db_user, $db_password);
 
 // Return content to the visitor
 echo request::answer();

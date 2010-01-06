@@ -9,7 +9,6 @@
 
 // A base class for controllers
 // This class contains all the supported requests methods
-// Sublassing is also possible
 class BaseController
 {
 	protected $request = false;
@@ -129,12 +128,13 @@ abstract class BaseWebController extends BaseController
 // A controller for web pages with user authentication enabled
 abstract class AuthWebController extends BaseController
 {
-	protected $auth = false;
+	protected $dbc = false, $auth = false;
 
 	public function __construct($request)
 	{
 		$this->set_mimetype('html');
 
+		//$this->dbc = utils::load_module('dbc');
 		$this->user = utils::load_module('user');
 		$this->user->authenticate();
 

@@ -118,52 +118,6 @@ class request
 	}
 }
 
-// This is a wrapper class for PDO
-// It's possible that this wrapper is going to be replaced in the future
-class db
-{
-	static public $connected = false, $c = false;
-
-	static public function connect($db_type, $db_host, $db_name, $db_user, $db_password)
-	{
-		if (self::$connected)
-			return false;
-
-		try
-		{
-			switch ($db_type)
-			{
-				case 'mysql':
-					self::$c = new PDO('mysql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password,
-						array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
-					break;
-				case 'pgsql':
-					self::$c = new PDO('pgsql:host='.$db_host.';dbname='.$db_name, $db_user, $db_password);
-					break;
-				case 'sqlite2':
-					self::$c = new PDO('sqlite2:'.$db_name);
-					break;
-				case 'sqlite':
-					self::$c = new PDO('sqlite:'.$db_name);
-					break;
-				default:
-					error('There is no support for the specified database type, "'.$db_type.'".');
-			}
-		}
-		catch (PDOException $e)
-		{
-			error($e->getMessage(), __FILE__, __LINE__);
-		}
-
-		self::$connected = true;
-	}
-
-	static public function close()
-	{
-		self::$c = null;
-	}
-}
-
 // The template class
 class tpl
 {

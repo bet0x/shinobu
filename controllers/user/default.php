@@ -1,5 +1,12 @@
 <?php
 
+# =============================================================================
+# controllers/user/default.php
+#
+# Copyright (c) 2009 Frank Smit
+# License: zlib/libpng, see the COPYING file for details
+# =============================================================================
+
 class default_controller extends AuthWebController
 {
 	public function prepare()
@@ -24,6 +31,8 @@ class default_controller extends AuthWebController
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
+
+		$this->dbc = utils::load_module('dbc');
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();
@@ -57,7 +66,7 @@ class default_controller extends AuthWebController
 				$errors['email'] = 'You have entered an invalid e-mail address.';
 			else
 			{
-				$result = db::$c->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.db::$c->quote($args['form']['email']).'')
+				$result = $this->dbc->c->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->c->quote($args['form']['email']).'')
 					or error('Unable to fetch user info', __FILE__, __LINE__);
 
 				if ($result->rowCount() > 0)
