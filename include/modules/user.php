@@ -11,11 +11,11 @@ class user
 {
 	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email'),
 	        $authenticated = false, $data = array();
-	private $dbc = false;
+	private $db = false;
 
 	public function __construct()
 	{
-		$this->dbc = utils::load_module('dbc');
+		$this->db = utils::load_module('db');
 	}
 
 	// Check user cookie (only affects the current user/visitor)
@@ -24,9 +24,10 @@ class user
 		if (($cookie = utils::get_cookie('user')) !== false)
 		{
 			// Get user data
-			$result = $this->dbc->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
+			$result = $this->db->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
 				or error('Could not fetch user information.', __FILE__, __LINE__);
-			$this->data = $result->fetch(PDO::FETCH_ASSOC);
+			#$this->data = $result->fetch(PDO::FETCH_ASSOC);
+			$this->data = $this->db->fetch_assoc($result);
 
 			if ($this->data !== false)
 			{
@@ -54,13 +55,13 @@ class user
 			return 2;
 
 		// Escape username and password
-		$username = trim($this->dbc->quote($username));
+		$username = trim($this->db->escape($username));
 		$password = trim($password);
 
 		// Check if user exists and fetch data
-		$result = $this->dbc->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username='.$username.' LIMIT 1')
+		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username="'.$username.'" LIMIT 1')
 			or error('Could not fetch login information.', __FILE__, __LINE__);
-		$fetch = $result->fetch(PDO::FETCH_NUM);
+		$fetch = $this->db->fetch_row($result);
 
 		if (!$fetch)
 			return 3;
@@ -91,18 +92,18 @@ class user
 		$password = generate_hash($password, $salt);
 		$hash = generate_hash(generate_salt(), $salt);
 
-		$this->dbc->exec('
+		$this->db->query('
 			INSERT INTO '.DB_PREFIX.'users
 				(username, password, salt, hash, email)
 			VALUES(
-				'.$this->dbc->quote($username).',
-				'.$this->dbc->quote($password).',
-				'.$this->dbc->quote($salt).',
-				'.$this->dbc->quote($hash).',
-				'.$this->dbc->quote($email).')') or error('Could not add new user to the database.', __FILE__, __LINE__);
+				"'.$this->db->escape($username).'",
+				"'.$this->db->escape($password).'",
+				"'.$this->db->escape($salt).'",
+				"'.$this->db->escape($hash).'",
+				"'.$this->db->escape($email).'")') or error('Could not add new user to the database.', __FILE__, __LINE__);
 
 		// Return the ID of the added user
-		return $this->dbc->lastInsertId();
+		return $this->db->insert_id();
 	}
 
 	/* Returns all the stored user data when no arguments are given.  When an argument (or more)
@@ -138,9 +139,9 @@ class user
 			$extra_data = implode(', ', $extra_data);
 
 			// Fetch user data
-			$result = $this->dbc->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
+			$result = $this->db->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
 				or error('Could not fetch user data.', __FILE__, __LINE__);
-			$db_data = $result->fetch(PDO::FETCH_ASSOC);
+			$db_data = $this->db->fetch_assoc($result);
 
 			// Store the user data
 			if ($db_data)
@@ -155,10 +156,8 @@ class user
 	// Update user data
 	public function update($id, $new_data = array())
 	{
-		if (count(array_diff(array_keys($new_data), $this->data_fields)) > 0)
+		if (count($new_data) === 0 || count(array_diff(array_keys($new_data), $this->data_fields)) > 0)
 			return false;
-
-		$keys = $values = array();
 
 		// Create hashes when the password is updated
 		if (isset($new_data['password']))
@@ -168,35 +167,28 @@ class user
 			$new_data['hash'] = generate_hash(generate_salt(), $salt);
 		}
 
-		// Generate the keys for the query
-		foreach($new_data as $k => $v)
-		{
-			$keys[] = $k.'=:'.$k;
-			$values[':'.$k] = $v;
-		}
-		$values[':user_id'] = $id;
+		$data_sql = array();
 
-		// Execute query
-		$sql = 'UPDATE '.DB_PREFIX.'users SET '.implode(', ', $keys).' WHERE id=:user_id';
-		$sth = $this->dbc->prepare($sql);
-		$sth->execute($values);
+		foreach ($new_data as $k => $v)
+			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$this->db->escape($v).'"';
+
+		return $this->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
+			or error('User data could not be updated: '.$this->db->error(), __FILE__, __LINE__);
 	}
 
 	// Remove a user
 	public function remove($id)
 	{
 		// Check if user exists
-		$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
+		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not check user existance.', __FILE__, __LINE__);
-		$fetch = $result->fetch(PDO::FETCH_NUM);
+		$fetch = $this->db->fetch_row($result);
 
 		if (!$fetch)
 			return false;
 
 		// Remove user
-		$this->dbc->exec('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
+		return $this->db->query('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
-
-		return true;
 	}
 }
