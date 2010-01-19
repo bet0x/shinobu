@@ -26,7 +26,7 @@ Don't worry.  You can also download an archived version.
 Installation
 ============
 
- 1. Import sql.pgsql, sql.mysql, sql.sqlite2 or sql.sqlite3 into your database.
+ 1. Import mysql.sql into your database.
  2. Rename include/sample.config.php to include/config.php
  3. Adjust all the needed variables in include/config.php
 

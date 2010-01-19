@@ -1,4 +1,27 @@
 --
+-- Table structure for table `usergroups`
+--
+
+CREATE TABLE IF NOT EXISTS `usergroups` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `user_title` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `usergroups`
+--
+
+INSERT INTO `usergroups` (`id`, `name`, `user_title`, `description`) VALUES
+(1, 'Administrators', 'Administrator', 'Users in this usergroup have no restrictions on the administration panel.'),
+(2, 'Members', 'Member', 'Registered users.');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `users`
 --
 
