@@ -128,13 +128,13 @@ abstract class BaseWebController extends BaseController
 // A controller for web pages with user authentication enabled
 abstract class AuthWebController extends BaseController
 {
-	protected $dbc = false, $auth = false;
+	protected $db = false, $user = false;
 
 	public function __construct($request)
 	{
 		$this->set_mimetype('html');
 
-		//$this->dbc = utils::load_module('dbc');
+		// Load user module
 		$this->user = utils::load_module('user');
 		$this->user->authenticate();
 

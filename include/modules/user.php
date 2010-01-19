@@ -24,9 +24,10 @@ class user
 		if (($cookie = utils::get_cookie('user')) !== false)
 		{
 			// Get user data
-			$result = $this->db->query('SELECT id, username, salt, hash, email FROM '.DB_PREFIX.'users WHERE id='.intval($cookie['id']).' LIMIT 1')
-				or error('Could not fetch user information.', __FILE__, __LINE__);
-			#$this->data = $result->fetch(PDO::FETCH_ASSOC);
+			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
+				'FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
+				'WHERE u.id='.intval($cookie['id']).' AND g.id=u.group_id LIMIT 1')
+				or error('Could not fetch user information. '.$this->db->error() , __FILE__, __LINE__);
 			$this->data = $this->db->fetch_assoc($result);
 
 			if ($this->data !== false)
