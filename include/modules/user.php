@@ -164,8 +164,8 @@ class user
 		if (isset($new_data['password']))
 		{
 			$new_data['salt'] = generate_salt();
-			$new_data['password'] = generate_hash($new_data['password'], $salt);
-			$new_data['hash'] = generate_hash(generate_salt(), $salt);
+			$new_data['password'] = generate_hash($new_data['password'], $new_data['salt']);
+			$new_data['hash'] = generate_hash(generate_salt(), $new_data['salt']);
 		}
 
 		$data_sql = array();
