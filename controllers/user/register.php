@@ -63,7 +63,7 @@ class register_controller extends AuthWebController
 		if (strlen($args['form']['password']) < 6)
 			$errors['password'] = 'Passwords must be at least 6 characters long. Please choose another (longer) password.';
 		elseif (strlen($args['form']['password']) > 40)
-			$errors['password'] = 'Usernames must not be more than 40 characters long. Please choose another (shorter) password.';
+			$errors['password'] = 'Passwords must not be more than 40 characters long. Please choose another (shorter) password.';
 		elseif ($args['form']['password'] != $args['form']['confirm_password'])
 			$errors['password'] = 'Passwords do not match.';
 

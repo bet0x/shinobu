@@ -19,8 +19,8 @@ $SYSTEM_DEFAULT_CONTROLLER = 'BaseController';
 $db_type       = ''; // mysql, pgsql, sqlite2 or sqlite (sqlite3)
 $db_host       = '';
 $db_name       = '';
-$db_user       = ''; // This variable is unset after the DB connection has been made
-$db_password   = ''; // This variable is unset after the DB connection has been made
+$db_user       = '';
+$db_password   = '';
 
 define('DB_PREFIX', '');
 
@@ -37,3 +37,4 @@ define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
 define('SYS_STATIC', SYS.'/static');
+define('SYS_UTF8', SYS_INCLUDE.'/utf8');
