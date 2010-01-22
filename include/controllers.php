@@ -81,7 +81,7 @@ class BaseController
 	// Send content type header
 	protected function set_mimetype($type)
 	{
-		if (array_key_exists($type, $this->_mimetypes))
+		if (isset($this->_mimetypes[$type]))
 			header('Content-type: '.$this->_mimetypes.'; charset=utf-8');
 		else
 			header('Content-type: text/plain; charset=utf-8');
@@ -89,7 +89,7 @@ class BaseController
 
 	public function send_error($status_code)
 	{
-		if (!array_key_exists($status_code, $this->_status_codes))
+		if (!isset($this->_status_codes[$status_code]))
 			$status_code = 500;
 
 		header('HTTP/1.1 '.$status_code.' '.$this->_status_codes[$status_code]);

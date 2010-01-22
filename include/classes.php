@@ -15,6 +15,7 @@
 class request
 {
 	static public $request = false, $controller_path = false;
+	static private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
 
 	// Find controller and return the path
 	static private function _find_controller($request_path)
@@ -30,7 +31,7 @@ class request
 
 			foreach ($request_path as $include)
 			{
-				if (is_file($include_dir.'/'.$include.'.php'))
+				if (file_exists($include_dir.'/'.$include.'.php'))
 					return $include_dir.'/'.$include.'.php';
 				else if (is_dir($include_dir.'/'.$include))
 					$include_dir .= '/'.$include;
@@ -40,7 +41,7 @@ class request
 				$has_looped = true;
 			}
 
-			if ($has_looped && is_file($include_dir.'/default.php'))
+			if ($has_looped && file_exists($include_dir.'/default.php'))
 				return $include_dir.'/default.php';
 		}
 
@@ -50,39 +51,19 @@ class request
 	// Get request type (POST or GET) (defaults to GET)
 	static private function _get_request_method()
 	{
-		if(!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 			return 'AJAX';
-
-		switch ($_SERVER['REQUEST_METHOD'])
-		{
-			case 'GET':
-				$request_method = 'GET';
-				break;
-			case 'POST':
-				$request_method = 'POST';
-				break;
-			case 'PUT':
-				$request_method = 'PUT';
-				break;
-			case 'DELETE':
-				$request_method = 'DELETE';
-				break;
-			case 'HEAD':
-				$request_method = 'HEAD';
-				break;
-			default:
-				$request_method = 'GET';
-				break;
-		}
-
-		return $request_method;
+		elseif (in_array($_SERVER['REQUEST_METHOD'], self::$request_methods))
+			return $_SERVER['REQUEST_METHOD'];
+		else
+			return 'GET';
 	}
 
 	// Get the contents of $_GET['q'] and filter and split it.
 	// If $_GET['q'] is not set false is returned
 	static private function _parse_request_string()
 	{
-		if (!isset($_GET['q']) || empty($_GET['q']))
+		if (!isset($_GET['q'][0]))
 			return false;
 
 		$request_path = str_replace('..', '', trim($_GET['q'], '/ '));
@@ -247,7 +228,7 @@ class utils
 		if (isset($objects[$module]))
 			return $objects[$module];
 
-		if (!is_file(SYS_INCLUDE.'/modules/'.$module.'.php'))
+		if (!file_exists(SYS_INCLUDE.'/modules/'.$module.'.php'))
 			return false;
 
 		require SYS_INCLUDE.'/modules/'.$module.'.php';

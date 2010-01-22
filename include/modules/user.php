@@ -21,7 +21,7 @@ class user
 	// Check user cookie (only affects the current user/visitor)
 	public function authenticate()
 	{
-		if (($cookie = utils::get_cookie('user')) !== false)
+		if (($cookie = utils::get_cookie('user')))
 		{
 			// Get user data
 			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
@@ -30,7 +30,7 @@ class user
 				or error('Could not fetch user information. '.$this->db->error() , __FILE__, __LINE__);
 			$this->data = $this->db->fetch_assoc($result);
 
-			if ($this->data !== false)
+			if ($this->data)
 			{
 				// Check cookie key
 				if ($cookie['key'] == sha1($this->data['salt'].$this->data['hash']))
@@ -52,7 +52,7 @@ class user
 	public function login($username, $password)
 	{
 		// Check if user is logged in
-		if (utils::get_cookie('user') !== false && $this->authenticated)
+		if (utils::get_cookie('user') && $this->authenticated)
 			return 2;
 
 		// Escape username and password

@@ -75,17 +75,17 @@ function error($messages, $file = false, $line = false)
 	// Show the file name and line number when development mode is enabled
 	if (SYSTEM_DEVEL)
 	{
-		echo ($file !== false) ? "\n".'File: '.$file : null;
-		echo ($line !== false) ? "\n".'Line: '.$line : null;
+		echo $file ? "\n".'File: '.$file : null;
+		echo $line ? "\n".'Line: '.$line : null;
 	}
 
 	exit;
 }
 
 // Generates a sha1 hash from a string
-function generate_hash($str, $salt = false)
+function generate_hash($str, $salt = '')
 {
-	if (!$str || strlen($salt) === 0)
+	if (!$str || !isset($salt[0]))
 		$salt = generate_salt();
 
 	return sha1($salt.sha1($str)); // Returns a 40 character long hash
@@ -138,7 +138,7 @@ function file_size($size)
 }
 
 // Get microtime
-function get_microtime($microtime=false)
+function get_microtime($microtime = false)
 {
 	if (!$microtime)
 		$microtime = microtime();

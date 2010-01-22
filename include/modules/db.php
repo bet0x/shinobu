@@ -36,7 +36,7 @@ class db
 			list($db_host, $db_port) = explode(':', $db_host);
 
 		// Persistent connection in MySQLi are only available in PHP 5.3 and later releases
-		$this->persistent = $p_connect && version_compare(PHP_VERSION, '5.3.0') >= 0 ? 'p:' : '';
+		$this->persistent = $p_connect && version_compare(PHP_VERSION, '5.3.0', '>=') ? 'p:' : '';
 
 		if (isset($db_port))
 			$this->link_id = mysqli_connect($this->persistent.$db_host, $db_username, $db_password, $db_name, $db_port);
@@ -72,10 +72,7 @@ class db
 
 		$this->query_result = mysqli_query($this->link_id, $sql);
 
-		if ($this->query_result)
-			return $this->query_result;
-		else
-			return false;
+		return $this->query_result ? $this->query_result : false;
 	}
 
 	public function result($query_id = false, $row = 0, $col = 0)
