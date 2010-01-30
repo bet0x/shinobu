@@ -16,11 +16,12 @@ define('SYSTEM_DEVEL', true); // Development mode
 $SYSTEM_DEFAULT_CONTROLLER = 'BaseController';
 
 // Database settings
-$db_type       = ''; // mysql, pgsql, sqlite2 or sqlite (sqlite3)
+$db_type       = ''; // Not used at the moment.  MySQLi will be used by default for now.
 $db_host       = '';
 $db_name       = '';
 $db_user       = '';
 $db_password   = '';
+$db_flags      = 0;
 
 define('DB_PREFIX', '');
 
@@ -38,3 +39,14 @@ define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
 define('SYS_STATIC', SYS.'/static');
 define('SYS_UTF8', SYS_INCLUDE.'/utf8');
+
+// ACL constants
+define('ACL_CREATE', 1);
+define('ACL_READ', 2);
+define('ACL_UPDATE', 4);
+define('ACL_DELETE', 8);
+
+define('ACL_PERM_5', 16);
+define('ACL_PERM_6', 32);
+define('ACL_PERM_7', 64);
+define('ACL_PERM_8', 128);

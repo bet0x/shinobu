@@ -26,7 +26,7 @@ class acl
 	public function __get($name)
 	{
 		if (!isset($this->permissions[$name]))
-			$this->permissions[$name] = 8;
+			$this->permissions[$name] = 0;
 
 		return $this->permissions[$name];
 	}

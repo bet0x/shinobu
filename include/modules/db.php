@@ -18,9 +18,9 @@ class db
 	// Connect to a database
 	public function __construct()
 	{
-		global $db_type, $db_host, $db_name, $db_user, $db_password, $db_persistent;
+		global $db_type, $db_host, $db_name, $db_user, $db_password, $db_persistent, $db_flags;
 
-		$this->open($db_host, $db_user, $db_password, $db_name, $db_persistent);
+		$this->open($db_host, $db_user, $db_password, $db_name, $db_persistent, $db_flags);
 	}
 
 	public function __destruct()
@@ -29,25 +29,30 @@ class db
 			$this->close();
 	}
 
-	public function open($db_host, $db_username, $db_password, $db_name, $p_connect)
+	public function open($host, $username, $password, $name, $p_connect, $flags)
 	{
 		// Was a custom port supplied with $db_host?
-		if (strpos($db_host, ':') !== false)
-			list($db_host, $db_port) = explode(':', $db_host);
+		if (strpos($host, ':') !== false)
+			list($host, $port) = explode(':', $host);
+		else
+			$port = false;
 
 		// Persistent connection in MySQLi are only available in PHP 5.3 and later releases
 		$this->persistent = $p_connect && version_compare(PHP_VERSION, '5.3.0', '>=') ? 'p:' : '';
 
-		if (isset($db_port))
-			$this->link_id = mysqli_connect($this->persistent.$db_host, $db_username, $db_password, $db_name, $db_port);
-		else
-			$this->link_id = mysqli_connect($this->persistent.$db_host, $db_username, $db_password, $db_name);
+		// Init MySQLi
+		$this->link_id = mysqli_init();
 
 		if (!$this->link_id)
-			error('Unable to connect to MySQL and select database. MySQL reported: '.mysqli_connect_error());
+			error('Connection error. MySQLi reported: '.mysqli_connect_error());
 
 		// Setup the client-server character set (UTF-8)
-		$this->set_names('utf8');
+		if (!mysqli_options($this->link_id, MYSQLI_INIT_COMMAND, 'SET NAMES "utf8"'))
+			error('Setting MYSQLI_INIT_COMMAND failed.');
+
+		// Make a connection
+		if (!mysqli_real_connect($this->link_id, $this->persistent.$host, $username, $password, $name, $port, false, $flags))
+			error('Connection error. MySQLi reported: '.mysqli_connect_error());
 
 		return $this->link_id;
 	}

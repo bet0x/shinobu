@@ -32,8 +32,6 @@ class default_controller extends AuthWebController
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
-		$this->dbc = utils::load_module('dbc');
-
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();
 		$new_password = $new_email = false;
@@ -66,10 +64,12 @@ class default_controller extends AuthWebController
 				$errors['email'] = 'You have entered an invalid e-mail address.';
 			else
 			{
-				$result = $this->dbc->query('SELECT id FROM '.DB_PREFIX.'users WHERE email='.$this->dbc->quote($args['form']['email']).'')
+				global $mc;
+
+				$result = $mc->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$mc->db->escape($args['form']['email']).'" LIMIT 1')
 					or error('Unable to fetch user info', __FILE__, __LINE__);
 
-				if ($result->rowCount() > 0)
+				if ($mc->db->num_rows($result) === 1)
 					$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 			}
 
@@ -103,7 +103,7 @@ class default_controller extends AuthWebController
 
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
-			'errors' => array(),
+			'errors' => $errors,
 			'values' => $this->user->data('username', 'email')
 			));
 	}

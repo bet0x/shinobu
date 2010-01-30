@@ -128,7 +128,7 @@ abstract class BaseWebController extends BaseController
 // A controller for web pages with user authentication enabled
 abstract class AuthWebController extends BaseController
 {
-	protected $db = false, $user = false;
+	protected $user = false;
 
 	public function __construct($request)
 	{
@@ -140,7 +140,7 @@ abstract class AuthWebController extends BaseController
 		$this->user = & $mc->user;
 
 		// Load ACL module
-		$mc->acl;
+		// $mc->acl;
 
 		tpl::set('website_title', 'Shinobu');
 		tpl::set('authenticated', $this->user->authenticated());

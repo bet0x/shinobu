@@ -222,33 +222,14 @@ class utils
 	{
 		return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
 	}
-
-	// Depreciated: Load a module
-	static public function load_module($module)
-	{
-		static $objects = array();
-
-		// Return the object if it's already initiated
-		if (isset($objects[$module]))
-			return $objects[$module];
-
-		if (!file_exists(SYS_INCLUDE.'/modules/'.$module.'.php'))
-			return false;
-
-		require SYS_INCLUDE.'/modules/'.$module.'.php';
-
-		if (!class_exists($module))
-			return false;
-
-		$objects[$module] = new $module();
-		return $objects[$module];
-	}
 }
 
 // Modules container (very simple dependency injection)
 class ModuleContainer
 {
 	private $objects = array();
+
+	// TODO: Add a possibility to use arguments when an object is initialized
 
 	public function __get($name)
 	{
