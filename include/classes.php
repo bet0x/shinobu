@@ -10,6 +10,10 @@
 // Note: All methods that are prefixed with an _ are meant for internal use.
 // That means they are not used outside the class.
 
+// This is an empty class that can be used to make variables and other stuff
+// available in the whole system.
+class g {  }
+
 // This class handles the request.  It processes the request string and calls
 // the controller and the method that needs to respond to the request.
 class request
@@ -219,7 +223,7 @@ class utils
 		return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
 	}
 
-	// Load a module
+	// Depreciated: Load a module
 	static public function load_module($module)
 	{
 		static $objects = array();
@@ -240,3 +244,25 @@ class utils
 		return $objects[$module];
 	}
 }
+
+// Modules container (very simple dependency injection)
+class ModuleContainer
+{
+	private $objects = array();
+
+	public function __get($name)
+	{
+		if (isset($this->objects[$name]))
+			return $this->objects[$name];
+
+		if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
+			return false;
+
+		require SYS_INCLUDE.'/modules/'.$name.'.php';
+
+		$this->objects[$name] = new $name();
+		return $this->objects[$name];
+	}
+}
+
+$mc = new ModuleContainer();

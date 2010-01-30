@@ -132,11 +132,15 @@ abstract class AuthWebController extends BaseController
 
 	public function __construct($request)
 	{
+		global $mc;
+
 		$this->set_mimetype('html');
 
 		// Load user module
-		$this->user = utils::load_module('user');
-		$this->user->authenticate();
+		$this->user = & $mc->user;
+
+		// Load ACL module
+		$mc->acl;
 
 		tpl::set('website_title', 'Shinobu');
 		tpl::set('authenticated', $this->user->authenticated());

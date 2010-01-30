@@ -9,13 +9,14 @@
 
 class user
 {
-	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email'),
+	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id', 'title'),
 	        $authenticated = false, $data = array();
 	private $db = false;
 
 	public function __construct()
 	{
 		$this->db = utils::load_module('db');
+		$this->authenticate();
 	}
 
 	// Check user cookie (only affects the current user/visitor)

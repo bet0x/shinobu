@@ -20,6 +20,10 @@ setlocale(LC_CTYPE, 'C');
 require SYS.'/include/config.php';
 require SYS_INCLUDE.'/functions.php';
 
+// Disable evil stuff
+disable_magic_quotes();
+unregister_globals();
+
 // Load UTF-8 library
 if (extension_loaded('mbstring'))
 {
@@ -40,10 +44,6 @@ else
 // Load classes and controllers
 require SYS_INCLUDE.'/classes.php';
 require SYS_INCLUDE.'/controllers.php';
-
-// Disable evil stuff
-disable_magic_quotes();
-unregister_globals();
 
 // Return content to the visitor
 echo request::answer();
