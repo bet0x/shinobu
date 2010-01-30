@@ -1,8 +1,8 @@
 Shinobu 0.4
 ===========
 
-Shinobu is a minimalistic framework/CMS written in PHP5 and it uses MySQL,
-PostgreSQL or SQLite (2/3) to store its data.  My intention if not to provide
+Shinobu is a minimalistic framework/CMS written in PHP5 and it uses MySQL
+or PostgreSQL to store its data.  My intention if not to provide
 a big, feature overloaded system, but a simple system that provides some
 basic features and it easy to extend (for a PHP developer) and easy to use.
 
@@ -13,15 +13,11 @@ Download
 ========
 
 The latest source code can be downloaded from the repository with
-Mercurial (Hg).  Just use the following command:
+Git.  Just use the following command:
 
-    hg clone http://hg.61924.nl/shinobu/
+    git clone git://github.com/FSX/shinobu.git
 
-Don't worry.  You can also download an archived version.
-
- - Bzip2: http://hg.61924.nl/shinobu/archive/tip.tar.bz2
- - Zip: http://hg.61924.nl/shinobu/archive/tip.zip
- - Gzipped Tar: http://hg.61924.nl/shinobu/archive/tip.tar.gz
+An archived version can also be downloaded from http://github.com/FSX/shinobu.
 
 Installation
 ============
@@ -44,4 +40,4 @@ You can find me at #shinobu channel on irc.irchighway.net.
 Links
 =====
 
- - Mercurial: http://mercurial.selenic.com/
+ - Git: http://git-scm.com/
