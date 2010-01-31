@@ -49,14 +49,14 @@ td                { border-bottom-color: #efefef;font-weight: normal }
 #header h1 span { font-size: 0.5em;color: #555 }
 
 /* Top navigation bar */
-#main-navigation
-	{ position: absolute;top: 0;right: 0;background: #403b36;padding: 0.5em 1em;
-	  color: #807b74;font-size: 0.8em;border-bottom-left-radius: 5px;
-	  -moz-border-radius-bottomleft: 5px;-webkit-border-bottom-left-radius: 5px;
-	  border-bottom-right-radius: 5px;-moz-border-radius-bottomright: 5px;
-	  -webkit-border-bottom-right-radius: 5px;
+#main-navigation { position: absolute;top: 0;right: 0 }
+#main-navigation ul
+    { float: left;margin: 0 0 0 1em;padding: 0;list-style: none;
+      background: #403b36;padding: 0.5em 1em;color: #807b74;font-size: 0.8em;
+      border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;
+	  -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;
+	  -webkit-border-bottom-left-radius: 5px;-webkit-border-bottom-right-radius: 5px;
 	  border: 1px solid #26221F }
-#main-navigation ul { margin: 0;padding: 0;list-style: none }
 #main-navigation li { display: inline }
 
 #main-navigation a:link, #main-navigation a:visited
