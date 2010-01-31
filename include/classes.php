@@ -229,7 +229,21 @@ class ModuleContainer
 {
 	private $objects = array();
 
-	// TODO: Add a possibility to use arguments when an object is initialized
+	public function __set($name, $value)
+	{
+		if (!isset($this->objects[$name]))
+		{
+			if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
+				return false;
+
+			require SYS_INCLUDE.'/modules/'.$name.'.php';
+		}
+		else
+			unset($this->objects[$name]);
+
+		$this->objects[$name] = new $name($value);
+		return $this->objects[$name];
+	}
 
 	public function __get($name)
 	{

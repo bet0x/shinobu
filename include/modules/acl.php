@@ -11,11 +11,11 @@
 
 class acl
 {
-	private $permisions = array();
+	private $permisions = array(), $new_perms = array(), $group_id;
 
-	public function __construct()
+	public function set_gid($id)
 	{
-
+		$this->group_id = intval($id);
 	}
 
 	public function __destruct()
@@ -23,16 +23,47 @@ class acl
 		// Write all the changes to the database
 	}
 
-	public function __get($name)
+	public function get($perm_id)
 	{
-		if (!isset($this->permissions[$name]))
-			$this->permissions[$name] = 0;
+		if (isset($this->permissions[$this->group_id][$perm_id]))
+			return $this->permissions[$this->group_id][$perm_id];
 
-		return $this->permissions[$name];
+		global $mc;
+
+		$result = $mc->db->query('SELECT perm_id, bits FROM '.DB_PREFIX.'group_perms WHERE group_id='.$this->group_id.'
+			AND perm_id="'.$mc->db->escape($perm_id).'"') or error('Unable to fetch permission.', __FILE__, __LINE__);
+
+		if ($mc->db->num_rows($result) === 1)
+			$this->permissions[$this->group_id][$perm_id] = $bits = (int) $mc->db->result($result, 0, 1);
+		else
+			return false;
+
+		return $bits;
 	}
 
-	public function __set($name, $value)
+	public function get_multiple()
 	{
-		$this->permissions[$name] = $value;
+		global $mc;
+
+		$req_perms = '"'.$mc->db->escape(implode('", "', func_get_args())).'"';
+		$result = $mc->db->query('SELECT perm_id, bits FROM '.DB_PREFIX.'group_perms WHERE group_id='.$this->group_id.'
+			AND perm_id IN ('.$req_perms.')') or error('Unable to fetch permissions: '.$mc->db->error(), __FILE__, __LINE__);
+
+		if ($mc->db->num_rows($result) > 0)
+		{
+			$permissions = array();
+			while ($row = $mc->db->fetch_assoc($result))
+				$this->permissions[$this->group_id][$row['perm_id']] = $permissions[$this->group_id][$row['perm_id']] = (int) $row['bits'];
+		}
+		else
+			return false;
+
+		return $permissions;
+	}
+
+	public function set($name, $value)
+	{
+		$this->permissions[$this->group_id][$name] = $value;
+		$this->new_perms[$this->group_id][$name] =& $this->permissions[$this->group_id][$name];
 	}
 }

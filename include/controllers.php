@@ -137,14 +137,21 @@ abstract class AuthWebController extends BaseController
 		$this->set_mimetype('html');
 
 		// Load user module
-		$this->user = & $mc->user;
+		$this->user = $mc->user;
+		$authenticated = $this->user->authenticated();
 
-		// Load ACL module
-		// $mc->acl;
-
+		// Set some template variables
 		tpl::set('website_title', 'Shinobu');
-		tpl::set('authenticated', $this->user->authenticated());
-		tpl::set('user', $this->user->data());
+		tpl::set('authenticated', $authenticated);
+
+		if ($authenticated)
+		{
+			$data = $this->user->data('username', 'group_id');
+			$mc->acl->set_gid($data['group_id']);
+
+			tpl::set('username', $data['username']);
+			tpl::set('admin_view', $mc->acl->get('admin_read') & ACL_READ);
+		}
 
 		// Run parent constructor after we've loaded all modules
 		parent::__construct($request);

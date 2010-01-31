@@ -19,8 +19,12 @@
 	<div id="main-navigation">
 		<ul>
 			<?php if ($authenticated): ?>
-			<li class="txts-one"><a href="<?php echo utils::url('user') ?>"><?php echo $user['username'] ?> (Profile)</a></li>
+			<li><a href="<?php echo utils::url('user') ?>"><?php echo u_htmlencode($username) ?> (Profile)</a></li>
 			<li>&middot;</li>
+			<?php if ($admin_view): ?>
+			<li><a href="<?php echo utils::url('admin') ?>">Administration</a></li>
+			<li>&middot;</li>
+			<?php endif ?>
 			<li><a href="<?php echo utils::url('user/logout/'.utils::xsrf_token()) ?>">Log out</a></li>
 			<?php else: ?>
 			<li><a href="<?php echo utils::url('user/login') ?>">Log in</a></li>
