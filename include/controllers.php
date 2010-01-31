@@ -3,7 +3,7 @@
 # =============================================================================
 # include/controllers.php
 #
-# Copyright (c) 2009 Frank Smit
+# Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 

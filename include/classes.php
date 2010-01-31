@@ -3,16 +3,12 @@
 # =============================================================================
 # include/classes.php
 #
-# Copyright (c) 2009 Frank Smit
+# Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
 // Note: All methods that are prefixed with an _ are meant for internal use.
 // That means they are not used outside the class.
-
-// This is an empty class that can be used to make variables and other stuff
-// available in the whole system.
-class g {  }
 
 // This class handles the request.  It processes the request string and calls
 // the controller and the method that needs to respond to the request.
