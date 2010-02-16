@@ -11,7 +11,7 @@ class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated())
+		if (!$this->module->user->authenticated())
 			$this->redirect(utils::url('user/login'));
 	}
 
@@ -20,7 +20,7 @@ class default_controller extends AuthWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => array(),
-			'values' => $this->user->data('username', 'email')
+			'values' => $this->module->user->data('username', 'email')
 			));
 	}
 
@@ -47,7 +47,7 @@ class default_controller extends AuthWebController
 				$errors['password'] = 'Passwords do not match.';
 			else
 			{
-				$cur_auth = $this->user->data('password', 'salt');
+				$cur_auth = $this->module->user->data('password', 'salt');
 
 				if ($cur_auth['password'] == generate_hash($args['form']['changed_password'], $cur_auth['salt']))
 					$errors['password'] = 'The given password is the same as the old password.';
@@ -58,18 +58,16 @@ class default_controller extends AuthWebController
 		}
 
 		// Check e-mail address
-		if ($args['form']['email'] != $this->user->data('email'))
+		if ($args['form']['email'] != $this->module->user->data('email'))
 		{
 			if (!filter_var($args['form']['email'], FILTER_VALIDATE_EMAIL))
 				$errors['email'] = 'You have entered an invalid e-mail address.';
 			else
 			{
-				global $mc;
-
-				$result = $mc->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$mc->db->escape($args['form']['email']).'" LIMIT 1')
+				$result = $this->module->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$this->module->db->escape($args['form']['email']).'" LIMIT 1')
 					or error('Unable to fetch user info', __FILE__, __LINE__);
 
-				if ($mc->db->num_rows($result) === 1)
+				if ($this->module->db->num_rows($result) === 1)
 					$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 			}
 
@@ -91,7 +89,7 @@ class default_controller extends AuthWebController
 			if (!$new_email)
 				unset($args['form']['email']);
 
-			$this->user->update($this->user->data('id'), $args['form']);
+			$this->module->user->update($this->module->user->data('id'), $args['form']);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>Your profile has been updated.'.
@@ -104,7 +102,7 @@ class default_controller extends AuthWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => $errors,
-			'values' => $this->user->data('username', 'email')
+			'values' => $this->module->user->data('username', 'email')
 			));
 	}
 }

@@ -12,13 +12,56 @@
 
 // This class handles the request.  It processes the request string and calls
 // the controller and the method that needs to respond to the request.
-class request
+class Application
 {
-	static public $request = false, $controller_path = false;
-	static private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
+	public $request = false, $controller_path = false, $output = '';
+	private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
+
+
+	public function __construct()
+	{
+		// Parse the request string and looks for the controler file
+		$request = $this->_parse_request_string();
+		$controller_path = $this->_find_controller($request);
+
+		// Send a 404 error when the controller could not be found
+		if (!$controller_path)
+		{
+			global $SYSTEM_DEFAULT_CONTROLLER;
+
+			$controller_instance = new $SYSTEM_DEFAULT_CONTROLLER($request);
+			return $controller_instance->send_error(404);
+		}
+
+		// include the controller file
+		require $controller_path;
+
+		// Resolve class name and request method
+		$class_name = pathinfo($controller_path, PATHINFO_FILENAME).'_controller';
+		$request_type = $this->_get_request_method();
+
+		// Set controller arguments
+		if ($request_type == 'POST')
+			$args =& $_POST;
+		else
+			$args = null;
+
+		// Load the module container
+		#$module = ();
+
+		// Start the controller
+		$controller_instance = new $class_name($request, new ModuleContainer);
+		$this->output = $controller_instance->$request_type($args);
+	}
+
+	// Return output
+	public function output()
+	{
+		return $this->output;
+	}
 
 	// Find controller and return the path
-	static private function _find_controller($request_path)
+	private function _find_controller($request_path)
 	{
 		if (!$request_path)
 		{
@@ -49,11 +92,11 @@ class request
 	}
 
 	// Get request type (POST or GET) (defaults to GET)
-	static private function _get_request_method()
+	private function _get_request_method()
 	{
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 			return 'AJAX';
-		elseif (in_array($_SERVER['REQUEST_METHOD'], self::$request_methods))
+		elseif (in_array($_SERVER['REQUEST_METHOD'], $this->request_methods))
 			return $_SERVER['REQUEST_METHOD'];
 		else
 			return 'GET';
@@ -61,41 +104,13 @@ class request
 
 	// Get the contents of $_GET['q'] and filter and split it.
 	// If $_GET['q'] is not set false is returned
-	static private function _parse_request_string()
+	private function _parse_request_string()
 	{
 		if (!isset($_GET['q'][0]))
 			return false;
 
 		$request_path = str_replace('..', '', trim($_GET['q'], '/ '));
 		return explode('/', $request_path);
-	}
-
-	// Call the controller and echo the output
-	static public function answer()
-	{
-		$request = self::_parse_request_string();
-		$controller_path = self::_find_controller($request);
-
-		if (!$controller_path)
-		{
-			global $SYSTEM_DEFAULT_CONTROLLER;
-
-			$controller_instance = new $SYSTEM_DEFAULT_CONTROLLER($request);
-			return $controller_instance->send_error(404);
-		}
-
-		require $controller_path;
-
-		$class_name = pathinfo($controller_path, PATHINFO_FILENAME).'_controller';
-		$request_type = self::_get_request_method();
-
-		if ($request_type == 'POST')
-			$args =& $_POST;
-		else
-			$args = null;
-
-		$controller_instance = new $class_name($request);
-		return $controller_instance->$request_type($args);
 	}
 }
 
@@ -221,6 +236,7 @@ class utils
 }
 
 // Modules container (very simple dependency injection)
+# TODO: THis should be initiated in the request handler class
 class ModuleContainer
 {
 	private $objects = array();
@@ -255,5 +271,3 @@ class ModuleContainer
 		return $this->objects[$name];
 	}
 }
-
-$mc = new ModuleContainer();

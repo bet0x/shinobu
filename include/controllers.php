@@ -11,7 +11,7 @@
 // This class contains all the supported requests methods
 class BaseController
 {
-	protected $request = false;
+	protected $request = false, $module = null;
 	protected $_mimetypes = array(
 		'text'  => 'text/plain',
 		'html'  => 'text/html',
@@ -67,15 +67,19 @@ class BaseController
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported');
 
-	public function __construct($request)
+	public function __construct($request, ModuleContainer $module = null)
 	{
 		$this->request = $request;
+		$this->module = $module;
 		$this->prepare();
 	}
 
+	/* This is an empty function that's always executed by the constructor of
+	   the base controller.  This function can be overwritten to execute  or
+	   process certin things before the request method function is executed. */
 	protected function prepare()
 	{
-		// This is an empty function that's always executed by the constructor
+
 	}
 
 	// Send content type header
@@ -87,6 +91,7 @@ class BaseController
 			header('Content-type: text/plain; charset=utf-8');
 	}
 
+	// Send an error to the client (e.g. 404, 500)
 	public function send_error($status_code)
 	{
 		if (!isset($this->_status_codes[$status_code]))
@@ -98,11 +103,15 @@ class BaseController
 		return $status_code.': '.$this->_status_codes[$status_code];
 	}
 
+	// Redirect a client to an other URL
 	protected function redirect($location)
 	{
 		header('location: '.$location); exit;
 	}
 
+	/* Be default all request method function return a 405 (Method Not Allowed)
+	   error. Controllers should extend the BaseController and overwrite these
+	   function. */
 	public function GET($args) { return $this->send_error(405); }
 	public function POST($args) { return $this->send_error(405); }
 	public function PUT($args) { return $this->send_error(405); }
@@ -128,17 +137,16 @@ abstract class BaseWebController extends BaseController
 // A controller for web pages with user authentication enabled
 abstract class AuthWebController extends BaseController
 {
-	protected $user = false;
-
-	public function __construct($request)
+	public function __construct($request, ModuleContainer $module = null)
 	{
-		global $mc;
+		$this->request = $request;
+		$this->module = $module;
 
 		$this->set_mimetype('html');
 
-		// Load user module
-		$this->user = $mc->user;
-		$authenticated = $this->user->authenticated();
+		// Load user and ACL module
+		$this->module->user = $this->module->acl = $this->module->db;
+		$authenticated = $this->module->user->authenticated();
 
 		// Set some template variables
 		tpl::set('website_title', 'Shinobu');
@@ -146,14 +154,14 @@ abstract class AuthWebController extends BaseController
 
 		if ($authenticated)
 		{
-			$data = $this->user->data('username', 'group_id');
-			$mc->acl->set_gid($data['group_id']);
+			#$this->module->acl = $this->module->db;
+			$data = $this->module->user->data();
+			$this->module->acl->set_gid($data['group_id']);
 
 			tpl::set('username', $data['username']);
-			tpl::set('admin_view', $mc->acl->get('admin_read') & ACL_READ);
+			tpl::set('admin_view', $this->module->acl->get('admin_read') & ACL_READ);
 		}
 
-		// Run parent constructor after we've loaded all modules
-		parent::__construct($request);
+		$this->prepare();
 	}
 }

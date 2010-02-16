@@ -11,9 +11,7 @@ class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		global $mc;
-
-		if (!$this->user->authenticated() || !($mc->acl->get('admin_read') & ACL_READ))
+		if (!$this->module->user->authenticated() || !($this->module->acl->get('admin_read') & ACL_READ))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 

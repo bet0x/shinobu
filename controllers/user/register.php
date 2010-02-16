@@ -11,7 +11,7 @@ class register_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if ($this->user->authenticated())
+		if ($this->module->user->authenticated())
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -34,8 +34,6 @@ class register_controller extends AuthWebController
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
-		global $mc;
-
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = $values = array();
 
@@ -47,12 +45,12 @@ class register_controller extends AuthWebController
 		else
 		{
 			// Check that the username (or a too similar username) is not already registered
-			$result = $mc->db->query('SELECT id FROM '.DB_PREFIX.'users
-				WHERE UPPER(username)=UPPER("'.$mc->db->escape($args['form']['username']).'")
-				OR UPPER(username)=UPPER("'.$mc->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
+			$result = $this->module->db->query('SELECT id FROM '.DB_PREFIX.'users
+				WHERE UPPER(username)=UPPER("'.$this->module->db->escape($args['form']['username']).'")
+				OR UPPER(username)=UPPER("'.$this->module->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
-			if ($mc->db->num_rows($result) === 1)
+			if ($this->module->db->num_rows($result) === 1)
 				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
 									  'The username you entered is too similar. The username must differ from that by at least one '.
 									  'alphanumerical character (a-z or 0-9). Please choose a different username.';
@@ -73,16 +71,16 @@ class register_controller extends AuthWebController
 			$errors['email'] = 'E-mail addresses do not match.';
 		else
 		{
-			$result = $mc->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$mc->db->escape($args['form']['email']).'" LIMIT 1')
+			$result = $this->module->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$this->module->db->escape($args['form']['email']).'" LIMIT 1')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
-			if ($mc->db->num_rows($result) === 1)
+			if ($this->module->db->num_rows($result) === 1)
 				$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 		}
 
 		if (count($errors) === 0)
 		{
-			$this->user->add(
+			$this->module->user->add(
 				$args['form']['username'],
 				$args['form']['password'],
 				$args['form']['email']);

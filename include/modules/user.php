@@ -10,13 +10,11 @@
 class user
 {
 	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id', 'title'),
-	        $authenticated = false, $data = array();
+	        $authenticated = false, $data = array(), $db = null;
 
-	public function __construct()
+	public function __construct(db $db = null)
 	{
-		//global $mc;
-
-		//$this->db = & $mc->db;
+		$this->db = $db;
 		$this->authenticate();
 	}
 
@@ -25,14 +23,12 @@ class user
 	{
 		if (($cookie = utils::get_cookie('user')))
 		{
-			global $mc;
-
 			// Get user data
-			$result = $mc->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
+			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
 				'FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
 				'WHERE u.id='.intval($cookie['id']).' AND g.id=u.group_id LIMIT 1')
-				or error('Could not fetch user information. '.$mc->db->error() , __FILE__, __LINE__);
-			$this->data = $mc->db->fetch_assoc($result);
+				or error('Could not fetch user information. '.$this->db->error() , __FILE__, __LINE__);
+			$this->data = $this->db->fetch_assoc($result);
 
 			if ($this->data)
 			{
@@ -59,16 +55,14 @@ class user
 		if (utils::get_cookie('user') && $this->authenticated)
 			return 2;
 
-		global $mc;
-
 		// Escape username and password
-		$username = trim($mc->db->escape($username));
+		$username = trim($this->db->escape($username));
 		$password = trim($password);
 
 		// Check if user exists and fetch data
-		$result = $mc->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username="'.$username.'" LIMIT 1')
+		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username="'.$username.'" LIMIT 1')
 			or error('Could not fetch login information.', __FILE__, __LINE__);
-		$fetch = $mc->db->fetch_row($result);
+		$fetch = $this->db->fetch_row($result);
 
 		if (!$fetch)
 			return 3;
@@ -94,31 +88,28 @@ class user
 	// Add new user
 	public function add($username, $password, $email)
 	{
-		global $mc;
-
 		// Create hashes for the password
 		$salt = generate_salt();
 		$password = generate_hash($password, $salt);
 		$hash = generate_hash(generate_salt(), $salt);
 
-		$mc->db->query('
+		$this->db->query('
 			INSERT INTO '.DB_PREFIX.'users
 				(username, password, salt, hash, email)
 			VALUES(
-				"'.$mc->db->escape($username).'",
-				"'.$mc->db->escape($password).'",
-				"'.$mc->db->escape($salt).'",
-				"'.$mc->db->escape($hash).'",
-				"'.$mc->db->escape($email).'")') or error('Could not add new user to the database: '.$mc->db->error(), __FILE__, __LINE__);
+				"'.$this->db->escape($username).'",
+				"'.$this->db->escape($password).'",
+				"'.$this->db->escape($salt).'",
+				"'.$this->db->escape($hash).'",
+				"'.$this->db->escape($email).'")') or error('Could not add new user to the database: '.$this->db->error(), __FILE__, __LINE__);
 
 		// Return the ID of the added user
-		return $mc->db->insert_id();
+		return $this->db->insert_id();
 	}
 
 	/* Returns all the stored user data when no arguments are given.  When an argument (or more)
-	   only the selected data will be returned. When the requested data was not stored it will
-	   be fetched from the database.
-	*/
+	   only the selected data will be returned.  When the requested data was not stored it will
+	   be fetched from the database. */
 	public function data()
 	{
 		if (($func_num_args = func_num_args()) > 0)
@@ -145,14 +136,12 @@ class user
 			if (count(array_diff($extra_data, $this->data_fields)) > 0)
 				return false;
 
-			global $mc;
-
 			$extra_data = implode(', ', $extra_data);
 
 			// Fetch user data
-			$result = $mc->db->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
+			$result = $this->db->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
 				or error('Could not fetch user data.', __FILE__, __LINE__);
-			$db_data = $mc->db->fetch_assoc($result);
+			$db_data = $this->db->fetch_assoc($result);
 
 			// Store the user data
 			if ($db_data)
@@ -170,8 +159,6 @@ class user
 		if (count($new_data) === 0 || count(array_diff(array_keys($new_data), $this->data_fields)) > 0)
 			return false;
 
-		global $mc;
-
 		// Create hashes when the password is updated
 		if (isset($new_data['password']))
 		{
@@ -183,27 +170,25 @@ class user
 		$data_sql = array();
 
 		foreach ($new_data as $k => $v)
-			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$mc->db->escape($v).'"';
+			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$this->db->escape($v).'"';
 
-		return $mc->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
-			or error('User data could not be updated: '.$mc->db->error(), __FILE__, __LINE__);
+		return $this->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
+			or error('User data could not be updated: '.$this->db->error(), __FILE__, __LINE__);
 	}
 
 	// Remove a user
 	public function remove($id)
 	{
-		global $mc;
-
 		// Check if user exists
-		$result = $mc->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
+		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
 			or error('Could not check user existance.', __FILE__, __LINE__);
-		$fetch = $mc->db->fetch_row($result);
+		$fetch = $this->db->fetch_row($result);
 
 		if (!$fetch)
 			return false;
 
 		// Remove user
-		return $mc->db->query('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
+		return $this->db->query('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
 	}
 }

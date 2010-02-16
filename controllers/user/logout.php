@@ -11,7 +11,7 @@ class logout_controller extends AuthWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated())
+		if (!$this->module->user->authenticated())
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($this->request[2]) || !utils::check_xsrf_cookie($this->request[2]))
