@@ -152,9 +152,9 @@ abstract class AuthWebController extends BaseController
 		tpl::set('website_title', 'Shinobu');
 		tpl::set('authenticated', $authenticated);
 
+		// Do some extra things for authenticated users
 		if ($authenticated)
 		{
-			#$this->module->acl = $this->module->db;
 			$data = $this->module->user->data();
 			$this->module->acl->set_gid($data['group_id']);
 

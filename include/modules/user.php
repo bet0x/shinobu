@@ -107,49 +107,9 @@ class user
 		return $this->db->insert_id();
 	}
 
-	/* Returns all the stored user data when no arguments are given.  When an argument (or more)
-	   only the selected data will be returned.  When the requested data was not stored it will
-	   be fetched from the database. */
+	// Return user data
 	public function data()
 	{
-		if (($func_num_args = func_num_args()) > 0)
-		{
-			$extra_data = func_get_args();
-
-			// First check if the requested data is already available
-			if (count(array_diff($extra_data, array_keys($this->data))) < 1)
-			{
-				if ($func_num_args === 1)
-					return $this->data[$extra_data[0]];
-				else
-				{
-					$selected_data = array();
-
-					foreach ($extra_data as $k)
-						$selected_data[$k] = $this->data[$k];
-
-					return $selected_data;
-				}
-			}
-
-			// Check if fields are valid
-			if (count(array_diff($extra_data, $this->data_fields)) > 0)
-				return false;
-
-			$extra_data = implode(', ', $extra_data);
-
-			// Fetch user data
-			$result = $this->db->query('SELECT '.$extra_data.' FROM '.DB_PREFIX.'users WHERE id='.intval($this->data['id']).' LIMIT 1')
-				or error('Could not fetch user data.', __FILE__, __LINE__);
-			$db_data = $this->db->fetch_assoc($result);
-
-			// Store the user data
-			if ($db_data)
-				$this->data = array_merge($this->data, $db_data);
-
-			return $db_data;
-		}
-
 		return $this->data;
 	}
 

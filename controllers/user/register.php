@@ -71,7 +71,8 @@ class register_controller extends AuthWebController
 			$errors['email'] = 'E-mail addresses do not match.';
 		else
 		{
-			$result = $this->module->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.$this->module->db->escape($args['form']['email']).'" LIMIT 1')
+			$result = $this->module->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.
+				$this->module->db->escape($args['form']['email']).'" LIMIT 1')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
 			if ($this->module->db->num_rows($result) === 1)

@@ -236,7 +236,6 @@ class utils
 }
 
 // Modules container (very simple dependency injection)
-# TODO: THis should be initiated in the request handler class
 class ModuleContainer
 {
 	private $objects = array();

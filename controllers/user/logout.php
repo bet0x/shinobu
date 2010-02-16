@@ -17,7 +17,7 @@ class logout_controller extends AuthWebController
 		if (!isset($this->request[2]) || !utils::check_xsrf_cookie($this->request[2]))
 			return $this->send_error(403);
 
-		$this->user->logout();
+		$this->module->user->logout();
 
 		return tpl::render('redirect', array(
 			'redirect_message' => '<p>You have been successfully logged out. You will be redirected to the homepage in 2 seconds.</p>',
