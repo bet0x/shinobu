@@ -28,33 +28,34 @@ class acl
 		// Write all the changes to the database
 	}
 
-	public function get($perm_id)
+	public function get($acl_id)
 	{
-		if (isset($this->permissions[$this->group_id][$perm_id]))
-			return $this->permissions[$this->group_id][$perm_id];
+		if (isset($this->permissions[$this->group_id][$acl_id]))
+			return $this->permissions[$this->group_id][$acl_id];
 
-		$result = $this->db->query('SELECT perm_id, bits FROM '.DB_PREFIX.'group_perms WHERE group_id='.$this->group_id.'
-			AND perm_id="'.$this->db->escape($perm_id).'"') or error('Unable to fetch permission.', __FILE__, __LINE__);
+		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->group_id.'
+			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error('Unable to fetch ACL permission.', __FILE__, __LINE__);
 
 		if ($this->db->num_rows($result) === 1)
-			$this->permissions[$this->group_id][$perm_id] = $bits = (int) $this->db->result($result, 0, 1);
+			$this->permissions[$this->group_id][$acl_id] = $permission = (int) $this->db->result($result);
 		else
 			return false;
 
-		return $bits;
+		return $permission;
 	}
 
+	// FIXME
 	public function get_multiple()
 	{
 		$req_perms = '"'.$this->db->escape(implode('", "', func_get_args())).'"';
-		$result = $this->db->query('SELECT perm_id, bits FROM '.DB_PREFIX.'group_perms WHERE group_id='.$this->group_id.'
-			AND perm_id IN ('.$req_perms.')') or error('Unable to fetch permissions: '.$this->db->error(), __FILE__, __LINE__);
+		$result = $this->db->query('SELECT acl_id, permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->group_id.'
+			AND acl_id IN ('.$req_perms.')') or error('Unable to fetch permissions.', __FILE__, __LINE__);
 
 		if ($this->db->num_rows($result) > 0)
 		{
 			$permissions = array();
 			while ($row = $this->db->fetch_assoc($result))
-				$this->permissions[$this->group_id][$row['perm_id']] = $permissions[$this->group_id][$row['perm_id']] = (int) $row['bits'];
+				$this->permissions[$this->group_id][$row['acl_id']] = $permissions[$this->group_id][$row['acl_id']] = (int) $row['permissions'];
 		}
 		else
 			return false;
@@ -62,9 +63,9 @@ class acl
 		return $permissions;
 	}
 
-	public function set($name, $value)
+	public function set($acl_id, $permissions)
 	{
-		$this->permissions[$this->group_id][$name] = $value;
-		$this->new_perms[$this->group_id][$name] =& $this->permissions[$this->group_id][$name];
+		$this->permissions[$this->group_id][$acl_id] = $permissions;
+		$this->new_perms[$this->group_id][$acl_id] =& $this->permissions[$this->group_id][$acl_id];
 	}
 }

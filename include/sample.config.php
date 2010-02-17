@@ -41,11 +41,10 @@ define('SYS_STATIC', SYS.'/static');
 define('SYS_UTF8', SYS_INCLUDE.'/utf8');
 
 // ACL constants
-define('ACL_CREATE', 1);
-define('ACL_READ', 2);
-define('ACL_UPDATE', 4);
-define('ACL_DELETE', 8);
-
+define('ACL_PERM_1', 1);
+define('ACL_PERM_2', 2);
+define('ACL_PERM_3', 4);
+define('ACL_PERM_4', 8);
 define('ACL_PERM_5', 16);
 define('ACL_PERM_6', 32);
 define('ACL_PERM_7', 64);
