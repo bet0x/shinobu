@@ -17,9 +17,59 @@ class default_controller extends AuthWebController
 
 	public function GET($args)
 	{
-		return tpl::render('basic', array(
+		global $db_name;
+
+		$sys_info = array(
+			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
+			'db' => $this->module->db->get_version(),
+			'os' => 'Not available',
+			'uptime' => 'Not available',
+			'users' => 'Not available',
+			'loadavg' => 'Not available'
+			);
+
+		// See if MMCache, PHPA or APC is loaded (From FLuxBB 1.2.*)
+		if (function_exists('mmcache'))
+			$sys_info['php_accelerator'] = '<a href="http://turck-mmcache.sourceforge.net/">Turck MMCache</a>';
+		else if (isset($_PHPA))
+			$sys_info['php_accelerator'] = '<a href="http://www.php-accelerator.co.uk/">ionCube PHP Accelerator</a>';
+		else if (extension_loaded('apc'))
+			$sys_info['php_accelerator'] = '<a href="http://php.net/apc">APC</a>';
+		else
+			$sys_info['php_accelerator'] = 'N/A';
+
+		// Calculate total database size/row count (only MySQLi for now)
+		$result = $this->module->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
+			or error('Can not get STATUS from MySQLi.', __FILE__, __LINE__);
+
+		$sys_info['db_records'] = $sys_info['db_size'] = 0;
+		while ($status = $this->module->db->fetch_assoc($result))
+		{
+			$sys_info['db_records'] += $status['Rows'];
+			$sys_info['db_size'] += $status['Data_length'] + $status['Index_length'];
+		}
+
+		// This part doesn't work in Windows
+		if (!in_array(PHP_OS, array('WINNT', 'WIN32')))
+		{
+			// Get uptime, users and load average
+			if (!preg_match('#^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$#', trim(shell_exec('uptime')), $matches))
+				error('Could not get uptime.', __FILE__, __LINE__);
+
+			list (, $sys_info['uptime'], $sys_info['users'], $sys_info['loadavg']) = $matches;
+
+			// Get kernel version and operating system
+			$sys_info['os'] = trim(shell_exec('uname -r -o'));
+		}
+
+		return tpl::render('admin_info', array(
 			'page_title' => 'Administration',
-			'page_body' => '<p>This is the administration panel.</p>',
+			'page_body' => '<p>This is the administration panel. From here you can manage the system, pages, menu, users, '.
+			               'groups and permissions. Below you can see some system statistics and software version information.</p>',
+			'section' => 'information',
+			'admin_perms' => $this->module->acl->get('administration'),
+
+			'sys_info' => $sys_info
 			));
 	}
 }

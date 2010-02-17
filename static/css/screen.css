@@ -12,10 +12,10 @@ a img             { border: 1px solid #222 }
 p                 { margin: 1.5em 0 }
 img               { margin: 0;padding: 0 }
 
-h1,h2,h3,h4,h5,h6 { font-weight: normal;color: #333 }
+h1,h2,h3,h4,h5,h6 { font-weight: normal;color: #444 }
 
 h1                { margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
-h2                { margin: 0.75em 0;font-size: 2em }
+h2                { margin: 0.75em 0;font-size: 1.8em }
 h3                { margin: 1em 0;font-size: 1.5em;line-height: 1em }
 h4                { margin: 1.25em 0;font-size: 1.2em;line-height: 1.25 }
 h5                { margin: 1.5em 0;font-size: 1em;font-weight: bold }
@@ -33,10 +33,15 @@ th, td            { padding: 0.3em 1em;border-width: 1px;border-left-color: #f1f
 th                { background: #eee;border-bottom-color: #ddd;font-weight: bold }
 td                { border-bottom-color: #efefef;font-weight: normal }
 
+hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
+
 /* --- Layouts
 ---------------------------------------------------------*/
 
 #header, #body, #footer { margin: 0 auto;width: 65% }
+
+#admin-content { float: left;width: 75% }
+#admin-navigation { float: right;width: 22% }
 
 /* --- Header, and main navigation
 ---------------------------------------------------------*/
@@ -120,3 +125,66 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 	{ margin: 1.5em auto;padding: 0 1.5em;width: 50% }
 .redirect-box h1 { font-size: 1.5em }
 .redirect-box .skip-redirect { font-size: 0.8em }
+
+/* --- Administration navigation and content
+---------------------------------------------------------*/
+
+#admin-navigation
+    { margin: 1.5em 0;border-left: 1px solid #ccc;font-size: 0.8em }
+#admin-navigation ul { margin: 0;padding: 0;list-style: none }
+
+#admin-navigation ul a:link, #admin-navigation ul a:visited
+    { display: block;padding: 0.5em;text-indent: 1em;color: #333;
+      text-decoration: none }
+
+.section-information a.anav-info,
+#admin-navigation ul a:hover, #admin-navigation ul a:active
+    { background: #eee;padding: 0.5em;text-indent: 1em;color: #333;
+      text-decoration: none;
+      border-top-right-radius: 3px;
+      border-bottom-right-radius: 3px;
+	  -moz-border-radius-topright: 3px;
+      -moz-border-radius-bottomright: 3px;
+	  -webkit-border-top-right-radius: 3px;
+      -webkit-border-bottom-right-radius: 3px; }
+
+.section-information a.anav-info,
+.section-options a.anav-options,
+.section-groups a.anav-groups,
+.section-users a.anav-users,
+.section-menu a.anav-menu,
+.section-pages a.anav-pages
+    { background: #dedede }
+
+/* --- Misc
+---------------------------------------------------------*/
+
+div.clear { clear: both;height: 0 }
+
+dl.info-list dt
+    { width: 150px;font-weight: bold;text-align: right;margin-top: 1em }
+dl.info-list dt:first-child
+    { margin-top: 0 }
+dl.info-list dd { margin-left: 170px }
+dl.info-list dt + dd { margin-top: -1.48em }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

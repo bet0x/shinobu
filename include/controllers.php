@@ -163,10 +163,12 @@ abstract class AuthWebController extends BaseController
 		}
 
 		// Testing
-		//$this->module->acl->set('administration', $this->module->acl->get('administration') ^ ACL_PERM_1);
-		// echo '<pre>';
-		// print_r($this->module->acl->get('administration'));
-		// echo '</pre>';
+		/*$this->module->acl->set('administration', $this->module->acl->get('administration')
+			 | ACL_PERM_3 | ACL_PERM_4 | ACL_PERM_5
+			 | ACL_PERM_6 | ACL_PERM_7 | ACL_PERM_8);
+		echo '<pre>';
+		print_r($this->module->acl->get('administration'));
+		echo '</pre>';*/
 
 		$this->prepare();
 	}
