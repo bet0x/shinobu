@@ -162,10 +162,11 @@ abstract class AuthWebController extends BaseController
 			tpl::set('admin_view', $this->module->acl->get('administration') & ACL_PERM_1);
 		}
 
-		/* $this->module->acl->set('administration', $this->module->acl->get('administration') ^ ACL_PERM_1);
-		echo '<pre>';
-		print_r($this->module->acl->get('administration'));
-		echo '</pre>'; */
+		// Testing
+		//$this->module->acl->set('administration', $this->module->acl->get('administration') ^ ACL_PERM_1);
+		// echo '<pre>';
+		// print_r($this->module->acl->get('administration'));
+		// echo '</pre>';
 
 		$this->prepare();
 	}

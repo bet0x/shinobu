@@ -7,8 +7,6 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// NOT DONE YET
-
 class acl
 {
 	private $permisions = array(), $new_perms = array(), $group_id, $db = null;
@@ -18,16 +16,29 @@ class acl
 		$this->db = $db;
 	}
 
+	// Set a group ID
 	public function set_gid($id)
 	{
 		$this->group_id = intval($id);
 	}
 
+	// Write all the changes to the database
 	public function __destruct()
 	{
-		// Write all the changes to the database
+		// Loop through groups
+		foreach ($this->new_perms as $gid => $acl)
+		{
+			// Loop through ACLs
+			foreach ($acl as $acl_id => $permission)
+			{
+				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions='.intval($permission).' WHERE group_id='.intval($gid).'
+					AND acl_id="'.$this->db->escape($acl_id).'"')
+					or error('User data could not be updated: '.$this->db->error(), __FILE__, __LINE__);
+			}
+		}
 	}
 
+	// Get a ACL
 	public function get($acl_id)
 	{
 		if (isset($this->permissions[$this->group_id][$acl_id]))
@@ -37,14 +48,14 @@ class acl
 			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error('Unable to fetch ACL permission.', __FILE__, __LINE__);
 
 		if ($this->db->num_rows($result) === 1)
-			$this->permissions[$this->group_id][$acl_id] = $permission = (int) $this->db->result($result);
+			$this->permissions[$this->group_id][$acl_id] = $permissions = (int) $this->db->result($result);
 		else
 			return false;
 
-		return $permission;
+		return $permissions;
 	}
 
-	// FIXME
+	// Get multiple ACLs
 	public function get_multiple()
 	{
 		$req_perms = '"'.$this->db->escape(implode('", "', func_get_args())).'"';
@@ -63,6 +74,7 @@ class acl
 		return $permissions;
 	}
 
+	// Update a ACL
 	public function set($acl_id, $permissions)
 	{
 		$this->permissions[$this->group_id][$acl_id] = $permissions;
