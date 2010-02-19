@@ -18,7 +18,8 @@ class options_controller extends AuthWebController
 	public function GET($args)
 	{
 		return tpl::render('admin_options', array(
-			'page_title' => 'Administration',
+			'website_section' => 'Administration',
+			'page_title' => 'Options - Administration',
 			'page_body' => '<p>This is the administration panel.</p>',
 			'section' => 'options',
 			'admin_perms' => $this->module->acl->get('administration')
