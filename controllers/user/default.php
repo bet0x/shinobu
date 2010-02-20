@@ -18,7 +18,6 @@ class default_controller extends AuthWebController
 	public function GET($args)
 	{
 		return tpl::render('user_profile', array(
-			'website_section' => 'Profile',
 			'page_title' => 'Profile',
 			'errors' => array(),
 			'values' => $this->module->user->data('username', 'email')

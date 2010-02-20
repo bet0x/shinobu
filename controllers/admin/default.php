@@ -64,10 +64,10 @@ class default_controller extends AuthWebController
 
 		return tpl::render('admin_info', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Information - Administration',
+			'page_title' => 'Information',
 			'page_body' => '<p>This is the administration panel. From here you can manage the system, pages, menu, users, '.
 			               'groups and permissions. Below you can see some system statistics and software version information.</p>',
-			'section' => 'information',
+			'subsection' => 'information',
 			'admin_perms' => $this->module->acl->get('administration'),
 
 			'sys_info' => $sys_info

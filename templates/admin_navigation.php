@@ -1,4 +1,4 @@
-<div id="admin-navigation" class="section-<?php echo $section ?>">
+<div id="admin-navigation" class="section-<?php echo $subsection ?>">
 	<ul>
 		<?php if ($admin_perms & ACL_PERM_1): ?>
 		<li><a class="anav-info" href="<?php echo utils::url('admin') ?>">Information</a></li>

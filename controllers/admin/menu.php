@@ -19,9 +19,9 @@ class menu_controller extends AuthWebController
 	{
 		return tpl::render('admin_menu', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Menu - Administration',
+			'page_title' => 'Menu',
 			'page_body' => '<p>This is the administration panel.</p>',
-			'section' => 'menu',
+			'subsection' => 'menu',
 			'admin_perms' => $this->module->acl->get('administration')
 			));
 	}

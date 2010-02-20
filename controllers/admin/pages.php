@@ -19,9 +19,9 @@ class pages_controller extends AuthWebController
 	{
 		return tpl::render('admin_pages', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Pages - Administration',
+			'page_title' => 'Pages',
 			'page_body' => '<p>This is the administration panel.</p>',
-			'section' => 'pages',
+			'subsection' => 'pages',
 			'admin_perms' => $this->module->acl->get('administration')
 			));
 	}

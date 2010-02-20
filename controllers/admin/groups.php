@@ -19,9 +19,9 @@ class groups_controller extends AuthWebController
 	{
 		return tpl::render('admin_groups', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Groups - Administration',
+			'page_title' => 'Groups',
 			'page_body' => '<p>This is the administration panel.</p>',
-			'section' => 'groups',
+			'subsection' => 'groups',
 			'admin_perms' => $this->module->acl->get('administration')
 			));
 	}

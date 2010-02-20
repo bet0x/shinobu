@@ -19,9 +19,9 @@ class options_controller extends AuthWebController
 	{
 		return tpl::render('admin_options', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Options - Administration',
+			'page_title' => 'Options',
 			'page_body' => '<p>This is the administration panel.</p>',
-			'section' => 'options',
+			'subsection' => 'options',
 			'admin_perms' => $this->module->acl->get('administration')
 			));
 	}

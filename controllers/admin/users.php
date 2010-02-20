@@ -19,9 +19,9 @@ class users_controller extends AuthWebController
 	{
 		return tpl::render('admin_users', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Users - Administration',
+			'page_title' => 'Users',
 			'page_body' => '<p>This is the administration panel.</p>',
-			'section' => 'users',
+			'subsection' => 'users',
 			'admin_perms' => $this->module->acl->get('administration')
 			));
 	}
