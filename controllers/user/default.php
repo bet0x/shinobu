@@ -20,14 +20,14 @@ class default_controller extends AuthWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => array(),
-			'values' => $this->module->user->data('username', 'email')
+			'values' => $this->module->user->data()
 			));
 	}
 
 	public function POST($args)
 	{
 		if (!isset($args['form_profile']))
-			$this->redirect(utils::url('user/register'));
+			$this->redirect(utils::url('user'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
@@ -103,7 +103,7 @@ class default_controller extends AuthWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => $errors,
-			'values' => $this->module->user->data('username', 'email')
+			'values' => $this->module->user->data()
 			));
 	}
 }

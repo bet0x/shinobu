@@ -144,12 +144,12 @@ abstract class AuthWebController extends BaseController
 
 		$this->set_mimetype('html');
 
-		// Load user and ACL module
-		$this->module->user = $this->module->acl = $this->module->db;
+		// Load config, user and ACL module
+		$this->module->config = $this->module->user = $this->module->acl = $this->module->db;
 		$authenticated = $this->module->user->authenticated();
 
 		// Set some template variables
-		tpl::set('website_title', 'Shinobu');
+		tpl::set('website_title', $this->module->config->website_title);
 		tpl::set('authenticated', $authenticated);
 
 		// Do some extra things for authenticated users

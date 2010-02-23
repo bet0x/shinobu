@@ -47,7 +47,7 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 ---------------------------------------------------------*/
 
 /* Header */
-#header { position: relative;padding: 55px 0 0 }
+#header { position: relative;padding: 55px 0 1em; border-bottom: 1px solid #ddd }
 #header h1 { margin: 0 }
 #header h1 a:link, #header h1 a:visited { color: #222;text-decoration: none }
 #header h1 a:hover, #header h1 a:active { border-bottom: 2px solid #000 }
@@ -71,7 +71,7 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 /* --- Footer
 ---------------------------------------------------------*/
 
-#footer { margin-top: 1.5em;border-top: 1px solid #ddd;clear: both }
+#footer { margin-top: 1.5em;border-top: 1px solid #dcdcdc;clear: both }
 #footer p { margin: 0;padding: 1em 0;font-size: 0.9em }
 #poweredby { float: right }
 
@@ -79,33 +79,36 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 ---------------------------------------------------------*/
 
 input, textarea, select
-	{ border-width: 1px;border-style: solid;
+	{ background: #fff;border-width: 1px;border-style: solid;
 	  border-color: #9a9a9a #ededed #eee #9b9b9b }
 input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 
-.form-style-one { margin: 1.5em 0;width: 72% }
+.form-style-one { margin: 1.5em 0 }
 .form-style-one p { clear: left;overflow: auto }
 .form-style-one p.description, .form-style-one p.note
-	{ margin-top: -1.2em;font-size:0.8em;width: 75% }
+	{ margin-top: -1.2em;font-size:0.8em;width: 40em }
 .form-style-one p.note
 	{ font-family: "DejaVu Serif", "Bitstream Vera Serif", Serif;color: #555 }
 .form-style-one span.description
-	{ display: block;margin: 0.5em 0;font-size:0.8em;width: 75% }
+	{ display: block;margin: 0.5em 0;font-size:0.8em }
 .form-style-one .confirm-field { color: #666 }
 .form-style-one p.multiple-fields label { float: left;margin-right: 1.5em }
 .form-style-one p.non-text-fields label
 	{ display: block;margin-top: 0.3em;cursor: pointer }
 .form-style-one label strong, .form-style-one p.non-text-fields strong
-	{ display: block;cursor: pointer }
+	{ display: block }
+.form-style-one label strong
+	{ cursor: pointer }
 .form-style-one label strong span
 	{ position: relative;top: -0.6em;font-weight: normal;font-size: 0.65em;
 	  color: #971010;cursor: auto }
 .form-style-one label input[type=text],
-.form-style-one label input[type=password]
+.form-style-one label input[type=password],
+.form-style-one label select
 	{ padding: 0.3em 0.4em;width: 19em }
 
 .form-style-one p.buttons
-	{ margin: 1.5em 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
+	{ margin: 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
 .form-style-one input[type=submit]
 	{ background: #eee;padding: 0.4em 0.5em;cursor: pointer;
 	  border-width: 1px;border-style: solid;
@@ -130,14 +133,16 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 ---------------------------------------------------------*/
 
 #admin-navigation
-    { margin: 1.5em 0;border-left: 1px solid #ccc;font-size: 0.8em }
+    { margin: 2em 0 1.5em;border-left: 1px solid #ccc;font-size: 0.8em }
 #admin-navigation ul { margin: 0;padding: 0;list-style: none }
 
 #admin-navigation ul a:link, #admin-navigation ul a:visited
     { display: block;padding: 0.5em;text-indent: 1em;color: #333;
       text-decoration: none }
 
-.section-information a.anav-info,
+.section-information a.anav-info, .section-options a.anav-options,
+.section-groups a.anav-groups, .section-users a.anav-users,
+.section-menu a.anav-menu, .section-pages a.anav-pages,
 #admin-navigation ul a:hover, #admin-navigation ul a:active
     { background: #eee;padding: 0.5em;text-indent: 1em;color: #333;
       text-decoration: none;
@@ -148,25 +153,27 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 	  -webkit-border-top-right-radius: 3px;
       -webkit-border-bottom-right-radius: 3px; }
 
-.section-information a.anav-info,
-.section-options a.anav-options,
-.section-groups a.anav-groups,
-.section-users a.anav-users,
-.section-menu a.anav-menu,
-.section-pages a.anav-pages
+.section-information a.anav-info, .section-options a.anav-options,
+.section-groups a.anav-groups, .section-users a.anav-users,
+.section-menu a.anav-menu, .section-pages a.anav-pages
     { background: #dedede }
+
+#admin-content h2:first-child
+    { margin-top: 0.89em }
+#admin-content form { margin-bottom: 0 }
 
 /* --- Misc
 ---------------------------------------------------------*/
 
 div.clear { clear: both;height: 0 }
 
-dl.info-list dt
+/* Infolist */
+dl.infolist dt
     { width: 150px;font-weight: bold;text-align: right;margin-top: 1em }
-dl.info-list dt:first-child
+dl.infolist dt:first-child
     { margin-top: 0 }
-dl.info-list dd { margin-left: 170px }
-dl.info-list dt + dd { margin-top: -1.48em }
+dl.infolist dd { margin-left: 170px }
+dl.infolist dt + dd { margin-top: -1.48em }
 
 
 

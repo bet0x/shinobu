@@ -17,6 +17,12 @@ class register_controller extends AuthWebController
 
 	public function GET($args)
 	{
+		if (!$this->module->config->allow_new_registrations)
+			return tpl::render('basic', array(
+				'page_title' => 'Register',
+				'page_body' => '<p>New registrations are currently disabled.</p>',
+				));
+
 		return tpl::render('user_register', array(
 			'page_title' => 'Register',
 			'errors' => array(),
@@ -28,7 +34,7 @@ class register_controller extends AuthWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_register']))
+		if (if (!$this->module->config->allow_new_registrations) || !isset($args['form_register']))
 			$this->redirect(utils::url('user/register'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
@@ -83,6 +89,7 @@ class register_controller extends AuthWebController
 		{
 			$this->module->user->add(
 				$args['form']['username'],
+				$this->module->config->default_usergroup,
 				$args['form']['password'],
 				$args['form']['email']);
 

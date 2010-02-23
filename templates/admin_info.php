@@ -6,12 +6,12 @@
 
 	<?php echo $page_body ?>
 
-	<dl class="info-list">
+	<dl class="infolist">
 		<dt>Shinobu</dt>
 		<dd><?php echo SHINOBU ?></dd>
 	</dl>
 	<hr />
-	<dl class="info-list">
+	<dl class="infolist">
 		<dt>Uptime</dt>
 		<dd><?php echo $sys_info['uptime'] ?></dd>
 
@@ -22,7 +22,7 @@
 		<dd><?php echo $sys_info['loadavg'] ?></dd>
 	</dl>
 	<hr />
-	<dl class="info-list">
+	<dl class="infolist">
 		<dt>Operating System</dt>
 		<dd><?php echo $sys_info['os'] ?></dd>
 

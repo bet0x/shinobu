@@ -86,7 +86,7 @@ class user
 	}
 
 	// Add new user
-	public function add($username, $password, $email)
+	public function add($username, $group_id, $password, $email)
 	{
 		// Create hashes for the password
 		$salt = generate_salt();
@@ -95,13 +95,14 @@ class user
 
 		$this->db->query('
 			INSERT INTO '.DB_PREFIX.'users
-				(username, password, salt, hash, email)
+				(username, group_id, password, salt, hash, email)
 			VALUES(
 				"'.$this->db->escape($username).'",
+				'.intval($group_id).',
 				"'.$this->db->escape($password).'",
 				"'.$this->db->escape($salt).'",
 				"'.$this->db->escape($hash).'",
-				"'.$this->db->escape($email).'")') or error('Could not add new user to the database: '.$this->db->error(), __FILE__, __LINE__);
+				"'.$this->db->escape($email).'")') or error('Could not add new user to the database.', __FILE__, __LINE__);
 
 		// Return the ID of the added user
 		return $this->db->insert_id();

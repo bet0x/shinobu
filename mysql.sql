@@ -41,8 +41,29 @@ CREATE TABLE IF NOT EXISTS `acl_groups` (
 --
 
 INSERT INTO `acl_groups` (`acl_id`, `group_id`, `permissions`) VALUES
-('administration', 1, 1),
+('administration', 1, 255),
 ('administration', 2, 0);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `config`
+--
+
+CREATE TABLE IF NOT EXISTS `config` (
+  `name` varchar(50) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `value` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `config`
+--
+
+INSERT INTO `config` (`name`, `value`) VALUES
+('website_title', 'Shinobu'),
+('allow_new_registrations', '1'),
+('default_usergroup', '2');
 
 -- --------------------------------------------------------
 
