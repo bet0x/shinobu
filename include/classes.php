@@ -386,7 +386,7 @@ abstract class AuthWebController extends BaseController
 			$this->acl->set_gid($this->user->data['group_id']);
 
 			tpl::set('username', $this->user->data['username']);
-			tpl::set('admin_view', $this->acl->get('administration') & ACL_PERM_1);
+			tpl::set('admin_view', $this->acl->check('administration', ACL_PERM_1));
 		}
 
 		// Testing
@@ -395,10 +395,9 @@ abstract class AuthWebController extends BaseController
 			 | ACL_PERM_6 | ACL_PERM_7 | ACL_PERM_8);
 		echo '<pre>';
 		print_r($this->acl->get('administration'));
-		echo '</pre>';*/
-
-		/*echo '<pre>';
-		print_r(acl::PERM_1);
+		echo '</pre>';
+		echo '<pre>';
+		print_r($this->acl->check('administration', ACL_PERM_1));
 		echo '</pre>';*/
 
 		$this->prepare();

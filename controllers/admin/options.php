@@ -11,7 +11,7 @@ class options_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !($this->acl->get('administration') & ACL_PERM_5))
+		if (!$this->user->authenticated() || !$this->acl->get('administration', ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 

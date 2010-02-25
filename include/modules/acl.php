@@ -9,15 +9,6 @@
 
 class acl
 {
-	const PERM_1 = 1;
-	const PERM_2 = 2;
-	const PERM_3 = 4;
-	const PERM_4 = 8;
-	const PERM_5 = 16;
-	const PERM_6 = 32;
-	const PERM_7 = 64;
-	const PERM_8 = 128;
-
 	private $permisions = array(), $new_perms = array(), $group_id, $db = null;
 
 	public function __construct(db $db = null)
@@ -88,5 +79,14 @@ class acl
 	{
 		$this->permissions[$this->group_id][$acl_id] = $permissions;
 		$this->new_perms[$this->group_id][$acl_id] =& $this->permissions[$this->group_id][$acl_id];
+	}
+
+	// Check a permission
+	public function check($acl_id, $bits)
+	{
+		if (!isset($this->permissions[$this->group_id][$acl_id]))
+			$this->get('administration');
+
+		return $this->permissions[$this->group_id][$acl_id] & $bits;
 	}
 }
