@@ -11,19 +11,19 @@ class options_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->module->user->authenticated() || !($this->module->acl->get('administration') & ACL_PERM_5))
+		if (!$this->user->authenticated() || !($this->acl->get('administration') & ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
 	private function _fetch_usergroups()
 	{
 		$usergroups = array();
-		$result = $this->module->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
+		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
 			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
 
-		if ($this->module->db->num_rows($result) > 0)
+		if ($this->db->num_rows($result) > 0)
 		{
-			while ($row = $this->module->db->fetch_assoc($result))
+			while ($row = $this->db->fetch_assoc($result))
 				$usergroups[$row['id']] = $row['name'];
 		}
 
@@ -36,12 +36,12 @@ class options_controller extends AuthWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->module->acl->get('administration'),
+			'admin_perms' => $this->acl->get('administration'),
 			'usergroups' => $this->_fetch_usergroups(),
 			'values' => array(
-				'website_title' => $this->module->config->website_title,
-				'allow_new_registrations' => $this->module->config->allow_new_registrations,
-				'default_usergroup' => $this->module->config->default_usergroup),
+				'website_title' => $this->config->website_title,
+				'allow_new_registrations' => $this->config->allow_new_registrations,
+				'default_usergroup' => $this->config->default_usergroup),
 			'errors' => array(),
 			));
 	}
@@ -75,8 +75,8 @@ class options_controller extends AuthWebController
 		{
 			foreach ($args['form'] as $name => $value)
 			{
-				$this->module->db->query('UPDATE '.DB_PREFIX.'config SET value="'.$this->module->db->escape($value).
-					'" WHERE name="'.$this->module->db->escape($name).'"')
+				$this->db->query('UPDATE '.DB_PREFIX.'config SET value="'.$this->db->escape($value).
+					'" WHERE name="'.$this->db->escape($name).'"')
 					or error('Could not update the configuration.', __FILE__, __LINE__);
 			}
 
@@ -92,12 +92,12 @@ class options_controller extends AuthWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->module->acl->get('administration'),
+			'admin_perms' => $this->acl->get('administration'),
 			'usergroups' => $usergroups,
 			'values' => array(
-				'website_title' => $this->module->config->website_title,
-				'allow_new_registrations' => $this->module->config->allow_new_registrations,
-				'default_usergroup' => $this->module->config->default_usergroup),
+				'website_title' => $this->config->website_title,
+				'allow_new_registrations' => $this->config->allow_new_registrations,
+				'default_usergroup' => $this->config->default_usergroup),
 			'errors' => array(),
 			));
 	}

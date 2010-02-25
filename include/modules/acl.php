@@ -9,6 +9,15 @@
 
 class acl
 {
+	const PERM_1 = 1;
+	const PERM_2 = 2;
+	const PERM_3 = 4;
+	const PERM_4 = 8;
+	const PERM_5 = 16;
+	const PERM_6 = 32;
+	const PERM_7 = 64;
+	const PERM_8 = 128;
+
 	private $permisions = array(), $new_perms = array(), $group_id, $db = null;
 
 	public function __construct(db $db = null)

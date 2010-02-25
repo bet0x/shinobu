@@ -11,7 +11,7 @@ class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->module->user->authenticated() || !($this->module->acl->get('administration') & ACL_PERM_1))
+		if (!$this->user->authenticated() || !($this->acl->get('administration') & ACL_PERM_1))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -21,7 +21,7 @@ class default_controller extends AuthWebController
 
 		$sys_info = array(
 			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
-			'db' => $this->module->db->get_version(),
+			'db' => $this->db->get_version(),
 			'os' => 'Not available',
 			'uptime' => 'Not available',
 			'users' => 'Not available',
@@ -39,11 +39,11 @@ class default_controller extends AuthWebController
 			$sys_info['php_accelerator'] = 'N/A';
 
 		// Calculate total database size/row count (only MySQLi for now)
-		$result = $this->module->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
+		$result = $this->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
 			or error('Can not get STATUS from MySQLi.', __FILE__, __LINE__);
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;
-		while ($status = $this->module->db->fetch_assoc($result))
+		while ($status = $this->db->fetch_assoc($result))
 		{
 			$sys_info['db_records'] += $status['Rows'];
 			$sys_info['db_size'] += $status['Data_length'] + $status['Index_length'];
@@ -68,7 +68,7 @@ class default_controller extends AuthWebController
 			'page_body' => '<p>This is the administration panel. From here you can manage the system, pages, menu, users, '.
 			               'groups and permissions. Below you can see some system statistics and software version information.</p>',
 			'subsection' => 'information',
-			'admin_perms' => $this->module->acl->get('administration'),
+			'admin_perms' => $this->acl->get('administration'),
 
 			'sys_info' => $sys_info
 			));

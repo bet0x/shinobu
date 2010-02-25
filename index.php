@@ -41,9 +41,8 @@ else
 	require SYS_UTF8.'/native/core.php';
 }
 
-// Load classes and controllers
+// Load classes
 require SYS_INCLUDE.'/classes.php';
-require SYS_INCLUDE.'/controllers.php';
 
 // Return content to the visitor
 $application = new Application();

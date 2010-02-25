@@ -10,7 +10,8 @@
 class user
 {
 	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id', 'title'),
-	        $authenticated = false, $data = array(), $db = null;
+	        $authenticated = false, $db = null;
+	public $data = array();
 
 	public function __construct(db $db = null)
 	{
@@ -106,12 +107,6 @@ class user
 
 		// Return the ID of the added user
 		return $this->db->insert_id();
-	}
-
-	// Return user data
-	public function data()
-	{
-		return $this->data;
 	}
 
 	// Update user data

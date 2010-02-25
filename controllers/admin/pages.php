@@ -11,7 +11,7 @@ class pages_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->module->user->authenticated() || !($this->module->acl->get('administration') & ACL_PERM_2))
+		if (!$this->user->authenticated() || !($this->acl->get('administration') & ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -22,7 +22,7 @@ class pages_controller extends AuthWebController
 			'page_title' => 'Pages',
 			'page_body' => '<p>This is the administration panel.</p>',
 			'subsection' => 'pages',
-			'admin_perms' => $this->module->acl->get('administration')
+			'admin_perms' => $this->acl->get('administration')
 			));
 	}
 }

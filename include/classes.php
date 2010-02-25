@@ -46,11 +46,8 @@ class Application
 		else
 			$args = null;
 
-		// Load the module container
-		#$module = ();
-
 		// Start the controller
-		$controller_instance = new $class_name($request, new ModuleContainer);
+		$controller_instance = new $class_name($request);
 		$this->output = $controller_instance->$request_type($args);
 	}
 
@@ -235,38 +232,175 @@ class utils
 	}
 }
 
-// Modules container (very simple dependency injection)
-class ModuleContainer
+// A base class for controllers
+// This class contains all the supported requests methods
+class BaseController
 {
-	private $objects = array();
+	protected $request = false, $module = null;
+	protected $_mimetypes = array(
+		'text'  => 'text/plain',
+		'html'  => 'text/html',
+		'xml'   => 'text/xml',
+		'xhtml' => 'application/xhtml+xml',
+		'atom'  => 'application/atom+xml',
+		'rss'   => 'application/rss+xml',
+		'json'  => 'application/json',
+		'svg'   => 'image/svg+xml',
+		'gif'   => 'image/gif',
+		'png'   => 'image/png',
+		'jpg'   => 'image/jpeg');
+	protected $_status_codes = array(
+		100 => 'Continue',
+		101 => 'Switching Protocols',
+		200 => 'OK',
+		201 => 'Created',
+		202 => 'Accepted',
+		203 => 'Non-Authoritative Information',
+		204 => 'No Content',
+		205 => 'Reset Content',
+		206 => 'Partial Content',
+		300 => 'Multiple Choices',
+		301 => 'Moved Permanently',
+		302 => 'Found',
+		303 => 'See Other',
+		304 => 'Not Modified',
+		305 => 'Use Proxy',
+		306 => '(Unused)',
+		307 => 'Temporary Redirect',
+		400 => 'Bad Request',
+		401 => 'Unauthorized',
+		402 => 'Payment Required',
+		403 => 'Forbidden',
+		404 => 'Not Found',
+		405 => 'Method Not Allowed',
+		406 => 'Not Acceptable',
+		407 => 'Proxy Authentication Required',
+		408 => 'Request Timeout',
+		409 => 'Conflict',
+		410 => 'Gone',
+		411 => 'Length Required',
+		412 => 'Precondition Failed',
+		413 => 'Request Entity Too Large',
+		414 => 'Request-URI Too Long',
+		415 => 'Unsupported Media Type',
+		416 => 'Requested Range Not Satisfiable',
+		417 => 'Expectation Failed',
+		500 => 'Internal Server Error',
+		501 => 'Not Implemented',
+		502 => 'Bad Gateway',
+		503 => 'Service Unavailable',
+		504 => 'Gateway Timeout',
+		505 => 'HTTP Version Not Supported');
 
-	public function __set($name, $value)
+	public function __construct($request)
 	{
-		if (!isset($this->objects[$name]))
-		{
-			if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
-				return false;
-
-			require SYS_INCLUDE.'/modules/'.$name.'.php';
-		}
-		else
-			unset($this->objects[$name]);
-
-		$this->objects[$name] = new $name($value);
-		return $this->objects[$name];
+		$this->request = $request;
+		$this->prepare();
 	}
 
-	public function __get($name)
+	/* This is an empty function that's always executed by the constructor of
+	   the base controller.  This function can be overwritten to execute  or
+	   process certin things before the request method function is executed. */
+	protected function prepare()
 	{
-		if (isset($this->objects[$name]))
-			return $this->objects[$name];
+
+	}
+
+	protected function load_module($name, $args = null)
+	{
+		static $modules = array();
+
+		if (isset($modules[$name]))
+			return $modules[$name];
 
 		if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
 			return false;
 
 		require SYS_INCLUDE.'/modules/'.$name.'.php';
 
-		$this->objects[$name] = new $name();
-		return $this->objects[$name];
+		$modules[$name] = new $name($args);
+		return $modules[$name];
+	}
+
+	// Send content type header
+	protected function set_mimetype($type)
+	{
+		if (isset($this->_mimetypes[$type]))
+			header('Content-type: '.$this->_mimetypes.'; charset=utf-8');
+		else
+			header('Content-type: text/plain; charset=utf-8');
+	}
+
+	// Send an error to the client (e.g. 404, 500)
+	public function send_error($status_code)
+	{
+		if (!isset($this->_status_codes[$status_code]))
+			$status_code = 500;
+
+		header('HTTP/1.1 '.$status_code.' '.$this->_status_codes[$status_code]);
+		$this->set_mimetype('text');
+
+		return $status_code.': '.$this->_status_codes[$status_code];
+	}
+
+	// Redirect a client to an other URL
+	protected function redirect($location)
+	{
+		header('location: '.$location); exit;
+	}
+
+	/* Be default all request method function return a 405 (Method Not Allowed)
+	   error. Controllers should extend the BaseController and overwrite these
+	   function. */
+	public function GET($args) { return $this->send_error(405); }
+	public function POST($args) { return $this->send_error(405); }
+	public function PUT($args) { return $this->send_error(405); }
+	public function DELETE($args) { return $this->send_error(405); }
+	public function HEAD($args) { return $this->send_error(405); }
+	public function AJAX($args) { return $this->send_error(405); }
+}
+
+// A controller for web pages with user authentication enabled
+abstract class AuthWebController extends BaseController
+{
+	public function __construct($request)
+	{
+		$this->request = $request;
+		$this->set_mimetype('html');
+
+		// Load modules
+		$this->db = $this->load_module('db');
+		$this->config = $this->load_module('config', $this->db);
+		$this->user = $this->load_module('user', $this->db);
+		$this->acl = $this->load_module('acl', $this->db);
+
+		$authenticated = $this->user->authenticated();
+
+		// Set some template variables
+		tpl::set('website_title', $this->config->website_title);
+		tpl::set('authenticated', $authenticated);
+
+		// Do some extra things for authenticated users
+		if ($authenticated)
+		{
+			$this->acl->set_gid($this->user->data['group_id']);
+
+			tpl::set('username', $this->user->data['username']);
+			tpl::set('admin_view', $this->acl->get('administration') & ACL_PERM_1);
+		}
+
+		// Testing
+		/*$this->acl->set('administration', $this->acl->get('administration')
+			 | ACL_PERM_3 | ACL_PERM_4 | ACL_PERM_5
+			 | ACL_PERM_6 | ACL_PERM_7 | ACL_PERM_8);
+		echo '<pre>';
+		print_r($this->acl->get('administration'));
+		echo '</pre>';*/
+
+		/*echo '<pre>';
+		print_r(acl::PERM_1);
+		echo '</pre>';*/
+
+		$this->prepare();
 	}
 }

@@ -11,7 +11,7 @@ class menu_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->module->user->authenticated() || !($this->module->acl->get('administration') & ACL_PERM_4))
+		if (!$this->user->authenticated() || !($this->acl->get('administration') & ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -22,7 +22,7 @@ class menu_controller extends AuthWebController
 			'page_title' => 'Menu',
 			'page_body' => '<p>This is the administration panel.</p>',
 			'subsection' => 'menu',
-			'admin_perms' => $this->module->acl->get('administration')
+			'admin_perms' => $this->acl->get('administration')
 			));
 	}
 }
