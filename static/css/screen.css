@@ -84,7 +84,7 @@ input, textarea, select
 input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 
 .form-style-one { margin: 1.5em 0 }
-.form-style-one p { clear: left;overflow: auto }
+.form-style-one p, .form-style-two p { clear: left;overflow: auto }
 .form-style-one p.description, .form-style-one p.note
 	{ margin-top: -1.2em;font-size:0.8em;width: 40em }
 .form-style-one p.note
@@ -92,34 +92,47 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 .form-style-one span.description
 	{ display: block;margin: 0.5em 0;font-size:0.8em }
 .form-style-one .confirm-field { color: #666 }
-.form-style-one p.multiple-fields label { float: left;margin-right: 1.5em }
+.form-style-one p.multiple-fields label,
+.form-style-two p label
+    { float: left;margin-right: 1.5em }
 .form-style-one p.non-text-fields label
 	{ display: block;margin-top: 0.3em;cursor: pointer }
-.form-style-one label strong, .form-style-one p.non-text-fields strong
+.form-style-one label strong, .form-style-one p.non-text-fields strong,
+.form-style-two label strong
 	{ display: block }
-.form-style-one label strong
+.form-style-one label strong,
+.form-style-two label strong
 	{ cursor: pointer }
-.form-style-one label strong span
+.form-style-one label strong span,
+.form-style-two label strong span
 	{ position: relative;top: -0.6em;font-weight: normal;font-size: 0.65em;
 	  color: #971010;cursor: auto }
-.form-style-one label input[type=text],
-.form-style-one label input[type=password],
-.form-style-one label select
+
+label input[type=text],
+label input[type=password],
+label select
 	{ padding: 0.3em 0.4em;width: 19em }
 
 .form-style-one p.buttons
 	{ margin: 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
-.form-style-one input[type=submit]
+
+input[type=submit],
+input[type=reset]
 	{ background: #eee;padding: 0.4em 0.5em;cursor: pointer;
 	  border-width: 1px;border-style: solid;
 	  border-color: #aaa #595959 #565656 #ababab }
-.form-style-one input[type=submit]:focus
+input[type=submit]:focus,
+input[type=reset]:focus
 	{ background: #dcdcdc }
 
-.form-style-one label.error-field input
+label.error-field input
 	{ background: #ffdada }
-.form-style-one label.error-field input:focus
+label.error-field input:focus
 	{ background: #ffb1b1 }
+
+.form-style-two { background: #eee;padding: 0.5em 0.7em;border: 1px solid #ddd }
+.form-style-two p { margin: 0 }
+.form-style-two p.buttons { float: none;clear: both;margin-top: 0.7em }
 
 /* --- Redirect
 ---------------------------------------------------------*/
@@ -166,6 +179,8 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 ---------------------------------------------------------*/
 
 div.clear { clear: both;height: 0 }
+span.disabled-link { color: #666 }
+p.note { font-style: italic;color: #e20 }
 
 /* Infolist */
 dl.infolist dt
@@ -175,14 +190,20 @@ dl.infolist dt:first-child
 dl.infolist dd { margin-left: 170px }
 dl.infolist dt + dd { margin-top: -1.48em }
 
+/* Lists */
+.two-column-list
+    { margin: 1.5em 0;padding: 0;list-style: none;font-size: 0.9em }
+    .two-column-list li:first-child { border-top: 1px solid #ccc }
+.two-column-list li
+    { padding: 0.3em 0.5em;border-bottom: 1px solid #ccc;overflow: auto }
+.two-column-list li.row-even { background: #efefef }
+.two-column-list li.row-odd { background: #f9f9f9 }
 
+.two-column-list .name { float: left;clear: both;width: 21% }
+.two-column-list .description { float: left;width: 59% }
+.two-column-list .actions { float: right;width: 18%;text-align: right }
 
-
-
-
-
-
-
+.two-column-list a { text-decoration: none }
 
 
 
