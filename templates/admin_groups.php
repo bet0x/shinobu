@@ -19,7 +19,7 @@
 				<?php if ($group['user_count'] > 0): ?>
 				<span class="disabled-link">Delete</span>
 				<?php else: ?>
-				<a href="<?php echo utils::url('admin/groups/delete/'.$group['id']), '?', utils::xsrf_token() ?>">Delete</a>
+				<a href="<?php echo utils::url('admin/groups/delete/'.$group['id']), '&amp;', utils::xsrf_token() ?>">Delete</a>
 				<?php endif ?>
 			</div>
 		</li>

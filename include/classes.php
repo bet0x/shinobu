@@ -14,15 +14,36 @@
 // the controller and the method that needs to respond to the request.
 class Application
 {
-	public $request = false, $controller_path = false, $output = '';
+	public $output = '';
 	private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
 
 
 	public function __construct()
 	{
-		// Parse the request string and looks for the controler file
-		$request = $this->_parse_request_string();
-		$controller_path = $this->_find_controller($request);
+		$request = array('path' => false, 'args' => false);
+		$request_type = 'GET';
+
+		// Parse request string
+		if (isset($_GET['q'][0]))
+		{
+			$request_string = str_replace(array('%', '..'), '', trim($_GET['q'], '/ '));
+
+			if (strpos($request_string, ':') !== false)
+				list($request['path'], $request['args']) = explode(':', $request_string, 2);
+			else
+				$request['path'] =& $request_string;
+		}
+
+		// Look for the controller
+		if (!$request['path'])
+			$controller_path = SYS_CONTROL.'/default.php';
+		else
+		{
+			if (file_exists(SYS_CONTROL.'/'.$request['path'].'.php'))
+				$controller_path = SYS_CONTROL.'/'.$request['path'].'.php';
+			elseif (file_exists(SYS_CONTROL.'/'.$request['path'].'/default.php'))
+				$controller_path = SYS_CONTROL.'/'.$request['path'].'/default.php';
+		}
 
 		// Send a 404 error when the controller could not be found
 		if (!$controller_path)
@@ -33,12 +54,17 @@ class Application
 			return $controller_instance->send_error(404);
 		}
 
-		// include the controller file
+		// Include the controller file
 		require $controller_path;
 
 		// Resolve class name and request method
 		$class_name = pathinfo($controller_path, PATHINFO_FILENAME).'_controller';
-		$request_type = $this->_get_request_method();
+
+		// Get request method (Default is GET)
+		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
+			$request_type = 'AJAX';
+		elseif (in_array($_SERVER['REQUEST_METHOD'], $this->request_methods))
+			$request_type = $_SERVER['REQUEST_METHOD'];
 
 		// Set controller arguments
 		if ($request_type == 'POST')
@@ -49,65 +75,6 @@ class Application
 		// Start the controller
 		$controller_instance = new $class_name($request);
 		$this->output = $controller_instance->$request_type($args);
-	}
-
-	// Return output
-	public function output()
-	{
-		return $this->output;
-	}
-
-	// Find controller and return the path
-	private function _find_controller($request_path)
-	{
-		if (!$request_path)
-		{
-			return SYS_CONTROL.'/default.php';
-		}
-		else
-		{
-			$include_dir = SYS_CONTROL;
-			$has_looped = false;
-
-			foreach ($request_path as $include)
-			{
-				if (file_exists($include_dir.'/'.$include.'.php'))
-					return $include_dir.'/'.$include.'.php';
-				else if (is_dir($include_dir.'/'.$include))
-					$include_dir .= '/'.$include;
-				else
-					break;
-
-				$has_looped = true;
-			}
-
-			if ($has_looped && file_exists($include_dir.'/default.php'))
-				return $include_dir.'/default.php';
-		}
-
-		return false;
-	}
-
-	// Get request type (POST or GET) (defaults to GET)
-	private function _get_request_method()
-	{
-		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
-			return 'AJAX';
-		elseif (in_array($_SERVER['REQUEST_METHOD'], $this->request_methods))
-			return $_SERVER['REQUEST_METHOD'];
-		else
-			return 'GET';
-	}
-
-	// Get the contents of $_GET['q'] and filter and split it.
-	// If $_GET['q'] is not set false is returned
-	private function _parse_request_string()
-	{
-		if (!isset($_GET['q'][0]))
-			return false;
-
-		$request_path = str_replace('..', '', trim($_GET['q'], '/ '));
-		return explode('/', $request_path);
 	}
 }
 

@@ -46,7 +46,7 @@ require SYS_INCLUDE.'/classes.php';
 
 // Return content to the visitor
 $application = new Application();
-echo $application->output();
+echo $application->output;
 
 echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
      's - ', file_size(memory_get_usage()), ' - ',

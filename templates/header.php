@@ -25,7 +25,7 @@
 			<li><a href="<?php echo utils::url('admin') ?>">Administration</a></li>
 			<li>&middot;</li>
 			<?php endif ?>
-			<li><a href="<?php echo utils::url('user/logout/'.utils::xsrf_token()) ?>">Log out</a></li>
+			<li><a href="<?php echo utils::url('user/logout'), '&amp;', utils::xsrf_token() ?>">Log out</a></li>
 			<?php else: ?>
 			<li><a href="<?php echo utils::url('user/login') ?>">Log in</a></li>
 			<li>&middot;</li>
