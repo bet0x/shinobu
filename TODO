@@ -1,9 +1,23 @@
 TODO
 ====
 
- - ACL, Access Control List, for users.
- - Administration panel.
- - Extension system (?).
- - Language system (?).
- - Navigation and page management.
- - Separate database layers.
+Items prefixed with = are not top priority.
+
+ - Administration panel:
+   - Groups: add, edit and delete actions.
+   - Users
+   - Menu
+   - Pages (page management)
+   = Files (filemanager)
+   - Improve menu/navigation rendering.
+   = Improve/Redo index/information page.
+ - Libraries
+   - Time and date functions/helpers.
+   = E-mail
+   - Cache
+ - Pages system
+   = Restricted pages (only accessible by certain groups).
+   - PHP Markdown (Extra)
+   = TOC (Table Of Contents) generation.
+   - Nested/Parent pages.
+ - Language system

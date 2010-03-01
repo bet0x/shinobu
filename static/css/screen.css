@@ -132,7 +132,7 @@ label.error-field input:focus
 
 .form-style-two { background: #eee;padding: 0.5em 0.7em;border: 1px solid #ddd }
 .form-style-two p { margin: 0 }
-.form-style-two p.buttons { float: none;clear: both;margin-top: 0.7em }
+.form-style-two p.buttons { margin-top: 0.7em }
 
 /* --- Redirect
 ---------------------------------------------------------*/
