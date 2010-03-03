@@ -15,7 +15,7 @@ class options_controller extends AuthWebController
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
-	private function _fetch_usergroups()
+	private function _get_usergroups()
 	{
 		$usergroups = array();
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
@@ -37,7 +37,7 @@ class options_controller extends AuthWebController
 			'page_title' => 'Options',
 			'subsection' => 'options',
 			'admin_perms' => $this->acl->get('administration'),
-			'usergroups' => $this->_fetch_usergroups(),
+			'usergroups' => $this->_get_usergroups(),
 			'values' => array(
 				'website_title' => $this->config->website_title,
 				'allow_new_registrations' => $this->config->allow_new_registrations,
@@ -54,15 +54,15 @@ class options_controller extends AuthWebController
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
-		$usergroups = $this->_fetch_usergroups();
+		$usergroups = $this->_get_usergroups();
 		$args['form'] = array_map('trim', $args['form']);
-		$errors = $values = array();
+		$errors = array();
 
 		// Check website title
 		if (strlen($args['form']['website_title']) < 1)
-			$errors['website_title'] = 'The website title must at least be 2 characters long. Please choose another (longer) title.';
+			$errors['website_title'] = 'The website title must at least be 1 characters long. Please choose another (longer) title.';
 		elseif (strlen($args['form']['website_title']) > 50)
-			$errors['website_title'] = 'The website title must not be more than 20 characters long. Please choose another (shorter) title.';
+			$errors['website_title'] = 'The website title must not be more than 50 characters long. Please choose another (shorter) title.';
 
 		// Check `allow_new_registrations`
 		$args['form']['allow_new_registrations'] = $args['form']['allow_new_registrations'] == '1' ? 1 : 0;

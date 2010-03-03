@@ -13,7 +13,7 @@
 	<?php foreach ($usergroups as $index => $group): ?>
 		<li class="row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
 			<div class="name"><strong><?php echo u_htmlencode($group['name']) ?></strong></div>
-			<div class="description"><?php echo u_htmlencode($group['description']) ?></div>
+			<div class="description"><?php echo $group['description'] ? u_htmlencode($group['description']) : '&nbsp;' ?></div>
 			<div class="actions">
 				<a href="<?php echo utils::url('admin/groups/edit:'.$group['id']) ?>">Edit</a> &middot;
 				<?php if ($group['user_count'] > 0): ?>

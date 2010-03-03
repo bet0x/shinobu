@@ -22,6 +22,7 @@ class Application
 	{
 		$request = array('path' => false, 'args' => false);
 		$request_type = 'GET';
+		$controller_path = false;
 
 		// Parse request string
 		if (isset($_GET['q'][0]))
