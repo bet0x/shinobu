@@ -75,7 +75,11 @@ class Application
 
 		// Start the controller
 		$controller_instance = new $class_name($request);
-		$this->output = $controller_instance->$request_type($args);
+
+		if ($controller_instance->interrupt)
+			$this->output = $controller_instance->pre_output;
+		else
+			$this->output = $controller_instance->$request_type($args);
 	}
 }
 
@@ -204,7 +208,7 @@ class utils
 // This class contains all the supported requests methods
 class BaseController
 {
-	protected $request = false, $module = null;
+	protected $request = false;
 	protected $_mimetypes = array(
 		'text'  => 'text/plain',
 		'html'  => 'text/html',
@@ -259,11 +263,12 @@ class BaseController
 		503 => 'Service Unavailable',
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported');
+	public $interrupt = false, $pre_output = false;
 
 	public function __construct($request)
 	{
 		$this->request = $request;
-		$this->prepare();
+		$this->pre_output = $this->prepare();
 	}
 
 	/* This is an empty function that's always executed by the constructor of
@@ -271,7 +276,7 @@ class BaseController
 	   process certin things before the request method function is executed. */
 	protected function prepare()
 	{
-
+		return;
 	}
 
 	protected function load_module($name, $args = null)
@@ -368,6 +373,6 @@ abstract class AuthWebController extends BaseController
 		print_r($this->acl->check('administration', ACL_PERM_1));
 		echo '</pre>';*/
 
-		$this->prepare();
+		$this->pre_output = $this->prepare();
 	}
 }

@@ -25,8 +25,11 @@ class edit_controller extends AuthWebController
 			$this->request['args'].' LIMIT 1') or error($this->db->error(), __FILE__, __LINE__);
 
 		$this->_group_data = $this->db->fetch_assoc($result);
-		//if (is_null($this->_group_data))
-		//	$this->send_error(404);
+		if (is_null($this->_group_data))
+		{
+			$this->interrupt = true;
+			return $this->send_error(404);
+		}
 	}
 
 	public function GET($args)
