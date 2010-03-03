@@ -4,7 +4,8 @@
 <div id="admin-content">
 	<h2>Information</h2>
 
-	<?php echo $page_body ?>
+	<p>This is the administration panel. From here you can manage the system, pages, menu, users, 'groups and permissions.
+	   Below you can see some system statistics and software version information.</p>
 
 	<dl class="infolist">
 		<dt>Shinobu</dt>

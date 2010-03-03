@@ -9,25 +9,21 @@
 
 class options_controller extends AuthWebController
 {
+	private $_usergroups = array();
+
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->get('administration', ACL_PERM_5))
+		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	private function _get_usergroups()
-	{
-		$usergroups = array();
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
 			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
 
 		if ($this->db->num_rows($result) > 0)
 		{
 			while ($row = $this->db->fetch_assoc($result))
-				$usergroups[$row['id']] = $row['name'];
+				$this->_usergroups[$row['id']] = $row['name'];
 		}
-
-		return $usergroups;
 	}
 
 	public function GET($args)
@@ -37,7 +33,7 @@ class options_controller extends AuthWebController
 			'page_title' => 'Options',
 			'subsection' => 'options',
 			'admin_perms' => $this->acl->get('administration'),
-			'usergroups' => $this->_get_usergroups(),
+			'usergroups' => $this->_usergroups,
 			'values' => array(
 				'website_title' => $this->config->website_title,
 				'allow_new_registrations' => $this->config->allow_new_registrations,
@@ -54,7 +50,6 @@ class options_controller extends AuthWebController
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
-		$usergroups = $this->_get_usergroups();
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();
 
@@ -68,7 +63,7 @@ class options_controller extends AuthWebController
 		$args['form']['allow_new_registrations'] = $args['form']['allow_new_registrations'] == '1' ? 1 : 0;
 
 		// Check default usergroup
-		if (!isset($usergroups[intval($args['form']['default_usergroup'])]))
+		if (!isset($this->_usergroups[intval($args['form']['default_usergroup'])]))
 			$errors['default_usergroup'] = 'The chosen usergroup does not exists.';
 
 		if (count($errors) === 0)
@@ -82,7 +77,7 @@ class options_controller extends AuthWebController
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All options have been successfully updated. You will be redirected to the '.
-				                      'previous page in 2 seconds where you can log in.</p>',
+				                      'previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => utils::url('admin/options')
 				));
@@ -93,7 +88,7 @@ class options_controller extends AuthWebController
 			'page_title' => 'Options',
 			'subsection' => 'options',
 			'admin_perms' => $this->acl->get('administration'),
-			'usergroups' => $usergroups,
+			'usergroups' => $this->_usergroups,
 			'values' => array(
 				'website_title' => $this->config->website_title,
 				'allow_new_registrations' => $this->config->allow_new_registrations,

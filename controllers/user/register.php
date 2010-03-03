@@ -94,10 +94,9 @@ class register_controller extends AuthWebController
 				$args['form']['email']);
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>You have been successfully registered. You will be redirected to the homepage in 2 seconds '.
-				                      'where you can log in.</p>',
+				'redirect_message' => '<p>You have been successfully registered. You will be redirected to the login page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => SYSTEM_BASE_URL
+				'destination_url' => utils::url('user/login')
 				));
 		}
 

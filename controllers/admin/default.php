@@ -11,7 +11,7 @@ class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->get('administration', ACL_PERM_1))
+		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_1))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -65,8 +65,6 @@ class default_controller extends AuthWebController
 		return tpl::render('admin_info', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Information',
-			'page_body' => '<p>This is the administration panel. From here you can manage the system, pages, menu, users, '.
-			               'groups and permissions. Below you can see some system statistics and software version information.</p>',
 			'subsection' => 'information',
 			'admin_perms' => $this->acl->get('administration'),
 

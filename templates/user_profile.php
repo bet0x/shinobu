@@ -1,7 +1,7 @@
 <?php require 'header.php' ?>
 
-<p>On this page you can change or update your password, settings and e-mail address. Under each field there is a text that explains everything.
-Please read those texts.</p>
+<p>On this page you can change or update your password, settings and e-mail address. Under each field there is a description that explains
+everything. Please read those texts.</p>
 
 <?php if (count($errors) > 0): ?>
 <h4><strong>The following errors need to be corrected before you can update your profile:</strong></h4>

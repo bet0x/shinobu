@@ -11,7 +11,7 @@ class users_controller extends AuthWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->get('administration', ACL_PERM_3))
+		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 

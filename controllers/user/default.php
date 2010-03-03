@@ -78,12 +78,9 @@ class default_controller extends AuthWebController
 		{
 
 			if ($new_password)
-			{
 				$args['form']['password'] = $args['form']['changed_password'];
-				unset($args['form']['changed_password'], $args['form']['confirm_changed_password']);
-			}
-			else
-				unset($args['form']['changed_password'], $args['form']['confirm_changed_password']);
+
+			unset($args['form']['changed_password'], $args['form']['confirm_changed_password']);
 
 			if (!$new_email)
 				unset($args['form']['email']);
@@ -92,7 +89,7 @@ class default_controller extends AuthWebController
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>Your profile has been updated.'.
-				                      ' You will be redirected to the homepage in 2 seconds.</p>',
+				                      ' You will be redirected to your profile in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => utils::url('user', true)
 				));

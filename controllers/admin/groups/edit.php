@@ -77,7 +77,7 @@ class edit_controller extends AuthWebController
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All the group settings have been successfully updated. You will be redirected to the '.
-				                      'previous page in 2 seconds where you can log in.</p>',
+				                      'previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => utils::url('admin/groups')
 				));
