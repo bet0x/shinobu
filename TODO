@@ -4,7 +4,7 @@ TODO
 Items prefixed with = are not top priority.
 
  - Administration panel:
-   - Groups: add, edit and delete actions.
+   - Groups: ACL/Permission management.
    - Users
    - Menu
    - Pages (page management)

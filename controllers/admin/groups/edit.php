@@ -21,6 +21,7 @@ class edit_controller extends AuthWebController
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
+		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT id, name, user_title, description FROM '.DB_PREFIX.'usergroups WHERE id='.
 			$this->request['args'].' LIMIT 1') or error($this->db->error(), __FILE__, __LINE__);
 
@@ -46,7 +47,7 @@ class edit_controller extends AuthWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_admin_group_edit']))
+		if (!isset($args['form_admin_edit_group']))
 			$this->redirect(utils::url('admin/groups'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))

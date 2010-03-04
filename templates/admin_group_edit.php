@@ -41,7 +41,7 @@
 		<p class="description">This is only used for administrative purposes. A short description for each group in the overview
 		                       makes it easier to identify a usergroup.</p>
 		<p class="buttons">
-			<input type="submit" value="Update" name="form_admin_group_edit" /> or
+			<input type="submit" value="Update" name="form_admin_edit_group" /> or
 			<a href="<?php echo utils::url('admin/groups') ?>">cancel</a>.
 		</p>
 	</form>
