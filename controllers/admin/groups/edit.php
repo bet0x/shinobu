@@ -84,11 +84,6 @@ class edit_controller extends AuthWebController
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();
 
-		//echo '<pre>';
-		//print_r($args);
-		//echo '</pre>';
-		//exit;
-
 		// Check group name
 		if (strlen($args['form']['name']) < 1)
 			$errors['name'] = 'The name must at least be 1 characters long. Please choose another (longer) name.';
