@@ -27,7 +27,7 @@ class delete_controller extends AuthWebController
 			'WHERE g.id='.$this->request['args'].' GROUP BY g.id LIMIT 1')
 			or error($this->db->error(), __FILE__, __LINE__);
 
-		$group_data = $this->db->fetch_row($result);
+		$group_data = $result->fetch_row();
 		if (is_null($group_data))
 			return $this->send_error(404);
 

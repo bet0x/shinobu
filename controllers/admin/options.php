@@ -19,9 +19,9 @@ class options_controller extends AuthWebController
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
 			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
 
-		if ($this->db->num_rows($result) > 0)
+		if ($result->num_rows > 0)
 		{
-			while ($row = $this->db->fetch_assoc($result))
+			while ($row = $result->fetch_assoc())
 				$this->_usergroups[$row['id']] = $row['name'];
 		}
 	}

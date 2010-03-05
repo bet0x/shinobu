@@ -56,7 +56,7 @@ class register_controller extends AuthWebController
 				OR UPPER(username)=UPPER("'.$this->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
-			if ($this->db->num_rows($result) === 1)
+			if ($result->num_rows === 1)
 				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
 									  'The username you entered is too similar. The username must differ from that by at least one '.
 									  'alphanumerical character (a-z or 0-9). Please choose a different username.';
@@ -81,7 +81,7 @@ class register_controller extends AuthWebController
 				$this->db->escape($args['form']['email']).'" LIMIT 1')
 				or error('Unable to fetch user info', __FILE__, __LINE__);
 
-			if ($this->db->num_rows($result) === 1)
+			if ($result->num_rows === 1)
 				$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 		}
 

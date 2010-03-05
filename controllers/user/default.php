@@ -64,9 +64,9 @@ class default_controller extends AuthWebController
 			{
 				$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.
 					$this->db->escape($args['form']['email']).'" LIMIT 1')
-					or error('Unable to fetch user info', __FILE__, __LINE__);
+					or error($this->db->error(), __FILE__, __LINE__);
 
-				if ($this->db->num_rows($result) === 1)
+				if ($result->num_rows === 1)
 					$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 			}
 

@@ -7,12 +7,8 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-/* TODO
-
-   - Determine type of configuration values.
-   - Add caching and a cache loader.
-
-   */
+# TODO
+# - Add caching and a cache loader.
 
 class config
 {
@@ -25,10 +21,10 @@ class config
 		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config')
 			or error('Unable to fetch configuration data.', __FILE__, __LINE__);
 
-		if ($this->db->num_rows($result) > 0)
+		if ($result->num_rows > 0)
 		{
 			$permissions = array();
-			while ($row = $this->db->fetch_assoc($result))
+			while ($row = $result->fetch_assoc())
 			{
 				// Do some type casting
                	if ($row['value'] === 'true' || $row['value'] === 'false')

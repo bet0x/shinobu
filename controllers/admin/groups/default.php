@@ -23,9 +23,9 @@ class default_controller extends AuthWebController
 		                           'LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id')
 			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
 
-		if ($this->db->num_rows($result) > 0)
+		if ($result->num_rows > 0)
 		{
-			while ($row = $this->db->fetch_assoc($result))
+			while ($row = $result->fetch_assoc())
 				$usergroups[] = $row;
 		}
 

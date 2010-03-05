@@ -35,7 +35,7 @@ class edit_controller extends AuthWebController
 			DB_PREFIX.'acl_groups AS p WHERE id='.$this->request['args'].' AND p.group_id=g.id LIMIT 1')
 			or error($this->db->error(), __FILE__, __LINE__);
 
-		$this->_group_data = $this->db->fetch_assoc($result);
+		$this->_group_data = $result->fetch_assoc();
 		if (is_null($this->_group_data))
 		{
 			$this->interrupt = true;
@@ -46,7 +46,7 @@ class edit_controller extends AuthWebController
 		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
 			or error($this->db->error(), __FILE__, __LINE__);
 
-		while ($row = $this->db->fetch_assoc($result))
+		while ($row = $result->fetch_assoc())
 		{
 			foreach ($this->permission_list as $p => $b)
 			{

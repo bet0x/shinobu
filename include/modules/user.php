@@ -28,8 +28,8 @@ class user
 			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
 				'FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
 				'WHERE u.id='.intval($cookie['id']).' AND g.id=u.group_id LIMIT 1')
-				or error('Could not fetch user information. '.$this->db->error() , __FILE__, __LINE__);
-			$this->data = $this->db->fetch_assoc($result);
+				or error($this->db->error(), __FILE__, __LINE__);
+			$this->data = $result->fetch_assoc();
 
 			if ($this->data)
 			{
@@ -62,8 +62,8 @@ class user
 
 		// Check if user exists and fetch data
 		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username="'.$username.'" LIMIT 1')
-			or error('Could not fetch login information.', __FILE__, __LINE__);
-		$fetch = $this->db->fetch_row($result);
+			or error($this->db->error(), __FILE__, __LINE__);
+		$fetch = $result->fetch_row();
 
 		if (!$fetch)
 			return 3;
@@ -103,10 +103,10 @@ class user
 				"'.$this->db->escape($password).'",
 				"'.$this->db->escape($salt).'",
 				"'.$this->db->escape($hash).'",
-				"'.$this->db->escape($email).'")') or error('Could not add new user to the database.', __FILE__, __LINE__);
+				"'.$this->db->escape($email).'")') or error($this->db->error(), __FILE__, __LINE__);
 
 		// Return the ID of the added user
-		return $this->db->insert_id();
+		return $this->db->insert_id;
 	}
 
 	// Update user data
@@ -129,7 +129,7 @@ class user
 			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$this->db->escape($v).'"';
 
 		return $this->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
-			or error('User data could not be updated: '.$this->db->error(), __FILE__, __LINE__);
+			or error($this->db->error(), __FILE__, __LINE__);
 	}
 
 	// Remove a user
@@ -137,14 +137,14 @@ class user
 	{
 		// Check if user exists
 		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
-			or error('Could not check user existance.', __FILE__, __LINE__);
-		$fetch = $this->db->fetch_row($result);
+			or error($this->db->error(), __FILE__, __LINE__);
+		$fetch = $result->fetch_row($result);
 
 		if (!$fetch)
 			return false;
 
 		// Remove user
 		return $this->db->query('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
-			or error('Could not delete user with ID number, '.intval($id).'.', __FILE__, __LINE__);
+			or error($this->db->error(), __FILE__, __LINE__);
 	}
 }

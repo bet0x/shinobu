@@ -33,7 +33,7 @@ class acl
 			{
 				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions='.intval($permission).' WHERE group_id='.intval($gid).'
 					AND acl_id="'.$this->db->escape($acl_id).'"')
-					or error('User data could not be updated: '.$this->db->error(), __FILE__, __LINE__);
+					or error($this->db->error(), __FILE__, __LINE__);
 			}
 		}
 	}
@@ -47,12 +47,15 @@ class acl
 		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->group_id.'
 			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error('Unable to fetch ACL permission.', __FILE__, __LINE__);
 
-		if ($this->db->num_rows($result) === 1)
-			$this->permissions[$this->group_id][$acl_id] = $permissions = (int) $this->db->result($result);
+		if ($result->num_rows === 1)
+		{
+			$permissions = $result->fetch_row();
+			$this->permissions[$this->group_id][$acl_id] = (int) $permissions[0];
+		}
 		else
 			return false;
 
-		return $permissions;
+		return (int) $permissions[0];
 	}
 
 	// Get multiple ACLs
@@ -60,12 +63,12 @@ class acl
 	{
 		$req_perms = '"'.$this->db->escape(implode('", "', func_get_args())).'"';
 		$result = $this->db->query('SELECT acl_id, permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->group_id.'
-			AND acl_id IN ('.$req_perms.')') or error('Unable to fetch permissions.', __FILE__, __LINE__);
+			AND acl_id IN ('.$req_perms.')') or error($this->db->error(), __FILE__, __LINE__);
 
-		if ($this->db->num_rows($result) > 0)
+		if ($result->num_rows > 0)
 		{
 			$permissions = array();
-			while ($row = $this->db->fetch_assoc($result))
+			while ($row = $result->fetch_assoc($result))
 				$this->permissions[$this->group_id][$row['acl_id']] = $permissions[$this->group_id][$row['acl_id']] = (int) $row['permissions'];
 		}
 		else

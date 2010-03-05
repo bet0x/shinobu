@@ -21,7 +21,9 @@ class default_controller extends AuthWebController
 
 		$sys_info = array(
 			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
-			'db' => $this->db->get_version(),
+			'db' => array(
+				'name' => 'MySQLi',
+				'version' => $this->db->server_info),
 			'os' => 'Not available',
 			'uptime' => 'Not available',
 			'users' => 'Not available',
@@ -43,7 +45,7 @@ class default_controller extends AuthWebController
 			or error('Can not get STATUS from MySQLi.', __FILE__, __LINE__);
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;
-		while ($status = $this->db->fetch_assoc($result))
+		while ($status = $result->fetch_assoc())
 		{
 			$sys_info['db_records'] += $status['Rows'];
 			$sys_info['db_size'] += $status['Data_length'] + $status['Index_length'];

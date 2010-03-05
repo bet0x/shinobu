@@ -45,13 +45,13 @@ class add_controller extends AuthWebController
 				'"'.$this->db->escape($args['form']['name']).'", '.
 				'"'.$this->db->escape($args['form']['description']).'")')
 				or error($this->db->error(), __FILE__, __LINE__);
-			$group_id = intval($this->db->insert_id());
+			$group_id = intval($this->db->insert_id);
 
 			// Create ACL groups
 			$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'acl')
 				or error($this->db->error(), __FILE__, __LINE__);
 
-			while ($row = $this->db->fetch_assoc($result))
+			while ($row = $result->fetch_assoc())
 			{
 				$this->db->query('INSERT INTO '.DB_PREFIX.'acl_groups (acl_id, group_id) VALUES('.
 					'"'.$this->db->escape($row['id']).'", '.

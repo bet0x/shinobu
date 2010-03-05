@@ -343,6 +343,7 @@ abstract class AuthWebController extends BaseController
 
 		// Load modules
 		$this->db = $this->load_module('db');
+
 		$this->config = $this->load_module('config', $this->db);
 		$this->user = $this->load_module('user', $this->db);
 		$this->acl = $this->load_module('acl', $this->db);
