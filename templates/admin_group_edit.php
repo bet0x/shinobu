@@ -40,6 +40,17 @@
 		</p>
 		<p class="description">This is only used for administrative purposes. A short description for each group in the overview
 		                       makes it easier to identify a usergroup.</p>
+
+		<p class="non-text-fields">
+			<strong>Permissions</strong>
+			<?php foreach($permissions as $p): ?>
+			<label>
+				<input type="checkbox" name="acl[<?php echo $p['id'] ?>][<?php echo $p['name'] ?>]" value="1"<?php echo $p['check'] ? ' checked="checked"' : '' ?>/>
+				<?php echo u_htmlencode($p['desc']) ?>
+			</label>
+			<?php endforeach ?>
+		</p>
+
 		<p class="buttons">
 			<input type="submit" value="Update" name="form_admin_edit_group" /> or
 			<a href="<?php echo utils::url('admin/groups') ?>">cancel</a>.

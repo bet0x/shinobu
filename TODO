@@ -22,3 +22,4 @@ Items prefixed with = are not top priority.
    - Nested/Parent pages.
  - Language system
  - Documentation (API, tutorials/examples, usage).
+ = Configuration options for HTML meta tags in the configuration file.

@@ -10,26 +10,53 @@
 # TODO:
 # - ACL permissions checklist.
 # - List of groupmembers.
-# - Show error when group doesn't exist.
 
 class edit_controller extends AuthWebController
 {
-	private $_group_data = null;
+	private $_group_data = null, $_permission_data = array();
+	private $permission_list = array(
+		'permission_01' => ACL_PERM_1,
+		'permission_02' => ACL_PERM_2,
+		'permission_03' => ACL_PERM_3,
+		'permission_04' => ACL_PERM_4,
+		'permission_05' => ACL_PERM_5,
+		'permission_06' => ACL_PERM_6,
+		'permission_07' => ACL_PERM_7,
+		'permission_08' => ACL_PERM_8);
 
 	public function prepare()
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
+		// Get usergroup data
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT id, name, user_title, description FROM '.DB_PREFIX.'usergroups WHERE id='.
-			$this->request['args'].' LIMIT 1') or error($this->db->error(), __FILE__, __LINE__);
+		$result = $this->db->query('SELECT g.*, p.permissions FROM '.DB_PREFIX.'usergroups AS g, '.
+			DB_PREFIX.'acl_groups AS p WHERE id='.$this->request['args'].' AND p.group_id=g.id LIMIT 1')
+			or error($this->db->error(), __FILE__, __LINE__);
 
 		$this->_group_data = $this->db->fetch_assoc($result);
 		if (is_null($this->_group_data))
 		{
 			$this->interrupt = true;
 			return $this->send_error(404);
+		}
+
+		// Get permissions
+		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
+			or error($this->db->error(), __FILE__, __LINE__);
+
+		while ($row = $this->db->fetch_assoc($result))
+		{
+			foreach ($this->permission_list as $p => $b)
+			{
+				if ($row[$p])
+					$this->_permission_data[] = array(
+						'id' =>$row['id'],
+						'name' => $p,
+						'check' => $this->_group_data['permissions'] & $b,
+						'desc' => $row[$p]);
+			}
 		}
 	}
 
@@ -41,7 +68,8 @@ class edit_controller extends AuthWebController
 			'subsection' => 'groups',
 			'admin_perms' => $this->acl->get('administration'),
 			'values' => $this->_group_data,
-			'errors' => array()
+			'errors' => array(),
+			'permissions' => $this->_permission_data
 			));
 	}
 
@@ -55,6 +83,11 @@ class edit_controller extends AuthWebController
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();
+
+		//echo '<pre>';
+		//print_r($args);
+		//echo '</pre>';
+		//exit;
 
 		// Check group name
 		if (strlen($args['form']['name']) < 1)
@@ -76,9 +109,25 @@ class edit_controller extends AuthWebController
 				'name="'.$this->db->escape($args['form']['name']).'", '.
 				'user_title="'.$this->db->escape($args['form']['user_title']).'", '.
 				'description="'.$this->db->escape($args['form']['description']).'" '.
-				'WHERE id='.intval($this->request['args']))
+				'WHERE id='.$this->request['args'])
 				or error($this->db->error(), __FILE__, __LINE__);
 
+			// Store permissions
+			foreach ($args['acl'] as $acl_id => $acl)
+			{
+				$tmp = 0;
+				foreach ($this->permission_list as $p => $b)
+				{
+					if (isset($args['acl'][$acl_id][$p]))
+						$tmp |= $b;
+				}
+
+				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions='.$tmp.' '.
+					'WHERE acl_id="'.$this->db->escape($acl_id).'" AND group_id='.$this->request['args'])
+					or error($this->db->error(), __FILE__, __LINE__);
+			}
+
+			// Redirect
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All the group settings have been successfully updated. You will be redirected to the '.
 				                      'previous page in 2 seconds.</p>',
