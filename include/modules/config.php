@@ -19,7 +19,7 @@ class config
 		$this->db = $db;
 
 		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config')
-			or error('Unable to fetch configuration data.', __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
 		{

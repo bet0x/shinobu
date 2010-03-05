@@ -42,7 +42,7 @@ class default_controller extends AuthWebController
 
 		// Calculate total database size/row count (only MySQLi for now)
 		$result = $this->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
-			or error('Can not get STATUS from MySQLi.', __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;
 		while ($status = $result->fetch_assoc())

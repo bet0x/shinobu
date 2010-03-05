@@ -13,7 +13,7 @@
 
 class edit_controller extends AuthWebController
 {
-	private $_group_data = null, $_permission_data = array();
+	private $_group_data = null, $_group_permissions = array();
 	private $permission_list = array(
 		'permission_01' => ACL_PERM_1,
 		'permission_02' => ACL_PERM_2,
@@ -33,7 +33,7 @@ class edit_controller extends AuthWebController
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT g.*, p.permissions FROM '.DB_PREFIX.'usergroups AS g, '.
 			DB_PREFIX.'acl_groups AS p WHERE id='.$this->request['args'].' AND p.group_id=g.id LIMIT 1')
-			or error($this->db->error(), __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		$this->_group_data = $result->fetch_assoc();
 		if (is_null($this->_group_data))
@@ -44,15 +44,15 @@ class edit_controller extends AuthWebController
 
 		// Get permissions
 		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
-			or error($this->db->error(), __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		while ($row = $result->fetch_assoc())
 		{
 			foreach ($this->permission_list as $p => $b)
 			{
 				if ($row[$p])
-					$this->_permission_data[] = array(
-						'id' =>$row['id'],
+					$this->_group_permissions[] = array(
+						'acl_id' =>$row['id'],
 						'name' => $p,
 						'check' => $this->_group_data['permissions'] & $b,
 						'desc' => $row[$p]);
@@ -69,7 +69,7 @@ class edit_controller extends AuthWebController
 			'admin_perms' => $this->acl->get('administration'),
 			'values' => $this->_group_data,
 			'errors' => array(),
-			'permissions' => $this->_permission_data
+			'permissions' => $this->_group_permissions
 			));
 	}
 
@@ -105,21 +105,33 @@ class edit_controller extends AuthWebController
 				'user_title="'.$this->db->escape($args['form']['user_title']).'", '.
 				'description="'.$this->db->escape($args['form']['description']).'" '.
 				'WHERE id='.$this->request['args'])
-				or error($this->db->error(), __FILE__, __LINE__);
+				or error($this->db->error, __FILE__, __LINE__);
 
 			// Store permissions
-			foreach ($args['acl'] as $acl_id => $acl)
+			if (isset($args['acl']))
 			{
-				$tmp = 0;
-				foreach ($this->permission_list as $p => $b)
+				$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'acl_groups SET permissions=? WHERE acl_id=? AND group_id=?')
+					or error($this->db->error, __FILE__, __LINE__);
+
+				foreach ($args['acl'] as $acl_id => $acl)
 				{
-					if (isset($args['acl'][$acl_id][$p]))
-						$tmp |= $b;
+					$tmp = 0;
+					foreach ($this->permission_list as $p => $b)
+					{
+						if (isset($args['acl'][$acl_id][$p]))
+							$tmp |= $b;
+					}
+
+					$stmt->bind_param('isi', $tmp, $acl_id, $this->request['args']);
+					$stmt->execute();
 				}
 
-				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions='.$tmp.' '.
-					'WHERE acl_id="'.$this->db->escape($acl_id).'" AND group_id='.$this->request['args'])
-					or error($this->db->error(), __FILE__, __LINE__);
+				$stmt->close();
+			}
+			else
+			{
+				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions=0 WHERE group_id='.$this->request['args'])
+					or error($this->db->error, __FILE__, __LINE__);
 			}
 
 			// Redirect
@@ -137,7 +149,8 @@ class edit_controller extends AuthWebController
 			'subsection' => 'groups',
 			'admin_perms' => $this->acl->get('administration'),
 			'values' => $this->_group_data,
-			'errors' => $errors
+			'errors' => $errors,
+			'permissions' => $this->_group_permissions
 			));
 	}
 }

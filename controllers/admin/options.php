@@ -17,7 +17,7 @@ class options_controller extends AuthWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
-			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
 		{
@@ -68,12 +68,16 @@ class options_controller extends AuthWebController
 
 		if (count($errors) === 0)
 		{
+			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'config SET value=? WHERE name=?')
+				or error($this->db->error, __FILE__, __LINE__);
+
 			foreach ($args['form'] as $name => $value)
 			{
-				$this->db->query('UPDATE '.DB_PREFIX.'config SET value="'.$this->db->escape($value).
-					'" WHERE name="'.$this->db->escape($name).'"')
-					or error('Could not update the configuration.', __FILE__, __LINE__);
+				$stmt->bind_param('ss', $value, $name);
+				$stmt->execute();
 			}
+
+			$stmt->close();
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All options have been successfully updated. You will be redirected to the '.

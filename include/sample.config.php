@@ -16,7 +16,6 @@ define('SYSTEM_DEVEL', true); // Development mode
 $SYSTEM_DEFAULT_CONTROLLER = 'BaseController';
 
 // Database settings
-$db_type       = ''; // Not used at the moment.  MySQLi will be used by default for now.
 $db_host       = '';
 $db_name       = '';
 $db_user       = '';

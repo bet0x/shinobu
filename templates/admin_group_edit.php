@@ -45,7 +45,7 @@
 			<strong>Permissions</strong>
 			<?php foreach($permissions as $p): ?>
 			<label>
-				<input type="checkbox" name="acl[<?php echo $p['id'] ?>][<?php echo $p['name'] ?>]" value="1"<?php echo $p['check'] ? ' checked="checked"' : '' ?>/>
+				<input type="checkbox" name="acl[<?php echo $p['acl_id'] ?>][<?php echo $p['name'] ?>]" value="1"<?php echo $p['check'] ? ' checked="checked"' : '' ?>/>
 				<?php echo u_htmlencode($p['desc']) ?>
 			</label>
 			<?php endforeach ?>

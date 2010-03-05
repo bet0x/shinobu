@@ -54,7 +54,7 @@ class register_controller extends AuthWebController
 			$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users
 				WHERE UPPER(username)=UPPER("'.$this->db->escape($args['form']['username']).'")
 				OR UPPER(username)=UPPER("'.$this->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
-				or error('Unable to fetch user info', __FILE__, __LINE__);
+				or error($this->db->error, __FILE__, __LINE__);
 
 			if ($result->num_rows === 1)
 				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
@@ -79,7 +79,7 @@ class register_controller extends AuthWebController
 		{
 			$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.
 				$this->db->escape($args['form']['email']).'" LIMIT 1')
-				or error('Unable to fetch user info', __FILE__, __LINE__);
+				or error($this->db->error, __FILE__, __LINE__);
 
 			if ($result->num_rows === 1)
 				$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';

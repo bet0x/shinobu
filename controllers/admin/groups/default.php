@@ -21,7 +21,7 @@ class default_controller extends AuthWebController
 		$usergroups = array();
 		$result = $this->db->query('SELECT g.id, g.name, g.description, COUNT(u.group_id) AS user_count FROM '.DB_PREFIX.'usergroups AS g '.
 		                           'LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id')
-			or error('Unable to fetch usergroups.', __FILE__, __LINE__);
+			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
 		{
