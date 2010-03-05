@@ -116,11 +116,10 @@ class edit_controller extends AuthWebController
 				foreach ($args['acl'] as $acl_id => $acl)
 				{
 					$tmp = 0;
+
 					foreach ($this->permission_list as $p => $b)
-					{
 						if (isset($args['acl'][$acl_id][$p]))
 							$tmp |= $b;
-					}
 
 					$stmt->bind_param('isi', $tmp, $acl_id, $this->request['args']);
 					$stmt->execute();
@@ -129,10 +128,8 @@ class edit_controller extends AuthWebController
 				$stmt->close();
 			}
 			else
-			{
 				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions=0 WHERE group_id='.$this->request['args'])
 					or error($this->db->error, __FILE__, __LINE__);
-			}
 
 			// Redirect
 			return tpl::render('redirect', array(

@@ -31,15 +31,13 @@ class acl
 		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->group_id.'
 			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error, __FILE__, __LINE__);
 
-		if ($result->num_rows === 1)
-		{
-			$permissions = $result->fetch_row();
-			$this->permissions[$this->group_id][$acl_id] = (int) $permissions[0];
-		}
-		else
+		if ($result->num_rows === 0)
 			return false;
 
-		return (int) $permissions[0];
+		list($permissions) = $result->fetch_row();
+		$this->permissions[$this->group_id][$acl_id] = (int) $permissions;
+
+		return $this->permissions[$this->group_id][$acl_id];
 	}
 
 	// Get multiple ACLs

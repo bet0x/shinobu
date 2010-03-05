@@ -279,20 +279,23 @@ class BaseController
 		return;
 	}
 
-	protected function load_module($name, $args = null)
+	protected function load_module($name, $args = null, $suffix = '')
 	{
 		static $modules = array();
 
-		if (isset($modules[$name]))
-			return $modules[$name];
+		if (isset($modules[$name.$suffix]))
+			return $modules[$name.$suffix];
 
-		if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
-			return false;
+		if (!isset($modules[$name]))
+		{
+			if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
+				return false;
 
-		require SYS_INCLUDE.'/modules/'.$name.'.php';
+			require SYS_INCLUDE.'/modules/'.$name.'.php';
+		}
 
-		$modules[$name] = new $name($args);
-		return $modules[$name];
+		$modules[$name.$suffix] = new $name($args);
+		return $modules[$name.$suffix];
 	}
 
 	// Send content type header
