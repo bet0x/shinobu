@@ -37,10 +37,7 @@ class edit_controller extends AuthWebController
 
 		$this->_group_data = $result->fetch_assoc();
 		if (is_null($this->_group_data))
-		{
-			$this->interrupt = true;
 			return $this->send_error(404);
-		}
 
 		// Get permissions
 		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')

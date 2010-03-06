@@ -269,6 +269,9 @@ class BaseController
 	{
 		$this->request = $request;
 		$this->pre_output = $this->prepare();
+
+		if (!is_null($this->pre_output))
+			$this->interrupt = true;
 	}
 
 	/* This is an empty function that's always executed by the constructor of
@@ -276,7 +279,7 @@ class BaseController
 	   process certin things before the request method function is executed. */
 	protected function prepare()
 	{
-		return;
+		return null;
 	}
 
 	protected function load_module($name, $args = null, $suffix = '')
@@ -378,5 +381,8 @@ abstract class AuthWebController extends BaseController
 		echo '</pre>';*/
 
 		$this->pre_output = $this->prepare();
+
+		if (!is_null($this->pre_output))
+			$this->interrupt = true;
 	}
 }

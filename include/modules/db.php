@@ -9,8 +9,6 @@
 
 class db extends MySQLi
 {
-	protected $_persistent = false;
-
 	public function __construct()
 	{
 		global $db_host, $db_name, $db_user, $db_password, $db_persistent, $db_user, $db_flags;
@@ -24,14 +22,14 @@ class db extends MySQLi
 			$db_port = false;
 
 		// Persistent connection in MySQLi are only available in PHP 5.3 and later releases
-		$this->_persistent = $db_persistent && version_compare(PHP_VERSION, '5.3.0', '>=') ? 'p:' : '';
+		$db_persistent = $db_persistent && version_compare(PHP_VERSION, '5.3.0', '>=') ? 'p:' : '';
 
 		// Setup the client-server character set (UTF-8)
 		if (!$this->options(MYSQLI_INIT_COMMAND, 'SET NAMES "utf8"'))
 			error('Setting MYSQLI_INIT_COMMAND failed.');
 
 		// Make a connection
-		if (!$this->real_connect($this->_persistent.$db_host, $db_user, $db_password, $db_name, $db_port, false, $db_flags))
+		if (!$this->real_connect($db_persistent.$db_host, $db_user, $db_password, $db_name, $db_port, false, $db_flags))
 			error('Connection error ('.mysqli_connect_errno().'): '.mysqli_connect_error());
 	}
 

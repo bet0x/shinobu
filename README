@@ -1,9 +1,9 @@
 Shinobu 0.4
 ===========
 
-Shinobu is a minimalistic framework/CMS written in PHP5 and it uses MySQLi
-to store its data.  My intention if not to provide a big, feature overloaded
-system, but a simple system that provides some basic features and it easy to
+Shinobu is a minimalistic framework/CMS written in PHP5 and uses MySQLi
+to store its data. My intention if not to provide a big, feature overloaded
+system, but a simple system that provides some basic features and is easy to
 extend (for a PHP developer) and easy to use.
 
 Note: Shinobu is currently under development and it may happen that some
