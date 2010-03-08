@@ -180,9 +180,17 @@ label.error-field input:focus
 /* --- Misc
 ---------------------------------------------------------*/
 
+/* Misc */
 div.clear { clear: both;height: 0 }
 span.disabled-link { color: #666 }
 p.note { font-style: italic;color: #e20 }
+
+.align-right { text-align: right }
+
+/* Buttons */
+a.inline-button
+    { background: #eee;padding: 0.5em 1em;border: 1px solid #ddd;
+      text-decoration: none;color: #521414 }
 
 /* Infolist */
 dl.infolist dt

@@ -26,30 +26,7 @@
 	<?php endforeach ?>
 	</ul>
 
-	<h3>Add new group</h3>
-
-	<p>Both fields are required. You will be redirected to a page where you can configure the permissions and usertitle for the group
-	   after you completed both fields and pressed <em>Add</em>.</p>
-
-	<form  class="form-style-two" method="post" accept-charset="utf-8" action="<?php echo utils::url('admin/groups/add') ?>">
-		<div>
-			<?php echo utils::xsrf_form_html(), "\n" ?>
-		</div>
-		<p>
-			<label>
-				<strong>Name <span>(required)</span></strong>
-				<input type="text" name="form[name]" maxlength="20" />
-			</label>
-			<label>
-				<strong>Description <span>(required)</span></strong>
-				<input type="text" name="form[description]" maxlength="255" />
-			</label>
-		</p>
-		<p class="buttons">
-			<input type="submit" value="Add" name="form_admin_add_group" />
-			<input type="reset" value="Reset" />
-		</p>
-	</form>
+	<p class="align-right"><a class="inline-button" href="<?php echo utils::url('admin/groups/add') ?>">Add new group</a></p>
 </div>
 
 <div class="clear">&nbsp;</div>

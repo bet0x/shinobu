@@ -8,12 +8,14 @@
 # =============================================================================
 
 # TODO:
-# - ACL permissions checklist.
 # - List of groupmembers.
+# - Store permissions temporarly on form submit.
 
 class edit_controller extends AuthWebController
 {
 	private $_group_data = null, $_group_permissions = array();
+
+	// Permission id => permission byte
 	private $permission_list = array(
 		'permission_01' => ACL_PERM_1,
 		'permission_02' => ACL_PERM_2,
@@ -59,7 +61,7 @@ class edit_controller extends AuthWebController
 
 	public function GET($args)
 	{
-		return tpl::render('admin_group_edit', array(
+		return tpl::render('admin_edit_group', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
@@ -131,15 +133,15 @@ class edit_controller extends AuthWebController
 			// Redirect
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All the group settings have been successfully updated. You will be redirected to the '.
-				                      'previous page in 2 seconds.</p>',
+				                      'group overview in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => utils::url('admin/groups')
 				));
 		}
 
-		return tpl::render('admin_group_edit', array(
+		return tpl::render('admin_edit_group', array(
 			'website_section' => 'Administration',
-			'page_title' => 'Group: '.$group_data['name'],
+			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
 			'admin_perms' => $this->acl->get('administration'),
 			'values' => $this->_group_data,
