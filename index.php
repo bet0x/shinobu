@@ -24,21 +24,48 @@ require SYS_INCLUDE.'/functions.php';
 disable_magic_quotes();
 unregister_globals();
 
+// Check whether PCRE has been compiled with UTF-8 support
+$UTF8_ar = array();
+if (preg_match('/^.{1}$/u', "ñ", $UTF8_ar) != 1)
+	trigger_error('PCRE is not compiled with UTF-8 support', E_USER_ERROR);
+
+unset($UTF8_ar);
+
+// Put the current directory in this constant
+if (!defined('UTF8'))
+	define('UTF8', SYS_INCLUDE.'/utf8');
+
+if (extension_loaded('mbstring') && !defined('UTF8_USE_MBSTRING') && !defined('UTF8_USE_NATIVE'))
+	define('UTF8_USE_MBSTRING', true);
+else
+	define('UTF8_USE_NATIVE', true);
+
 // Load UTF-8 library
-if (extension_loaded('mbstring'))
+if (defined('UTF8_USE_MBSTRING'))
 {
+	/**
+	* If string overloading is active, it will break many of the
+	* native implementations. mbstring.func_overload must be set
+	* to 0, 1 or 4 in php.ini (string overloading disabled).
+	* Also need to check we have the correct internal mbstring
+	* encoding
+	*/
 	if (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING)
 		trigger_error('String functions are overloaded by mbstring', E_USER_ERROR);
 
 	mb_language('uni');
 	mb_internal_encoding('UTF-8');
 
-	require SYS_UTF8.'/mbstring/core.php';
+	if (!defined('UTF8_CORE'))
+		require UTF8.'/mbstring/core.php';
 }
-else
+elseif (defined('UTF8_USE_NATIVE'))
 {
-	require SYS_UTF8.'/utils/unicode.php';
-	require SYS_UTF8.'/native/core.php';
+	if (!defined('UTF8_CORE'))
+	{
+		require UTF8.'/utils/unicode.php';
+		require UTF8.'/native/core.php';
+	}
 }
 
 // Load classes

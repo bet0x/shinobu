@@ -37,7 +37,6 @@ define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');
 define('SYS_TEMPLATE', SYS.'/templates');
 define('SYS_STATIC', SYS.'/static');
-define('SYS_UTF8', SYS_INCLUDE.'/utf8');
 
 // ACL constants
 define('ACL_PERM_1', 1);
