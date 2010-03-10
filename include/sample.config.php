@@ -32,6 +32,10 @@ $sys_cookie_secure   = 0;
 $sys_cookie_seed     = '&^7hyY&*88uhY&'; // Some random characters should be entered here. Example: &^7hyY&*88uhY&
 $sys_cookie_lifetime = 34560000; // 400 days
 
+// Use Mbstring or the native implementation?
+define('UTF8_USE_MBSTRING', true);
+#define('UTF8_USE_NATIVE', true);
+
 // Paths
 define('SYS_INCLUDE', SYS.'/include');
 define('SYS_CONTROL', SYS.'/controllers');

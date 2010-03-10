@@ -32,13 +32,10 @@ if (preg_match('/^.{1}$/u', "ñ", $UTF8_ar) != 1)
 unset($UTF8_ar);
 
 // Put the current directory in this constant
+// UTF8 is used instead of SYS_UTF8.  That's because the UTF-8 library also
+// uses this constand to include files internally
 if (!defined('UTF8'))
 	define('UTF8', SYS_INCLUDE.'/utf8');
-
-if (extension_loaded('mbstring') && !defined('UTF8_USE_MBSTRING') && !defined('UTF8_USE_NATIVE'))
-	define('UTF8_USE_MBSTRING', true);
-else
-	define('UTF8_USE_NATIVE', true);
 
 // Load UTF-8 library
 if (defined('UTF8_USE_MBSTRING'))
