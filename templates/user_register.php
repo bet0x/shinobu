@@ -11,7 +11,7 @@ click <em>register</em>.</p>
 </ul>
 <?php endif ?>
 
-<form  class="form-style-one" method="post" accept-charset="utf-8" action="<?php echo utils::url('user/register') ?>">
+<form accept-charset="utf-8" class="form-style-one" method="post" accept-charset="utf-8" action="<?php echo utils::url('user/register') ?>">
 	<div>
 		<?php echo utils::xsrf_form_html(), "\n" ?>
 	</div>

@@ -4,12 +4,15 @@
 <div id="admin-content">
 	<h2>Information</h2>
 
-	<p>This is the administration panel. From here you can manage the system, pages, menu, users, 'groups and permissions.
+	<p>This is the administration panel. From here you can manage the system, pages, menu, users, groups and permissions.
 	   Below you can see some system statistics and software version information.</p>
 
 	<dl class="infolist">
 		<dt>Shinobu</dt>
 		<dd><?php echo SHINOBU ?></dd>
+
+		<dt>PHP-UTF8</dt>
+		<dd><?php echo u_htmlencode($sys_info['phputf8_version']) ?></dd>
 	</dl>
 	<hr />
 	<dl class="infolist">
@@ -35,8 +38,7 @@
 		<dd>Accelerator/Cache: <?php echo $sys_info['php_accelerator'] ?></dd>
 
 		<dt>Database</dt>
-		<dd>Type: <?php echo $sys_info['db']['name'] ?></dd>
-		<dd>Version: <?php echo $sys_info['db']['version'] ?></dd>
+		<dd><?php echo $sys_info['db']['name'], ' ', $sys_info['db']['version'] ?></dd>
 		<dd>Rows: <?php echo $sys_info['db_records'] ?></dd>
 		<dd>Size: <?php echo file_size($sys_info['db_size']) ?></dd>
 	</dl>

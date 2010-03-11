@@ -20,6 +20,7 @@ class default_controller extends AuthWebController
 		global $db_name;
 
 		$sys_info = array(
+			'phputf8_version' => trim(file_get_contents(UTF8.'/VERSION')),
 			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
 			'db' => array(
 				'name' => 'MySQLi',
@@ -30,13 +31,19 @@ class default_controller extends AuthWebController
 			'loadavg' => 'Not available'
 			);
 
-		// See if MMCache, PHPA or APC is loaded (From FLuxBB 1.2.*)
+		// Check for the existence of various PHP opcode caches/optimizers
 		if (function_exists('mmcache'))
-			$sys_info['php_accelerator'] = '<a href="http://turck-mmcache.sourceforge.net/">Turck MMCache</a>';
+			$sys_info['php_accelerator'] = '<a href="http://turck-mmcache.sourceforge.net">Turk MMCache</a>';
 		else if (isset($_PHPA))
 			$sys_info['php_accelerator'] = '<a href="http://www.php-accelerator.co.uk/">ionCube PHP Accelerator</a>';
-		else if (extension_loaded('apc'))
-			$sys_info['php_accelerator'] = '<a href="http://php.net/apc">APC</a>';
+		else if (ini_get('apc.enabled'))
+			$sys_info['php_accelerator'] ='<a href="http://www.php.net/apc/">Alternative PHP Cache (APC)</a>';
+		else if (ini_get('zend_optimizer.optimization_level'))
+			$sys_info['php_accelerator'] = '<a href="http://www.zend.com/products/guard/zend-optimizer">Zend Optimizer</a>';
+		else if (ini_get('eaccelerator.enable'))
+			$sys_info['php_accelerator'] = '<a href="http://www.eaccelerator.net/">eAccelerator</a>';
+		else if (ini_get('xcache.cacher'))
+			$sys_info['php_accelerator'] = '<a href="http://xcache.lighttpd.net/">XCache</a>';
 		else
 			$sys_info['php_accelerator'] = 'N/A';
 
@@ -58,10 +65,13 @@ class default_controller extends AuthWebController
 			if (!preg_match('#^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$#', trim(shell_exec('uptime')), $matches))
 				error('Could not get uptime.', __FILE__, __LINE__);
 
-			list (, $sys_info['uptime'], $sys_info['users'], $sys_info['loadavg']) = $matches;
+			list (, $sys_info['uptime'], $sys_info['users'], ) = $matches;
 
 			// Get kernel version and operating system
 			$sys_info['os'] = trim(shell_exec('uname -r -o'));
+
+			// Get loadavg
+			$sys_info['loadavg'] = implode(' ', sys_getloadavg());
 		}
 
 		return tpl::render('admin_info', array(
