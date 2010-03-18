@@ -114,6 +114,7 @@ label input[type=text],
 label input[type=password],
 label select
 	{ padding: 0.3em 0.4em;width: 19em }
+label[for] { cursor: pointer }
 
 .form-style-one p.buttons
 	{ margin: 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
@@ -187,10 +188,15 @@ p.note { font-style: italic;color: #e20 }
 
 .align-right { text-align: right }
 
-/* Buttons */
-a.inline-button
-    { background: #eee;padding: 0.5em 1em;border: 1px solid #ddd;
-      text-decoration: none;color: #521414 }
+/* Inline buttons */
+input.inline-button, a.inline-button:link, a.inline-button:visited,
+a.inline-button:hover
+	{ background: #eee;padding: 0.2em 0.3em;cursor: pointer;
+	  border-width: 1px;border-style: solid;text-decoration: none;
+	  border-color: #aaa #595959 #565656 #ababab;color: #111;
+      font-size: 1em }
+input.inline-button:focus, a.inline-button:active
+	{ background: #dcdcdc }
 
 /* Infolist */
 dl.infolist dt
@@ -201,21 +207,24 @@ dl.infolist dd { margin-left: 170px }
 dl.infolist dt + dd { margin-top: -1.48em }
 
 /* Lists */
-.two-column-list
+.group-list, .user-list
     { margin: 1.5em 0;padding: 0;list-style: none;font-size: 0.9em }
-    .two-column-list li:first-child { border-top: 1px solid #ccc }
-.two-column-list li
+.group-list li:first-child, .user-list li:first-child
+    { border-top: 1px solid #ccc }
+.group-list li, .user-list li
     { padding: 0.3em 0.5em;border-bottom: 1px solid #ccc;overflow: auto }
-.two-column-list li.row-even { background: #efefef }
-.two-column-list li.row-odd { background: #f9f9f9 }
 
-.two-column-list .name { float: left;clear: both;width: 21% }
-.two-column-list .description { float: left;width: 59% }
-.two-column-list .actions { float: right;width: 18%;text-align: right }
+.group-list a, .user-list a { text-decoration: none }
+.group-list li.row-even, .user-list li.row-even { background: #efefef }
+.group-list li.row-odd, .user-list li.row-odd { background: #f9f9f9 }
 
-.two-column-list a { text-decoration: none }
+.group-list .name { float: left;clear: both;width: 21% }
+.group-list .description { float: left;width: 59% }
+.group-list .actions { float: right;width: 18%;text-align: right }
 
-
+.user-list .checkbox { float: left;clear: both;width: 4.5% }
+.user-list .name { float: left;width: 76.5% }
+.user-list .actions { float: right;width: 18%;text-align: right }
 
 
 

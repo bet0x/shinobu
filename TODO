@@ -1,11 +1,13 @@
 TODO
 ====
 
-Items prefixed with = are not top priority.
+= Not top priority.
+* In progress.
+- Still needs to be done.
 
  - Administration panel:
-   = Groups: improve ACL/Permission management GUI.
-   - Users
+   * Groups: improve ACL/Permission management GUI and add pagination in group list.
+   * Users: pagination.
    - Menu
    - Pages (page management)
    = Files (filemanager)

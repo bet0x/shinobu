@@ -42,7 +42,7 @@ class default_controller extends AuthWebController
 			if (strlen($args['form']['changed_password']) < 6)
 				$errors['password'] = 'Passwords must be at least 6 characters long. Please choose another (longer) password.';
 			elseif (strlen($args['form']['changed_password']) > 40)
-				$errors['password'] = 'Usernames must not be more than 40 characters long. Please choose another (shorter) password.';
+				$errors['password'] = 'Passwords can not be more than 40 characters long. Please choose another (shorter) password.';
 			elseif ($args['form']['changed_password'] != $args['form']['confirm_changed_password'])
 				$errors['password'] = 'Passwords do not match.';
 			else
@@ -91,7 +91,7 @@ class default_controller extends AuthWebController
 				'redirect_message' => '<p>Your profile has been updated.'.
 				                      ' You will be redirected to your profile in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('user', true)
+				'destination_url' => utils::url('user')
 				));
 		}
 

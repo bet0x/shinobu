@@ -35,9 +35,9 @@ class delete_controller extends AuthWebController
 		if ($group_data[0] == '0')
 		{
 			// Delete usergroup and ACL groups
-			$this->db->query('DELETE FROM '.DB_PREFIX.'usergroups WHERE id='.$this->request['args'].'')
+			$this->db->query('DELETE FROM '.DB_PREFIX.'usergroups WHERE id='.$this->request['args'])
 				or error($this->db->error, __FILE__, __LINE__);
-			$this->db->query('DELETE FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->request['args'].'')
+			$this->db->query('DELETE FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->request['args'])
 				or error($this->db->error, __FILE__, __LINE__);
 
 			$redirect_message = 'Usergroup has been successfully removed.';

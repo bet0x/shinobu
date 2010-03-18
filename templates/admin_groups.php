@@ -9,7 +9,7 @@
 
 	<p class="note">Note: Groups that contain users can not be deleted.</p>
 
-	<ul class="two-column-list">
+	<ul class="group-list">
 	<?php foreach ($usergroups as $index => $group): ?>
 		<li class="row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
 			<div class="name"><strong><?php echo u_htmlencode($group['name']) ?></strong></div>

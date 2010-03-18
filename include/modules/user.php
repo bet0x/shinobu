@@ -9,7 +9,7 @@
 
 class user
 {
-	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id', 'title'),
+	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id'),
 	        $authenticated = false, $db = null;
 	public $data = array();
 
@@ -47,9 +47,8 @@ class user
 	}
 
 	/* Create a login cookie for the user (only affects the current user/visitor)
-	   1 = successful login, 2 = already logged in, 3 = user does not exist,
-	   4 = wrong password
-	*/
+	1 = successful login, 2 = already logged in, 3 = user does not exist,
+	4 = wrong password */
 	public function login($username, $password)
 	{
 		// Check if user is logged in

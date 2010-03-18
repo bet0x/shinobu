@@ -14,7 +14,7 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" accept-charset="utf-8" action="<?php echo utils::url('admin/groups/edit:'.$values['id']) ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('admin/groups/edit:'.$values['id']) ?>">
 		<div>
 			<?php echo utils::xsrf_form_html(), "\n" ?>
 		</div>

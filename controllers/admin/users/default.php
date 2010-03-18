@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class users_controller extends AuthWebController
+class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
@@ -17,12 +17,24 @@ class users_controller extends AuthWebController
 
 	public function GET($args)
 	{
+		// Get users
+		$users = array();
+		$result = $this->db->query('SELECT u.id, u.username, g.user_title FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
+		                           'WHERE g.id=u.group_id')
+			or error($this->db->error, __FILE__, __LINE__);
+
+		if ($result->num_rows > 0)
+		{
+			while ($row = $result->fetch_assoc())
+				$users[] = $row;
+		}
+
 		return tpl::render('admin_users', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Users',
-			'page_body' => '<p>This is the administration panel.</p>',
 			'subsection' => 'users',
-			'admin_perms' => $this->acl->get('administration')
+			'admin_perms' => $this->acl->get('administration'),
+			'users' => $users
 			));
 	}
 }

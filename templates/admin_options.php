@@ -14,7 +14,7 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" accept-charset="utf-8" action="<?php echo utils::url('admin/options') ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('admin/options') ?>">
 		<div>
 			<?php echo utils::xsrf_form_html(), "\n" ?>
 		</div>
@@ -36,8 +36,8 @@
 			<label>
 				<strong>Default usergroup</strong>
 				<select name="form[default_usergroup]">
-					<option value="<?php echo $values['default_usergroup'] ?>"><?php echo u_htmlencode($usergroups[$values['default_usergroup']]) ?></option>
-					<option value="0">----------</option>
+					<option value="<?php echo $values['default_usergroup'] ?>" selected="selected"><?php echo u_htmlencode($usergroups[$values['default_usergroup']]) ?></option>
+					<option disabled="disabled">----------</option>
 					<?php foreach ($usergroups as $id => $name): ?>
 					<option value="<?php echo $id ?>"><?php echo u_htmlencode($name) ?></option>
 					<?php endforeach ?>

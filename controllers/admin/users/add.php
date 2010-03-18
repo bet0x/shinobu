@@ -1,41 +1,52 @@
 <?php
 
 # =============================================================================
-# controllers/user/register.php
+# controllers/admin/users/add.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class register_controller extends AuthWebController
+class add_controller extends AuthWebController
 {
+	private $_usergroups = array();
+
 	public function prepare()
 	{
-		if ($this->user->authenticated())
+		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
+
+		// Get a list of groups
+		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
+			or error($this->db->error, __FILE__, __LINE__);
+
+		if ($result->num_rows > 0)
+		{
+			while ($row = $result->fetch_assoc())
+				$this->_usergroups[$row['id']] = $row['name'];
+		}
 	}
 
 	public function GET($args)
 	{
-		if (!$this->config->allow_new_registrations)
-			return tpl::render('basic', array(
-				'page_title' => 'Register',
-				'page_body' => '<p>New registrations are currently disabled.</p>',
-				));
-
-		return tpl::render('user_register', array(
-			'page_title' => 'Register',
+		return tpl::render('admin_add_user', array(
+			'website_section' => 'Administration',
+			'page_title' => 'Add new user',
+			'subsection' => 'users',
+			'admin_perms' => $this->acl->get('administration'),
+			'usergroups' => $this->_usergroups,
 			'errors' => array(),
 			'values' => array(
 				'username' => '',
+				'group_id' => $this->config->default_usergroup,
 				'email' => '')
 			));
 	}
 
 	public function POST($args)
 	{
-		if (!$this->config->allow_new_registrations || !isset($args['form_register']))
-			$this->redirect(utils::url('user/register'));
+		if (!isset($args['form_add_user']))
+			$this->redirect(utils::url('admin/users'));
 
 		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
 			return $this->send_error(403);
@@ -60,6 +71,13 @@ class register_controller extends AuthWebController
 				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
 									  'The username you entered is too similar. The username must differ from that by at least one '.
 									  'alphanumerical character (a-z or 0-9). Please choose a different username.';
+		}
+
+		// Check default usergroup
+		if (!isset($this->_usergroups[intval($args['form']['group_id'])]))
+		{
+			$errors['group_id'] = 'The chosen usergroup does not exist.';
+			$args['form']['group_id'] = 0;
 		}
 
 		// Check password
@@ -89,21 +107,23 @@ class register_controller extends AuthWebController
 		{
 			$this->user->add(
 				$args['form']['username'],
-				$this->config->default_usergroup,
+				$args['form']['group_id'],
 				$args['form']['password'],
 				$args['form']['email']);
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>You have been successfully registered. You will be redirected to the login page in 2 seconds.</p>',
+				'redirect_message' => '<p>The user has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('user/login')
+				'destination_url' => utils::url('admin/users')
 				));
 		}
 
-		$args['form']['password'] = $args['form']['confirm_password'] = '';
-
-		return tpl::render('user_register', array(
-			'page_title' => 'Register',
+		return tpl::render('admin_add_user', array(
+			'website_section' => 'Administration',
+			'page_title' => 'Add new user',
+			'subsection' => 'users',
+			'admin_perms' => $this->acl->get('administration'),
+			'usergroups' => $this->_usergroups,
 			'errors' => $errors,
 			'values' => $args['form']
 			));

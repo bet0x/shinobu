@@ -63,8 +63,11 @@ class options_controller extends AuthWebController
 		$args['form']['allow_new_registrations'] = $args['form']['allow_new_registrations'] == '1' ? 1 : 0;
 
 		// Check default usergroup
-		if (!isset($this->_usergroups[intval($args['form']['default_usergroup'])]))
-			$errors['default_usergroup'] = 'The chosen usergroup does not exists.';
+		if (!isset($this->_usergroups[intval($args['form']['group_id'])]))
+		{
+			$errors['group_id'] = 'The chosen usergroup does not exist.';
+			$args['form']['group_id'] = 0;
+		}
 
 		if (count($errors) === 0)
 		{
