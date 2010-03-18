@@ -14,9 +14,9 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('admin/users/add') ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('admin/users/add') ?>">
 		<div>
-			<?php echo utils::xsrf_form_html(), "\n" ?>
+			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
 		<p>
 			<label<?php if (isset($errors['username'])) echo ' class="error-field"' ?>>
@@ -62,7 +62,7 @@
 		</p>
 		<p class="description">The e-mail address will not be visible to members or visitors, except administrators and moderators.
 							   Use an active e-mail address, because activation e-mails will be send to the user.</p>
-		<p class="buttons"><input type="submit" value="Add" name="form_add_user" /> or <a href="<?php echo utils::url('admin/users') ?>">cancel</a>.</p>
+		<p class="buttons"><input type="submit" value="Add" name="form_add_user" /> or <a href="<?php echo url('admin/users') ?>">cancel</a>.</p>
 	</form>
 </div>
 

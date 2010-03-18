@@ -14,9 +14,9 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('admin/options') ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('admin/options') ?>">
 		<div>
-			<?php echo utils::xsrf_form_html(), "\n" ?>
+			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
 		<p>
 			<label>
@@ -48,7 +48,7 @@
 		                       usergroup (e.g. the administrator group), because that means new users will have the permissions of that
 							   usergroup.</p>
 
-		<p class="buttons"><input type="submit" value="Update" name="form_admin_options" /> or <a href="<?php echo utils::url('admin') ?>">cancel</a>.</p>
+		<p class="buttons"><input type="submit" value="Update" name="form_admin_options" /> or <a href="<?php echo url('admin') ?>">cancel</a>.</p>
 	</form>
 </div>
 

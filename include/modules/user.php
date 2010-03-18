@@ -22,7 +22,7 @@ class user
 	// Check user cookie (only affects the current user/visitor)
 	public function authenticate()
 	{
-		if (($cookie = utils::get_cookie('user')))
+		if (($cookie = get_cookie('user')))
 		{
 			// Get user data
 			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
@@ -52,7 +52,7 @@ class user
 	public function login($username, $password)
 	{
 		// Check if user is logged in
-		if (utils::get_cookie('user') && $this->authenticated)
+		if (get_cookie('user') && $this->authenticated)
 			return 2;
 
 		// Escape username and password
@@ -74,7 +74,7 @@ class user
 			return 4;
 
 		// 1209600: 2 weeks
-		utils::set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
+		set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
 
 		return 1;
 	}
@@ -82,7 +82,7 @@ class user
 	// Let the user cookie expire.  Only affects the current user/visitor.
 	public function logout()
 	{
-		utils::set_cookie('user', null, time()-3600);
+		set_cookie('user', null, time()-3600);
 	}
 
 	// Add new user

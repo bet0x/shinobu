@@ -130,77 +130,44 @@ class tpl
 }
 
 // A class with web related functions
-class utils
+class xsrf
 {
-	static private $_xsrf_token = false;
+	static private $_token = false;
 
 	// Generate an XSRF token and store it in a cookie, but first check if the
 	// cookie already exists or if the token is already generated.  Then return it.
 	// See: http://en.wikipedia.org/wiki/Cross-site_request_forgery
-	static function xsrf_token()
+	static function token()
 	{
-		if (($token = utils::get_cookie('xsrf')) !== false)
-			self::$_xsrf_token =& $token;
-		elseif (!self::$_xsrf_token)
+		if (($token = get_cookie('xsrf')) !== false)
+			self::$_token =& $token;
+		elseif (!self::$_token)
 		{
-			self::$_xsrf_token = generate_hash(generate_salt());
-			utils::set_cookie('xsrf', self::$_xsrf_token);
+			self::$_token = generate_hash(generate_salt());
+			set_cookie('xsrf', self::$_token);
 		}
 
-		return self::$_xsrf_token;
+		return self::$_token;
 	}
 
 	// Compare $token with the XSRF token.  Generate an XSRF token if self::$_xsrf_token
 	// is false.
-	static function check_xsrf_cookie($token)
+	static function check_cookie($token)
 	{
-		if (!self::$_xsrf_token)
-			self::xsrf_token();
+		if (!self::$_token)
+			self::token();
 
-		return $token == self::$_xsrf_token;
+		return $token == self::$_token;
 	}
 
 	// Return a hidden form field with the XSRF token.  Generate an XSRF token
 	// if self::$_xsrf_token is false.
-	static function xsrf_form_html()
+	static function form_html()
 	{
-		if (!self::$_xsrf_token)
-			self::xsrf_token();
+		if (!self::$_token)
+			self::token();
 
-		return '<input type="hidden" name="xsrf_token" value="'.self::$_xsrf_token.'" />';
-	}
-
-	// Set a cookie
-	static public function set_cookie($name, $value, $expire = 0)
-	{
-		global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
-
-		header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
-
-		if (version_compare(PHP_VERSION, '5.2.0', '>='))
-			setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure, true);
-		else
-			setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly', $sys_cookie_domain, $sys_cookie_secure);
-	}
-
-	// Get a cookie
-	static public function get_cookie($name)
-	{
-		global $sys_cookie_name;
-
-		return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
-	}
-
-	// Generate and return an url to a controller
-	static public function url($relative_path = null)
-	{
-		return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
-	}
-
-	// Append a ?v=<timestamp of last modification> to a static file
-	static public function static_url($file_path)
-	{
-		return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
+		return '<input type="hidden" name="xsrf_token" value="'.self::$_token.'" />';
 	}
 }
 

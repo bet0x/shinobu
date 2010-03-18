@@ -26,9 +26,9 @@ class login_controller extends AuthWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_login']))
-			$this->redirect(utils::url('user/login'));
+			$this->redirect(url('user/login'));
 
-		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
 		if ($this->user->login($args['form']['username'], $args['form']['password']) === 1)

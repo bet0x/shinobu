@@ -15,7 +15,7 @@ class logout_controller extends AuthWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$this->request['path'] = explode('/', $this->request['path']);
-		if (!isset($this->request['path'][1]) || !isset($_GET[utils::xsrf_token()]))
+		if (!isset($this->request['path'][1]) || !isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
 		$this->user->logout();

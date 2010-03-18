@@ -14,9 +14,9 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('admin/groups/add') ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('admin/groups/add') ?>">
 		<div>
-			<?php echo utils::xsrf_form_html(), "\n" ?>
+			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
 		<p>
 			<label<?php if (isset($errors['name'])) echo ' class="error-field"' ?>>
@@ -53,7 +53,7 @@
 
 		<p class="buttons">
 			<input type="submit" value="Update" name="form_admin_add_group" /> or
-			<a href="<?php echo utils::url('admin/groups') ?>">cancel</a>.
+			<a href="<?php echo url('admin/groups') ?>">cancel</a>.
 		</p>
 	</form>
 </div>

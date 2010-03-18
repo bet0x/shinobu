@@ -11,9 +11,9 @@ click <em>register</em>.</p>
 </ul>
 <?php endif ?>
 
-<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo utils::url('user/register') ?>">
+<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('user/register') ?>">
 	<div>
-		<?php echo utils::xsrf_form_html(), "\n" ?>
+		<?php echo xsrf::form_html(), "\n" ?>
 	</div>
 	<p>
 		<label<?php if (isset($errors['username'])) echo ' class="error-field"' ?>>

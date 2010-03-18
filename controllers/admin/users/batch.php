@@ -21,7 +21,7 @@ class batch_controller extends AuthWebController
 		user is trying to delete himself. This should not be possible or the user
 		will be able to delete all users, which is not very good. */
 
-		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
 		if (!isset($args['users']))
@@ -30,7 +30,7 @@ class batch_controller extends AuthWebController
 				'redirect_message' => '<p>You have to select atleast one user to perform a batch action. You will be redirected to the '.
 									  'previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('admin/users')
+				'destination_url' => url('admin/users')
 				));
 		}
 
@@ -44,7 +44,7 @@ class batch_controller extends AuthWebController
 					'redirect_message' => '<p>You can not delete yourself... You will be redirected to the '.
 										  'previous page in 2 seconds.</p>',
 					'redirect_delay' => 2,
-					'destination_url' => utils::url('admin/users')
+					'destination_url' => url('admin/users')
 					));
 			}
 
@@ -66,10 +66,10 @@ class batch_controller extends AuthWebController
 				'redirect_message' => '<p>'.$deleted_row_count.' user(s) successfully deleted. You will be redirected to the '.
 									  'previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('admin/users')
+				'destination_url' => url('admin/users')
 				));
 		}
 		else
-			$this->redirect(utils::url('admin/users'));
+			$this->redirect(url('admin/users'));
 	}
 }

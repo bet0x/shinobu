@@ -15,18 +15,18 @@
 			<div class="name"><strong><?php echo u_htmlencode($group['name']) ?></strong></div>
 			<div class="description"><?php echo $group['description'] ? u_htmlencode($group['description']) : '&nbsp;' ?></div>
 			<div class="actions">
-				<a href="<?php echo utils::url('admin/groups/edit:'.$group['id']) ?>">Edit</a> &middot;
+				<a href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a> &middot;
 				<?php if ($group['user_count'] > 0): ?>
 				<span class="disabled-link">Delete</span>
 				<?php else: ?>
-				<a href="<?php echo utils::url('admin/groups/delete:'.$group['id']), '&amp;', utils::xsrf_token() ?>">Delete</a>
+				<a href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>">Delete</a>
 				<?php endif ?>
 			</div>
 		</li>
 	<?php endforeach ?>
 	</ul>
 
-	<p class="align-right"><a class="inline-button" href="<?php echo utils::url('admin/groups/add') ?>">Add new group</a></p>
+	<p class="align-right"><a class="inline-button" href="<?php echo url('admin/groups/add') ?>">Add new group</a></p>
 </div>
 
 <div class="clear">&nbsp;</div>

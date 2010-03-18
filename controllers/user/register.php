@@ -35,9 +35,9 @@ class register_controller extends AuthWebController
 	public function POST($args)
 	{
 		if (!$this->config->allow_new_registrations || !isset($args['form_register']))
-			$this->redirect(utils::url('user/register'));
+			$this->redirect(url('user/register'));
 
-		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
@@ -96,7 +96,7 @@ class register_controller extends AuthWebController
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>You have been successfully registered. You will be redirected to the login page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('user/login')
+				'destination_url' => url('user/login')
 				));
 		}
 

@@ -82,6 +82,39 @@ function error($messages, $file = false, $line = false)
 	exit;
 }
 
+// Set a cookie
+function set_cookie($name, $value, $expire = 0)
+{
+	global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
+
+	header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
+
+	if (version_compare(PHP_VERSION, '5.2.0', '>='))
+		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure, true);
+	else
+		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly', $sys_cookie_domain, $sys_cookie_secure);
+}
+
+// Get a cookie
+function get_cookie($name)
+{
+	global $sys_cookie_name;
+
+	return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
+}
+
+// Generate and return an url to a controller
+function url($relative_path = null)
+{
+	return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
+}
+
+// Append a ?v=<timestamp of last modification> to a static file
+function static_url($file_path)
+{
+	return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
+}
+
 // Generates a sha1 hash from a string
 function generate_hash($str, $salt = '')
 {

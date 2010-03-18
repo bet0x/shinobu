@@ -17,7 +17,7 @@ class delete_controller extends AuthWebController
 
 	public function GET($args)
 	{
-		if (!isset($_GET[utils::xsrf_token()]))
+		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
 		// Check if group exists
@@ -50,7 +50,7 @@ class delete_controller extends AuthWebController
 			'redirect_message' => '<p>'.$redirect_message.' You will be redirected to the '.
 			                      'previous page in 2 seconds.</p>',
 			'redirect_delay' => 2,
-			'destination_url' => utils::url('admin/groups')
+			'destination_url' => url('admin/groups')
 			));
 	}
 }

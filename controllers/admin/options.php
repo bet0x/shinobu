@@ -45,9 +45,9 @@ class options_controller extends AuthWebController
 	public function POST($args)
 	{
 		if (!isset($args['form_admin_options']))
-			$this->redirect(utils::url('admin/options'));
+			$this->redirect(url('admin/options'));
 
-		if (!isset($args['xsrf_token']) || !utils::check_xsrf_cookie($args['xsrf_token']))
+		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
 			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
@@ -63,10 +63,10 @@ class options_controller extends AuthWebController
 		$args['form']['allow_new_registrations'] = $args['form']['allow_new_registrations'] == '1' ? 1 : 0;
 
 		// Check default usergroup
-		if (!isset($this->_usergroups[intval($args['form']['group_id'])]))
+		if (!isset($this->_usergroups[intval($args['form']['default_usergroup'])]))
 		{
-			$errors['group_id'] = 'The chosen usergroup does not exist.';
-			$args['form']['group_id'] = 0;
+			$errors['default_usergroup'] = 'The chosen usergroup does not exist.';
+			$args['form']['default_usergroup'] = 0;
 		}
 
 		if (count($errors) === 0)
@@ -86,7 +86,7 @@ class options_controller extends AuthWebController
 				'redirect_message' => '<p>All options have been successfully updated. You will be redirected to the '.
 				                      'previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
-				'destination_url' => utils::url('admin/options')
+				'destination_url' => url('admin/options')
 				));
 		}
 

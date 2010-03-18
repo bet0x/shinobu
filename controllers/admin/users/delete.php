@@ -17,7 +17,7 @@ class delete_controller extends AuthWebController
 
 	public function GET($args)
 	{
-		if (!isset($_GET[utils::xsrf_token()]))
+		if (!isset($_GET[utils::token()]))
 			return $this->send_error(403);
 
 		// Check if user exists
@@ -38,7 +38,7 @@ class delete_controller extends AuthWebController
 			'redirect_message' => '<p>User has been successfully removed. You will be redirected to the '.
 			                      'previous page in 2 seconds.</p>',
 			'redirect_delay' => 2,
-			'destination_url' => utils::url('admin/users')
+			'destination_url' => url('admin/users')
 			));
 	}
 }
