@@ -17,7 +17,7 @@ define('SYS', dirname(__FILE__));
 setlocale(LC_CTYPE, 'C');
 
 // Load configuration, functions and libraries
-require SYS.'/include/config.php';
+require SYS.'/site/config.php';
 require SYS_INCLUDE.'/functions.php';
 
 // Disable evil stuff
@@ -68,10 +68,13 @@ elseif (defined('UTF8_USE_NATIVE'))
 // Load classes
 require SYS_INCLUDE.'/classes.php';
 
+// Load base controllers
+require SYS.'/site/basecontrollers.php';
+
 // Return content to the visitor
 $application = new Application();
 echo $application->output;
 
-#echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
-#     's - ', file_size(memory_get_usage()), ' - ',
-#     file_size(memory_get_peak_usage());
+echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
+     's - ', file_size(memory_get_usage()), ' - ',
+     file_size(memory_get_peak_usage());
