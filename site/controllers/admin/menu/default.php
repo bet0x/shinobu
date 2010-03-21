@@ -1,13 +1,13 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/default.php
+# site/controllers/admin/menu/default.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class menu_controller extends AuthWebController
+class default_controller extends AuthWebController
 {
 	public function prepare()
 	{
@@ -17,12 +17,26 @@ class menu_controller extends AuthWebController
 
 	public function GET($args)
 	{
+		// Get users
+		$m_items = array();
+		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu '.
+		                           'ORDER BY position ASC')
+			or error($this->db->error, __FILE__, __LINE__);
+
+		if ($result->num_rows > 0)
+		{
+			while ($row = $result->fetch_assoc())
+				$m_items[] = $row;
+		}
+
+		#print_r($m_items);
+
 		return tpl::render('admin_menu', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Menu',
-			'page_body' => '<p>This is the administration panel.</p>',
 			'subsection' => 'menu',
-			'admin_perms' => $this->acl->get('administration')
+			'admin_perms' => $this->acl->get('administration'),
+			'm_items' => $m_items
 			));
 	}
 }

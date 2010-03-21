@@ -31,22 +31,20 @@ if (preg_match('/^.{1}$/u', "ñ", $UTF8_ar) != 1)
 
 unset($UTF8_ar);
 
-// Put the current directory in this constant
-// UTF8 is used instead of SYS_UTF8.  That's because the UTF-8 library also
-// uses this constand to include files internally
+/* Put the current directory in this constant
+UTF8 is used instead of SYS_UTF8.  That's because the UTF-8 library also
+uses this constand to include files internally. */
 if (!defined('UTF8'))
 	define('UTF8', SYS_INCLUDE.'/utf8');
 
 // Load UTF-8 library
 if (defined('UTF8_USE_MBSTRING'))
 {
-	/**
-	* If string overloading is active, it will break many of the
-	* native implementations. mbstring.func_overload must be set
-	* to 0, 1 or 4 in php.ini (string overloading disabled).
-	* Also need to check we have the correct internal mbstring
-	* encoding
-	*/
+	/* If string overloading is active, it will break many of the
+	native implementations.  mbstring.func_overload must be set
+	to 0, 1 or 4 in php.ini (string overloading disabled).
+	Also need to check we have the correct internal mbstring
+	encoding. */
 	if (ini_get('mbstring.func_overload') & MB_OVERLOAD_STRING)
 		trigger_error('String functions are overloaded by mbstring', E_USER_ERROR);
 
@@ -69,12 +67,12 @@ elseif (defined('UTF8_USE_NATIVE'))
 require SYS_INCLUDE.'/classes.php';
 
 // Load base controllers
-require SYS.'/site/basecontrollers.php';
+require SYS.'/site/base.php';
 
 // Return content to the visitor
 $application = new Application();
 echo $application->output;
 
-echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
-     's - ', file_size(memory_get_usage()), ' - ',
-     file_size(memory_get_peak_usage());
+#echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
+#     's - ', file_size(memory_get_usage()), ' - ',
+#     file_size(memory_get_peak_usage());

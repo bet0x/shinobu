@@ -1,0 +1,44 @@
+<?php
+
+# =============================================================================
+# site/controllers/admin/users/delete.php
+#
+# Copyright (c) 2009-2010 Frank Smit
+# License: zlib/libpng, see the COPYING file for details
+# =============================================================================
+
+class delete_controller extends AuthWebController
+{
+	public function prepare()
+	{
+		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
+			$this->redirect(SYSTEM_BASE_URL);
+	}
+
+	public function GET($args)
+	{
+		if (!isset($_GET[xsrf::token()]))
+			return $this->send_error(403);
+
+		// Check if menu item exists
+		$this->request['args'] = intval($this->request['args']);
+		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'].' LIMIT 1')
+			or error($this->db->error, __FILE__, __LINE__);
+
+		$user_data = $result->fetch_row();
+		if (is_null($user_data))
+			return $this->send_error(404);
+
+		// Delete menu item
+		$this->db->query('DELETE FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'])
+			or error($this->db->error, __FILE__, __LINE__);
+
+		// Redirect
+		return tpl::render('redirect', array(
+			'redirect_message' => '<p>Menu item has been successfully removed. You will be redirected to the '.
+			                      'previous page in 2 seconds.</p>',
+			'redirect_delay' => 2,
+			'destination_url' => url('admin/menu')
+			));
+	}
+}
