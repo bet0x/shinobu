@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class default_controller extends AuthWebController
+class default_controller extends CmsWebController
 {
 	public function GET($args)
 	{

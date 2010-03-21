@@ -7,16 +7,13 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class default_controller extends AuthWebController
+class default_controller extends CmsWebController
 {
-	public function prepare()
+	public function GET($args)
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_1))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	public function GET($args)
-	{
 		global $db_name;
 
 		$sys_info = array(

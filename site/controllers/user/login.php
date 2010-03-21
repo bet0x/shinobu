@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class login_controller extends AuthWebController
+class login_controller extends CmsWebController
 {
 	protected function prepare()
 	{

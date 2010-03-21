@@ -7,20 +7,15 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class default_controller extends AuthWebController
+class default_controller extends CmsWebController
 {
-	public function prepare()
+	public function GET($args)
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	public function GET($args)
-	{
-		// Get users
 		$m_items = array();
-		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu '.
-		                           'ORDER BY position ASC')
+		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu ORDER BY position ASC')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
@@ -28,8 +23,6 @@ class default_controller extends AuthWebController
 			while ($row = $result->fetch_assoc())
 				$m_items[] = $row;
 		}
-
-		#print_r($m_items);
 
 		return tpl::render('admin_menu', array(
 			'website_section' => 'Administration',

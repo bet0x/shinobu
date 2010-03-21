@@ -11,7 +11,7 @@
 # - List of groupmembers.
 # - Store permissions temporarly on form submit.
 
-class edit_controller extends AuthWebController
+class edit_controller extends CmsWebController
 {
 	private $_group_data = null, $_group_permissions = array();
 

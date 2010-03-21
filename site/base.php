@@ -7,8 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// A controller for web pages with user authentication enabled
-abstract class AuthWebController extends BaseController
+abstract class CmsWebController extends BaseController
 {
 	public function __construct($request)
 	{

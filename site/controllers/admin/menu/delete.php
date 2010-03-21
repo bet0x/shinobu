@@ -1,22 +1,19 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/users/delete.php
+# site/controllers/admin/menu/delete.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class delete_controller extends AuthWebController
+class delete_controller extends CmsWebController
 {
-	public function prepare()
+	public function GET($args)
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	public function GET($args)
-	{
 		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
@@ -35,7 +32,7 @@ class delete_controller extends AuthWebController
 
 		// Redirect
 		return tpl::render('redirect', array(
-			'redirect_message' => '<p>Menu item has been successfully removed. You will be redirected to the '.
+			'redirect_message' => '<p>Menu item has been successfully deleted. You will be redirected to the '.
 			                      'previous page in 2 seconds.</p>',
 			'redirect_delay' => 2,
 			'destination_url' => url('admin/menu')

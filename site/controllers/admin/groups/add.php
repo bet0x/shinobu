@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class add_controller extends AuthWebController
+class add_controller extends CmsWebController
 {
 	private $_group_data = null, $_group_permissions = array(), $acl_ids = array();
 

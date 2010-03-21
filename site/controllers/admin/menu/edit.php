@@ -1,13 +1,13 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/default.php
+# site/controllers/admin/menu/edit.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class edit_controller extends AuthWebController
+class edit_controller extends CmsWebController
 {
 	private $_m_item_data = null;
 
@@ -16,7 +16,7 @@ class edit_controller extends AuthWebController
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		// Get user information
+		// Get menu item information
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT m.* FROM '.DB_PREFIX.'menu AS m WHERE id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
@@ -77,8 +77,7 @@ class edit_controller extends AuthWebController
 				or error($this->db->error, __FILE__, __LINE__);
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>The menu item has been updated.'.
-				                      ' You will be redirected to the previous page in 2 seconds.</p>',
+				'redirect_message' => '<p>The menu item has been updated. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => url('admin/menu')
 				));

@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class add_controller extends AuthWebController
+class add_controller extends CmsWebController
 {
 	private $_usergroups = array();
 
@@ -56,7 +56,7 @@ class add_controller extends AuthWebController
 
 		// Check username length and availability
 		if (strlen($args['form']['username']) < 3)
-			$errors['username'] = 'Usernames must be at least 2 characters long. Please choose another (longer) username.';
+			$errors['username'] = 'Usernames must be at least 3 characters long. Please choose another (longer) username.';
 		elseif (strlen($args['form']['username']) > 20)
 			$errors['username'] = 'Usernames must not be more than 20 characters long. Please choose another (shorter) username.';
 		else
@@ -74,7 +74,8 @@ class add_controller extends AuthWebController
 		}
 
 		// Check default usergroup
-		if (!isset($this->_usergroups[intval($args['form']['group_id'])]))
+		$args['form']['group_id'] = intval($args['form']['group_id']);
+		if (!isset($this->_usergroups[$args['form']['group_id']]))
 		{
 			$errors['group_id'] = 'The chosen usergroup does not exist.';
 			$args['form']['group_id'] = 0;

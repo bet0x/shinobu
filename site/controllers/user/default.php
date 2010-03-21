@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class default_controller extends AuthWebController
+class default_controller extends CmsWebController
 {
 	public function prepare()
 	{
@@ -98,7 +98,7 @@ class default_controller extends AuthWebController
 		return tpl::render('user_profile', array(
 			'page_title' => 'Profile',
 			'errors' => $errors,
-			'values' => $this->user->data
+			'values' => array_merge($this->user->data, $args['form'])
 			));
 	}
 }

@@ -1,13 +1,13 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/default.php
+# site/controllers/admin/users/edit.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class edit_controller extends AuthWebController
+class edit_controller extends CmsWebController
 {
 	private $_user_data = null, $_usergroups = array();
 
@@ -18,7 +18,7 @@ class edit_controller extends AuthWebController
 
 		// Get user information
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT u.* FROM '.DB_PREFIX.'users AS u WHERE id='.$this->request['args'])
+		$result = $this->db->query('SELECT u.* FROM '.DB_PREFIX.'users AS u WHERE id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		$this->_user_data = $result->fetch_assoc();
@@ -65,7 +65,7 @@ class edit_controller extends AuthWebController
 		if ($args['form']['username'] != $this->_user_data['username'])
 		{
 			if (strlen($args['form']['username']) < 3)
-				$errors['username'] = 'Usernames must be at least 2 characters long. Please choose another (longer) username.';
+				$errors['username'] = 'Usernames must be at least 3 characters long. Please choose another (longer) username.';
 			elseif (strlen($args['form']['username']) > 20)
 				$errors['username'] = 'Usernames must not be more than 20 characters long. Please choose another (shorter) username.';
 			else
@@ -84,7 +84,8 @@ class edit_controller extends AuthWebController
 		}
 
 		// Check default usergroup
-		if (!isset($this->_usergroups[intval($args['form']['group_id'])]))
+		$args['form']['group_id'] = intval($args['form']['group_id']);
+		if (!isset($this->_usergroups[$args['form']['group_id']]))
 		{
 			$errors['group_id'] = 'The chosen usergroup does not exist.';
 			$args['form']['group_id'] = 0;
@@ -142,8 +143,7 @@ class edit_controller extends AuthWebController
 			$this->user->update($this->_user_data['id'], $args['form']);
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>The user has been updated.'.
-				                      ' You will be redirected to the previous page in 2 seconds.</p>',
+				'redirect_message' => '<p>The user has been updated. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => url('admin/users')
 				));
@@ -155,7 +155,7 @@ class edit_controller extends AuthWebController
 			'subsection' => 'users',
 			'admin_perms' => $this->acl->get('administration'),
 			'errors' => $errors,
-			'values' => $this->_user_data,
+			'values' => $args['form'],
 			'usergroups' => $this->_usergroups
 			));
 	}

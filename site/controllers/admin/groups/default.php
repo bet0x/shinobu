@@ -7,17 +7,13 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class default_controller extends AuthWebController
+class default_controller extends CmsWebController
 {
-	public function prepare()
+	public function GET($args)
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	public function GET($args)
-	{
-		// Get usergroups
 		$usergroups = array();
 		$result = $this->db->query('SELECT g.id, g.name, g.description, COUNT(u.group_id) AS user_count FROM '.DB_PREFIX.'usergroups AS g '.
 		                           'LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id')

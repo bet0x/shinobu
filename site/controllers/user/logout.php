@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class logout_controller extends AuthWebController
+class logout_controller extends CmsWebController
 {
 	public function GET($args)
 	{

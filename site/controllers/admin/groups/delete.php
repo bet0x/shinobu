@@ -7,16 +7,13 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class delete_controller extends AuthWebController
+class delete_controller extends CmsWebController
 {
-	public function prepare()
+	public function GET($args)
 	{
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
-	}
 
-	public function GET($args)
-	{
 		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 

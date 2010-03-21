@@ -1,13 +1,13 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/users/add.php
+# site/controllers/admin/menu/add.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class add_controller extends AuthWebController
+class add_controller extends CmsWebController
 {
 	public function prepare()
 	{
@@ -42,16 +42,16 @@ class add_controller extends AuthWebController
 		$errors = array();
 
 		// Check name
-		if (strlen($args['form']['name']) < 3)
-			$errors['name'] = 'The name must be at least 3 characters long. Please choose another (longer) name.';
+		if (strlen($args['form']['name']) < 1)
+			$errors['name'] = 'The name must be at least 1 character long. Please choose another (longer) name.';
 		elseif (strlen($args['form']['name']) > 255)
 			$errors['name'] = 'The name must not be more than 255 characters long. Please choose another (shorter) name.';
 
 		// Check path
 		if (strlen($args['form']['path']) < 1)
-			$errors['path'] = 'The path must be at least 1 character long. Please choose another (longer) path.';
+			$errors['path'] = 'The path must be at least 1 character long. Please choose a longer path.';
 		elseif (strlen($args['form']['path']) > 255)
-			$errors['path'] = 'The path must not be more than 255 characters long. Please choose another (shorter) path.';
+			$errors['path'] = 'The path must not be more than 255 characters long. Please choose a shorter path.';
 
 		// Check position
 		$args['form']['position'] = intval($args['form']['position']);
@@ -59,8 +59,6 @@ class add_controller extends AuthWebController
 			$errors['position'] = 'The position must not be lower than 0. Please choose a higher number.';
 		elseif ($args['form']['position'] > 255)
 			$errors['position'] = 'The position must not be higher than 255. Please choose a lower number.';
-		else
-			$args['form']['position'] = 0;
 
 		if (count($errors) === 0)
 		{

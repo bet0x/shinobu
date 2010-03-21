@@ -1,13 +1,13 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/default.php
+# site/controllers/admin/options.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-class options_controller extends AuthWebController
+class options_controller extends CmsWebController
 {
 	private $_usergroups = array();
 
