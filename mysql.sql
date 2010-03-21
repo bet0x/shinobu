@@ -20,7 +20,7 @@ CREATE TABLE IF NOT EXISTS `acl` (
 --
 
 INSERT INTO `acl` (`id`, `permission_01`, `permission_02`, `permission_03`, `permission_04`, `permission_05`, `permission_06`, `permission_07`, `permission_08`) VALUES
-('administration', 'View administration panel (only view the menu item and administration index)', 'Create, delete and edit pages', 'Delete and edit users', 'Manage menu/navigation items', 'Change system options', 'Manage ACL user groups', 'Manage ACL permissions', '');
+('administration', 'Administration: View administration panel (only view the menu item and administration index)', 'Administration: Create, delete and edit pages', 'Administration: Delete and edit users', 'Administration: Manage menu/navigation items', 'Administration: Change system options', 'Administration: Manage ACL user groups', 'Administration: Manage ACL permissions', '');
 
 -- --------------------------------------------------------
 
@@ -41,8 +41,9 @@ CREATE TABLE IF NOT EXISTS `acl_groups` (
 --
 
 INSERT INTO `acl_groups` (`acl_id`, `group_id`, `permissions`) VALUES
-('administration', 1, 255),
-('administration', 2, 0);
+('administration', 1, 127),
+('administration', 2, 0),
+('administration', 16, 1);
 
 -- --------------------------------------------------------
 
@@ -68,17 +69,38 @@ INSERT INTO `config` (`name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `menu`
+--
+
+CREATE TABLE IF NOT EXISTS `menu` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `path` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `position` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=5 ;
+
+--
+-- Dumping data for table `menu`
+--
+
+INSERT INTO `menu` (`id`, `name`, `path`, `position`) VALUES
+(4, 'Home', '/shinobu', 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `usergroups`
 --
 
 CREATE TABLE IF NOT EXISTS `usergroups` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `user_title` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `description` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `user_title` varchar(20) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=3 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `usergroups`
@@ -86,7 +108,8 @@ CREATE TABLE IF NOT EXISTS `usergroups` (
 
 INSERT INTO `usergroups` (`id`, `name`, `user_title`, `description`) VALUES
 (1, 'Administrators', 'Administrator', 'Users in this usergroup have no restrictions on the administration panel.'),
-(2, 'Members', 'Member', 'Registered users.');
+(2, 'Members', 'Member', 'Registered users.'),
+(16, 'Testers', 'Tester', 'A group of test users.');
 
 -- --------------------------------------------------------
 
@@ -104,14 +127,18 @@ CREATE TABLE IF NOT EXISTS `users` (
   `email` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_username_index` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=17 ;
 
 --
 -- Dumping data for table `users`
 --
 
--- All users have "password" as their login password
+-- The password for all the users is: password
+
 INSERT INTO `users` (`id`, `group_id`, `username`, `password`, `salt`, `hash`, `email`) VALUES
 (1, 1, 'Frank', 'd65c4e4ccf8118baf64877e8ad0b8496805525b1', '/z{!j2Xn<q=:I"Tnd;,_', 'ad311415064cf8742acf52f4c731c4f3dccc4769', 'example@example.com'),
 (2, 2, 'Nachiko', 'aa283093b9ee1af8004839850cd3fb07f0137838', '=ogRW`f(N0fC^fzcUP&k', 'd1552cc8e84ab3f8dae38f829a2f495faac77ce8', 'lol@example.com'),
-(3, 2, 'Yuki', 'c6d26c0f5ccbd3924283a2863644de81d48014eb', 'OV_58b7&1199jx\\~h5{$', '751d649fc69acbf191edf129e95a6f3de15a8cf9', 'yuki@example.com');
+(3, 2, 'Yuki', 'c6d26c0f5ccbd3924283a2863644de81d48014eb', 'OV_58b7&1199jx\\~h5{$', '751d649fc69acbf191edf129e95a6f3de15a8cf9', 'yuki@example.com'),
+(4, 2, 'Midori', 'd959819cdef5287be9c7861fc6400226afe91ea3', 'gWJ6:0"H+5,<2B''SibTx', 'd58769fd21445d191af52dcca0bf374f54797662', 'midori@example.com'),
+(6, 1, 'Haruko', 'c5ce7ce3165d1e2a047cd60e92e3ec8df0d4b33f', '!2BO6ok80zWips"(22,Q', 'e2eaceedad7480d43ea62011c487e4f73b6cd37f', 'haruko@example.com'),
+(7, 16, 'Sumiko', '17ffc560d050a8d6af225c4ce99b6ee3b47edb5f', 'z$Qsg:;h[++n''uH&NXx$', '4b0d5f172de2dbdfc86e247c29209dd7171e3ae1', 'sumiko@example.com');

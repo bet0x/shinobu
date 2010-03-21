@@ -4,7 +4,9 @@
 <div id="admin-content">
 	<h2><?php echo u_htmlencode($page_title) ?></h2>
 
-	<p>Info.</p>
+	<p>If the path starts with <strong>http/https/ftp/irc</strong> or with a
+	   <strong>slash</strong> (/) it is an external path, otherwise it will be transformed intro something like
+	   <strong>http://example.com/?q=user</strong> (an internal path).</p>
 
 	<?php if (count($errors) > 0): ?>
 	<h4><strong>The following errors need to be corrected before a new menu item can be stored:</strong></h4>
@@ -41,7 +43,7 @@
 				<input type="text" name="form[position]" maxlength="255"<?php echo ' value="'.u_htmlencode($values['position']).'"' ?> />
 			</label>
 		</p>
-		<p class="description">The position must be a numeric value, not lower than 0 and not higher than 255.</p>
+		<p class="description">The position must be a numeric value, between 0 and 255.</p>
 
 		<p class="buttons"><input type="submit" value="Edit" name="form_edit_menu_item" /> or <a href="<?php echo url('admin/menu') ?>">cancel</a>.</p>
 	</form>

@@ -7,8 +7,8 @@ TODO
 
  - Administration panel:
    * Groups: improve ACL/Permission management GUI and add pagination in group list.
-   * Users: pagination, description/help text.
-   - Menu
+   * Users: pagination.
+   * Menu: pagination.
    - Pages (page management)
    = Files (filemanager)
    - Improve admin menu/navigation rendering.

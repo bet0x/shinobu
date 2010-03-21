@@ -4,7 +4,9 @@
 <div id="admin-content">
 	<h2>Add new item</h2>
 
-	<p>Info.</p>
+	<p>If the path starts with <strong>http/https/ftp/irc</strong> or with a
+	   <strong>slash</strong> (/) it is an external path, otherwise it will be transformed intro something like
+	   <strong>http://example.com/?q=user</strong> (an internal path).</p>
 
 	<?php if (count($errors) > 0): ?>
 	<h4><strong>The following errors need to be corrected before a new menu item can be stored:</strong></h4>

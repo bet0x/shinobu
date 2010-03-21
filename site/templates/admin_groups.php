@@ -7,7 +7,8 @@
 	<p>Usergroups can be used to groups users and give those groups certain permissions to give the members of those groups permission to do
 	   certain tasks or give them access to restricted content.</p>
 
-	<p class="note">Note: Groups that contain users can not be deleted.</p>
+	<p class="note"><strong>Note:</strong> Groups that contain users can not be deleted. All users in those groups should be moved
+	                before they can be deleted.</p>
 
 	<ul class="group-list">
 	<?php foreach ($usergroups as $index => $group): ?>

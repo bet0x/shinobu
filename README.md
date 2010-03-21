@@ -29,8 +29,9 @@ Installation
 Requirements
 ------------
 
- * PHP >= 5.1.0 (tested on 5.2 and 5.3)
- * MySQLi.
+ * PHP >= 5.2.0 (tested on 5.3)
+ * MySQLi (http://php.net/manual/en/book.mysqli.php)
+ * Filter (http://php.net/filter)
 
 Contact/Support
 ---------------
