@@ -17,6 +17,20 @@
 	</h1>
 
 	<div id="main-navigation">
+		<?php if (isset($main_menu[0])): ?>
+		<ul>
+			<?php
+
+			foreach ($main_menu as $k => $item)
+			{
+				if ($k !== 0) echo '<li>&middot;</li>', "\n";
+				echo '<li><a href="', $item['path'], '">', $item['name'], '</a></li>', "\n";
+			}
+
+			?>
+		</ul>
+		<?php endif ?>
+
 		<ul>
 			<?php if ($authenticated): ?>
 			<li><a href="<?php echo url('user') ?>"><?php echo u_htmlencode($username) ?> (Profile)</a></li>

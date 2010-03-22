@@ -15,7 +15,7 @@ class default_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$m_items = array();
-		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu ORDER BY position ASC')
+		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)

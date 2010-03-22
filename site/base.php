@@ -36,6 +36,22 @@ abstract class CmsWebController extends BaseController
 			tpl::set('admin_view', $this->acl->check('administration', ACL_PERM_1));
 		}
 
+		// Load menu
+		$main_menu = array();
+		$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
+			or error($this->db->error, __FILE__, __LINE__);
+
+		if ($result->num_rows > 0)
+			while ($row = $result->fetch_assoc())
+			{
+				if ($row['path'][0] != '/' && !preg_match('/^(https?|ftp|irc)/i', $row['path']))
+					$row['path'] = url($row['path']);
+
+				$main_menu[] = $row;
+			}
+
+		tpl::set('main_menu', $main_menu);
+
 		// Testing
 		/*$this->acl->set('administration', $this->acl->get('administration')
 			 | ACL_PERM_3 | ACL_PERM_4 | ACL_PERM_5
