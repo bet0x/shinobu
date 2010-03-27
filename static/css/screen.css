@@ -85,36 +85,31 @@ input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
 
 .form-style-one { margin: 1.5em 0 }
 .form-style-one p, .form-style-two p { clear: left;overflow: auto }
-.form-style-one p.description, .form-style-one p.note
+.form-style-one p.description
 	{ margin-top: -1.2em;font-size:0.8em;width: 40em }
-.form-style-one p.note
-	{ font-family: "DejaVu Serif", "Bitstream Vera Serif", Serif;color: #555 }
 .form-style-one span.description
 	{ display: block;margin: 0.5em 0;font-size:0.8em }
 .form-style-one .confirm-field { color: #666 }
-.form-style-one p.multiple-fields label,
-.form-style-two p label
+.form-style-one p.multiple-fields label
     { float: left;margin-right: 1.5em }
 .form-style-one p.non-text-fields strong
     { margin-bottom: 0.6em }
 .form-style-one p.non-text-fields label
 	{ display: block;margin-top: 0.3em;cursor: pointer;font-size:0.8em }
-.form-style-one label strong, .form-style-one p.non-text-fields strong,
-.form-style-two label strong
+.form-style-one label strong, .form-style-one p.non-text-fields strong
 	{ display: block }
-.form-style-one label strong,
-.form-style-two label strong
+.form-style-one label strong
 	{ cursor: pointer }
-.form-style-one label strong span,
-.form-style-two label strong span
+.form-style-one label strong span
 	{ position: relative;top: -0.6em;font-weight: normal;font-size: 0.65em;
 	  color: #971010;cursor: auto }
 
 label input[type=text],
 label input[type=password],
-label select
+label select, textarea
 	{ padding: 0.3em 0.4em;width: 19em }
 label[for] { cursor: pointer }
+.form-style-one textarea { width: 98% }
 
 .form-style-one p.buttons
 	{ margin: 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
@@ -128,14 +123,10 @@ input[type=submit]:focus,
 input[type=reset]:focus
 	{ background: #dcdcdc }
 
-label.error-field input
+label.error-field input, label.error-field textarea
 	{ background: #ffdada }
-label.error-field input:focus
+label.error-field input:focus, label.error-field textarea:focus
 	{ background: #ffb1b1 }
-
-.form-style-two { background: #eee;padding: 0.5em 0.7em;border: 1px solid #ddd }
-.form-style-two p { margin: 0 }
-.form-style-two p.buttons { margin-top: 0.7em }
 
 /* --- Redirect
 ---------------------------------------------------------*/
@@ -225,7 +216,7 @@ dl.infolist dt + dd { margin-top: -1.48em }
 .user-list .checkbox { float: left;clear: both;width: 4.5% }
 .user-list .name { float: left;width: 76.5% }
 .user-list .actions { float: right;width: 18%;text-align: right }
-
+.user-list li.marked-row { background: #ffdada }
 
 
 
