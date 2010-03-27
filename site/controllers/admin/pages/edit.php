@@ -16,7 +16,6 @@ class edit_controller extends CmsWebController
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		// Get menu item information
 		// Get page information
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT p.* FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')

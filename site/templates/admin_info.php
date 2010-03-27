@@ -8,11 +8,10 @@
 	   Below you can see some system statistics and software version information.</p>
 
 	<dl class="infolist">
-		<dt>Shinobu</dt>
-		<dd><?php echo SHINOBU ?></dd>
-
-		<dt>PHP-UTF8</dt>
-		<dd><?php echo u_htmlencode($sys_info['phputf8_version']) ?></dd>
+		<?php foreach ($software_versions as $name => $version): ?>
+		<dt><?php echo u_htmlencode($name) ?></dt>
+		<dd><?php echo u_htmlencode($version) ?></dd>
+		<?php endforeach ?>
 	</dl>
 	<hr />
 	<dl class="infolist">

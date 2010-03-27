@@ -16,8 +16,13 @@ class default_controller extends CmsWebController
 
 		global $db_name;
 
+		$software_versions = array(
+			'Shinobu' => SHINOBU,
+			'PHP-UTF8' => trim(file_get_contents(UTF8.'/VERSION')),
+			'Markdown' => trim(file_get_contents(SYS_LIB.'/markdown/VERSION'))
+			);
+
 		$sys_info = array(
-			'phputf8_version' => trim(file_get_contents(UTF8.'/VERSION')),
 			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
 			'db' => array(
 				'name' => 'MySQLi',
@@ -76,7 +81,7 @@ class default_controller extends CmsWebController
 			'page_title' => 'Information',
 			'subsection' => 'information',
 			'admin_perms' => $this->acl->get('administration'),
-
+			'software_versions' => $software_versions,
 			'sys_info' => $sys_info
 			));
 	}

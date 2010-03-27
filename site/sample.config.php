@@ -38,6 +38,7 @@ define('UTF8_USE_MBSTRING', true);
 
 // Paths
 define('SYS_INCLUDE', SYS.'/site/include');
+define('SYS_LIB', SYS_INCLUDE.'/lib');
 define('SYS_CONTROL', SYS.'/site/controllers');
 define('SYS_TEMPLATE', SYS.'/site/templates');
 define('SYS_STATIC', SYS.'/static');

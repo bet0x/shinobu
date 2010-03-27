@@ -39,7 +39,17 @@ Contact/Support
 
 You can find me at #shinobu on irc.irchighway.net.
 
+License
+-------
+
+Shinobu is licensed undet the Zlib/PNG license, PHP Markdown under the a
+BSD-style open source license and PHP-UTF8 under the GNU/LGPL 2.1.
+
+See the COPYING file for the full licenses.
+
 Links
 -----
 
  - Git: http://git-scm.com/
+ - PHP-UTF8: http://github.com/FSX/php-utf8
+ - PHP Markdown & Extra: http://michelf.com/projects/php-markdown/

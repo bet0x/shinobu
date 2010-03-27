@@ -35,7 +35,7 @@ unset($UTF8_ar);
 UTF8 is used instead of SYS_UTF8.  That's because the UTF-8 library also
 uses this constand to include files internally. */
 if (!defined('UTF8'))
-	define('UTF8', SYS_INCLUDE.'/utf8');
+	define('UTF8', SYS_LIB.'/utf8');
 
 // Load UTF-8 library
 if (defined('UTF8_USE_MBSTRING'))
