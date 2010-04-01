@@ -1,9 +1,10 @@
 TODO
 ====
 
-= Not top priority.
-* In progress.
-- Still needs to be done.
+= Not top priority
+* In progress
+- Still needs to be done
++ Needs to be done before Alpha1
 
  - Administration panel
    - Options
@@ -11,13 +12,13 @@ TODO
      = Configuration options for HTML meta tags in the configuration file
    * Groups
      - Improve ACL/Permission management GUI
-     - Pagination in group list
+     + Pagination in group list
    * Users
-     - Pagination
+     + Pagination
    * Menu
-     - Pagination
+     + Pagination
    * Pages
-     - Tooltips (publication and last revision date)
+     + Tooltips (publication and last revision date)
      - Markdown toolbar
      - Child pages
      - TOC option
@@ -33,4 +34,5 @@ TODO
    - Metadata
  - Localization system
  - Documentation (API, tutorials/examples, usage)
- - Template parser.
+ - Template parser
+ + An installer
