@@ -9,6 +9,8 @@
 
 abstract class CmsWebController extends BaseController
 {
+	protected $timedate = null;
+
 	public function __construct($request)
 	{
 		$this->request = $request;
@@ -16,7 +18,6 @@ abstract class CmsWebController extends BaseController
 
 		// Load modules
 		$this->db = $this->load_module('db');
-
 		$this->config = $this->load_module('config', $this->db);
 		$this->user = $this->load_module('user', $this->db);
 		$this->acl = $this->load_module('acl', $this->db);
@@ -67,5 +68,15 @@ abstract class CmsWebController extends BaseController
 
 		if (!is_null($this->pre_output))
 			$this->interrupt = true;
+	}
+
+	protected function load_timedate()
+	{
+		if ($this->timedate)
+			return;
+
+		$this->timedate = $this->load_module('timedate', $this->config->timezone);
+		$this->timedate->date_format = $this->config->date_format;
+		$this->timedate->time_format = $this->config->time_format;
 	}
 }

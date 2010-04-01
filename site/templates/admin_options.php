@@ -19,7 +19,7 @@
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
 		<p>
-			<label>
+			<label<?php if (isset($errors['website_title'])) echo ' class="error-field"' ?>>
 				<strong>Website title</strong>
 				<input type="text" name="form[website_title]" maxlength="50"<?php echo ' value="'.u_htmlencode($values['website_title']).'"' ?> />
 			</label>
@@ -33,7 +33,7 @@
 		</p>
 
 		<p>
-			<label>
+			<label<?php if (isset($errors['default_usergroup'])) echo ' class="error-field"' ?>>
 				<strong>Default usergroup</strong>
 				<select name="form[default_usergroup]">
 					<option value="<?php echo $values['default_usergroup'] ?>" selected="selected"><?php echo u_htmlencode($usergroups[$values['default_usergroup']]) ?></option>
@@ -47,6 +47,34 @@
 		<p class="description">This is the default user group, e.g. the group users are placed in when they register. Don't choose a powerful
 		                       usergroup (e.g. the administrator group), because that means new users will have the permissions of that
 							   usergroup.</p>
+
+		<p>
+			<label<?php if (isset($errors['timezone'])) echo ' class="error-field"' ?>>
+				<strong>Timezone</strong>
+				<input type="text" name="form[timezone]" maxlength="50"<?php echo ' value="'.u_htmlencode($values['timezone']).'"' ?> />
+			</label>
+		</p>
+		<p class="description">Pick a valid timezone from <a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones">Wikipedia</a>.</p>
+
+		<p>
+			<label<?php if (isset($errors['date_format'])) echo ' class="error-field"' ?>>
+				<strong>Date format</strong>
+				<input type="text" name="form[date_format]" maxlength="50"<?php echo ' value="'.u_htmlencode($values['date_format']).'"' ?> />
+			</label>
+		</p>
+		<p class="description">Current format: <strong><?php echo $date_format_example ?></strong>. See
+		                       <a href="http://php.net/manual/en/function.date.php">PHP manual</a>
+		                       for formatting options.</p>
+
+		<p>
+			<label<?php if (isset($errors['time_format'])) echo ' class="error-field"' ?>>
+				<strong>Time format</strong>
+				<input type="text" name="form[time_format]" maxlength="50"<?php echo ' value="'.u_htmlencode($values['time_format']).'"' ?> />
+			</label>
+		</p>
+		<p class="description">Current format: <strong><?php echo $time_format_example ?></strong>. See
+		                       <a href="http://php.net/manual/en/function.date.php">PHP manual</a>
+		                       for formatting options.</p>
 
 		<p class="buttons"><input type="submit" value="Update" name="form_admin_options" /> or <a href="<?php echo url('admin') ?>">cancel</a>.</p>
 	</form>

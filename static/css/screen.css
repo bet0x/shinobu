@@ -218,9 +218,11 @@ dl.infolist dt + dd { margin-top: -1.48em }
 .user-list .actions { float: right;width: 18%;text-align: right }
 .user-list li.marked-row { background: #ffdada }
 
-
-
-
+/* Page metadata box */
+.metadata
+    { margin: 2em 0;text-align: right }
+.metadata span
+    { padding: 0.5em 1em;border: 1px solid #ddd;background: #eee; }
 
 
 

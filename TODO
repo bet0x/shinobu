@@ -8,7 +8,7 @@ TODO
  - Administration panel
    - Options
      - Localization settings
-     - Time and date settings
+     = Configuration options for HTML meta tags in the configuration file
    * Groups
      - Improve ACL/Permission management GUI
      - Pagination in group list
@@ -23,7 +23,8 @@ TODO
      - TOC option
    = Files (filemanager)
  - Libraries
-   - Time and date functions/helpers
+   * Time and date functions/helpers
+     - Localization
    = E-mail
    - Cache
  - Pages system
@@ -32,4 +33,4 @@ TODO
    - Metadata
  - Localization system
  - Documentation (API, tutorials/examples, usage)
- = Configuration options for HTML meta tags in the configuration file
+ - Template parser.

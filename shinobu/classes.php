@@ -150,8 +150,8 @@ class xsrf
 		return self::$_token;
 	}
 
-	// Compare $token with the XSRF token.  Generate an XSRF token if self::$_xsrf_token
-	// is false.
+	// Compare $token with the XSRF token.  Generate an XSRF token if
+	// self::$_xsrf_token is false.
 	static function check_cookie($token)
 	{
 		if (!self::$_token)

@@ -24,6 +24,8 @@ class options_controller extends CmsWebController
 			while ($row = $result->fetch_assoc())
 				$this->_usergroups[$row['id']] = $row['name'];
 		}
+
+		$this->load_timedate();
 	}
 
 	public function GET($args)
@@ -34,10 +36,15 @@ class options_controller extends CmsWebController
 			'subsection' => 'options',
 			'admin_perms' => $this->acl->get('administration'),
 			'usergroups' => $this->_usergroups,
+			'date_format_example' => $this->timedate->date(time()),
+			'time_format_example' => $this->timedate->time(time()),
 			'values' => array(
 				'website_title' => $this->config->website_title,
 				'allow_new_registrations' => $this->config->allow_new_registrations,
-				'default_usergroup' => $this->config->default_usergroup),
+				'default_usergroup' => $this->config->default_usergroup,
+				'timezone' => $this->config->timezone,
+				'date_format' => $this->config->date_format,
+				'time_format' => $this->config->time_format),
 			'errors' => array(),
 			));
 	}
@@ -55,7 +62,7 @@ class options_controller extends CmsWebController
 
 		// Check website title
 		if (strlen($args['form']['website_title']) < 1)
-			$errors['website_title'] = 'The website title must at least be 1 characters long. Please choose another (longer) title.';
+			$errors['website_title'] = 'The website title must at least be 1 character long. Please choose another (longer) title.';
 		elseif (strlen($args['form']['website_title']) > 50)
 			$errors['website_title'] = 'The website title must not be more than 50 characters long. Please choose another (shorter) title.';
 
@@ -68,6 +75,22 @@ class options_controller extends CmsWebController
 			$errors['default_usergroup'] = 'The chosen usergroup does not exist.';
 			$args['form']['default_usergroup'] = 0;
 		}
+
+		// Check timezone
+		if (!@date_default_timezone_set($args['form']['timezone']))
+			$errors['timezone'] = 'The timezone must be valid. Please choose another timezone.';
+
+		// Check date format
+		if (strlen($args['form']['date_format']) < 1)
+			$errors['date_format'] = 'The date format must at least be 1 character long. Please choose another (longer) format.';
+		if (strlen($args['form']['date_format']) > 50)
+			$errors['date_format'] = 'The date format must not be more than 50 characters long. Please choose another (shorter) format.';
+
+		// Check time format
+		if (strlen($args['form']['time_format']) < 1)
+			$errors['time_format'] = 'The time format must at least be 1 character long. Please choose another (longer) format.';
+		if (strlen($args['form']['time_format']) > 50)
+			$errors['time_format'] = 'The time format must not be more than 50 characters long. Please choose another (shorter) format.';
 
 		if (count($errors) === 0)
 		{
@@ -96,11 +119,10 @@ class options_controller extends CmsWebController
 			'subsection' => 'options',
 			'admin_perms' => $this->acl->get('administration'),
 			'usergroups' => $this->_usergroups,
-			'values' => array(
-				'website_title' => $this->config->website_title,
-				'allow_new_registrations' => $this->config->allow_new_registrations,
-				'default_usergroup' => $this->config->default_usergroup),
-			'errors' => array(),
+			'date_format_example' => $this->timedate->date(time()),
+			'time_format_example' => $this->timedate->time(time()),
+			'values' => $args['form'],
+			'errors' => $errors,
 			));
 	}
 }

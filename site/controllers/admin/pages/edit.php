@@ -18,7 +18,8 @@ class edit_controller extends CmsWebController
 
 		// Get page information
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT p.* FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')
+		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.show_meta
+			FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		$this->_page_data = $result->fetch_assoc();
