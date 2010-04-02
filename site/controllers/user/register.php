@@ -11,7 +11,7 @@ class register_controller extends CmsWebController
 {
 	public function prepare()
 	{
-		if ($this->user->authenticated())
+		if ($this->user->authenticated)
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -44,9 +44,9 @@ class register_controller extends CmsWebController
 		$errors = array();
 
 		// Check username length and availability
-		if (strlen($args['form']['username']) < 3)
+		if (utf8_strlen($args['form']['username']) < 3)
 			$errors['username'] = 'Usernames must be at least 2 characters long. Please choose another (longer) username.';
-		elseif (strlen($args['form']['username']) > 20)
+		elseif (utf8_strlen($args['form']['username']) > 20)
 			$errors['username'] = 'Usernames must not be more than 20 characters long. Please choose another (shorter) username.';
 		else
 		{
@@ -85,7 +85,7 @@ class register_controller extends CmsWebController
 				$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';
 		}
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
 			$this->user->add(
 				$args['form']['username'],

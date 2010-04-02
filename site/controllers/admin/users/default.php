@@ -11,7 +11,7 @@ class default_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$current_page = $this->request['args'] ? intval($this->request['args']) : 1;

@@ -11,7 +11,7 @@ class batch_controller extends CmsWebController
 {
 	public function POST($args)
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
@@ -50,15 +50,16 @@ class batch_controller extends CmsWebController
 				'destination_url' => url('admin/pages')
 				));
 		}
-		elseif (isset($args['form_publish_selected_pages']))
+		elseif (isset($args['form_publish_selected_pages']) || isset($args['form_unpublish_selected_pages']))
 		{
+			$publish = isset($args['form_publish_selected_pages']) ? 1 : 0;
 			$changed_row_count = 0;
-			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'pages SET is_published=1 WHERE id=?')
+			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'pages SET is_published=? WHERE id=?')
 				or error($this->db->error, __FILE__, __LINE__);
 
 			foreach ($args['pages'] as $pid)
 			{
-				$stmt->bind_param('i', $pid);
+				$stmt->bind_param('ii', $publish, $pid);
 				$stmt->execute();
 				$changed_row_count += $stmt->affected_rows;
 			}
@@ -66,29 +67,7 @@ class batch_controller extends CmsWebController
 			$stmt->close();
 
 			return tpl::render('redirect', array(
-				'redirect_message' => '<p>'.$changed_row_count.' page(s) successfully published. '.
-									  'You will be redirected to the previous page in 2 seconds.</p>',
-				'redirect_delay' => 2,
-				'destination_url' => url('admin/pages')
-				));
-		}
-		elseif (isset($args['form_unpublish_selected_pages']))
-		{
-			$changed_row_count = 0;
-			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'pages SET is_published=0 WHERE id=?')
-				or error($this->db->error, __FILE__, __LINE__);
-
-			foreach ($args['pages'] as $pid)
-			{
-				$stmt->bind_param('i', $pid);
-				$stmt->execute();
-				$changed_row_count += $stmt->affected_rows;
-			}
-
-			$stmt->close();
-
-			return tpl::render('redirect', array(
-				'redirect_message' => '<p>'.$changed_row_count.' page(s) successfully unpublished. '.
+				'redirect_message' => '<p>'.$changed_row_count.' page(s) successfully '.(!$publish ? 'un' : '').'published. '.
 									  'You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
 				'destination_url' => url('admin/pages')

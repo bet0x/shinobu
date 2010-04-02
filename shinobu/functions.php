@@ -90,9 +90,11 @@ function set_cookie($name, $value, $expire = 0)
 	header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
 
 	if (version_compare(PHP_VERSION, '5.2.0', '>='))
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure, true);
+		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path,
+			$sys_cookie_domain, $sys_cookie_secure, true);
 	else
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly', $sys_cookie_domain, $sys_cookie_secure);
+		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly',
+			$sys_cookie_domain, $sys_cookie_secure);
 }
 
 // Get a cookie

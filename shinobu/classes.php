@@ -17,7 +17,6 @@ class Application
 	public $output = '';
 	private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
 
-
 	public function __construct()
 	{
 		$request = array('path' => false, 'args' => false);
@@ -242,8 +241,8 @@ class BaseController
 	}
 
 	/* This is an empty function that's always executed by the constructor of
-	   the base controller.  This function can be overwritten to execute  or
-	   process certin things before the request method function is executed. */
+	the base controller.  This function can be overwritten to execute  or
+	process certin things before the request method function is executed. */
 	protected function prepare()
 	{
 		return null;
@@ -296,8 +295,8 @@ class BaseController
 	}
 
 	/* Be default all request method function return a 405 (Method Not Allowed)
-	   error. Controllers should extend the BaseController and overwrite these
-	   function. */
+	error. Controllers should extend the BaseController and overwrite these
+	function. */
 	public function GET($args) { return $this->send_error(405); }
 	public function POST($args) { return $this->send_error(405); }
 	public function PUT($args) { return $this->send_error(405); }

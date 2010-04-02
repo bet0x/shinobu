@@ -24,7 +24,7 @@ class add_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get permissions
@@ -76,24 +76,24 @@ class add_controller extends CmsWebController
 		$errors = array();
 
 		// Check group name
-		if (strlen($args['form']['name']) < 1)
+		if (utf8_strlen($args['form']['name']) < 1)
 			$errors['name'] = 'The name must at least be 1 characters long. Please choose another (longer) name.';
-		elseif (strlen($args['form']['name']) > 20)
+		elseif (utf8_strlen($args['form']['name']) > 20)
 			$errors['name'] = 'The name must not be more than 20 characters long. Please choose another (shorter) name.';
 
 		// Check user title
-		if (strlen($args['form']['user_title']) > 20)
+		if (utf8_strlen($args['form']['user_title']) > 20)
 			$errors['user_title'] = 'The user title must not be more than 20 characters long. Please choose another (shorter) title.';
 
 		// Check description
-		if (strlen($args['form']['description']) > 255)
+		if (utf8_strlen($args['form']['description']) > 255)
 			$errors['description'] = 'The description must not be more than 255 characters long. Please choose another (shorter) description.';
 
 		// If no checkbox is checked, ACL won't be set
 		if (!isset($args['acl']))
 			$args['acl'] = array();
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
 			// Create usergroup
 			$this->db->query('INSERT INTO '.DB_PREFIX.'usergroups (name, description) VALUES('.

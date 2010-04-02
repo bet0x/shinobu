@@ -10,8 +10,8 @@
 class user
 {
 	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id'),
-	        $authenticated = false, $db = null;
-	public $data = array();
+	        $db = null;
+	public $data = array(), $authenticated = false;
 
 	public function __construct(db $db = null)
 	{
@@ -38,12 +38,6 @@ class user
 					$this->authenticated = true;
 			}
 		}
-	}
-
-	// Check if user if user is authenticated/logged in
-	public function authenticated()
-	{
-		return $this->authenticated;
 	}
 
 	/* Create a login cookie for the user (only affects the current user/visitor)

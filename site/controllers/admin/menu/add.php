@@ -11,7 +11,7 @@ class add_controller extends CmsWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -42,15 +42,15 @@ class add_controller extends CmsWebController
 		$errors = array();
 
 		// Check name
-		if (strlen($args['form']['name']) < 1)
+		if (utf8_strlen($args['form']['name']) < 1)
 			$errors['name'] = 'The name must be at least 1 character long. Please choose another (longer) name.';
-		elseif (strlen($args['form']['name']) > 255)
+		elseif (utf8_strlen($args['form']['name']) > 255)
 			$errors['name'] = 'The name must not be more than 255 characters long. Please choose another (shorter) name.';
 
 		// Check path
-		if (strlen($args['form']['path']) < 1)
+		if (utf8_strlen($args['form']['path']) < 1)
 			$errors['path'] = 'The path must be at least 1 character long. Please choose a longer path.';
-		elseif (strlen($args['form']['path']) > 255)
+		elseif (utf8_strlen($args['form']['path']) > 255)
 			$errors['path'] = 'The path must not be more than 255 characters long. Please choose a shorter path.';
 
 		// Check position

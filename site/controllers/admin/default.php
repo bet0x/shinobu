@@ -11,7 +11,7 @@ class default_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_1))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_1))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		global $db_name;
@@ -64,7 +64,7 @@ class default_controller extends CmsWebController
 		if (!in_array(PHP_OS, array('WINNT', 'WIN32')))
 		{
 			// Get uptime, users and load average
-			if (!preg_match('#^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$#', trim(shell_exec('uptime')), $matches))
+			if (!preg_match('%^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$%', trim(shell_exec('uptime')), $matches))
 				error('Could not get uptime.', __FILE__, __LINE__);
 
 			list (, $sys_info['uptime'], $sys_info['users'], ) = $matches;

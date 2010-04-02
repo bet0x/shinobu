@@ -11,7 +11,7 @@ class delete_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($_GET[xsrf::token()]))
@@ -19,9 +19,8 @@ class delete_controller extends CmsWebController
 
 		// Check if group exists
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT COUNT(u.group_id) AS user_count FROM '.DB_PREFIX.'usergroups AS g '.
-			'LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id '.
-			'WHERE g.id='.$this->request['args'].' GROUP BY g.id LIMIT 1')
+		$result = $this->db->query('SELECT COUNT(u.group_id) FROM '.DB_PREFIX.'usergroups AS g LEFT JOIN '.DB_PREFIX.'users AS u
+			ON u.group_id=g.id WHERE g.id='.$this->request['args'].' GROUP BY g.id LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		$group_data = $result->fetch_row();

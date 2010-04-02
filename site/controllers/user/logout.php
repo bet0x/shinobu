@@ -11,11 +11,10 @@ class logout_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated())
+		if (!$this->user->authenticated)
 			$this->redirect(SYSTEM_BASE_URL);
 
-		$this->request['path'] = explode('/', $this->request['path']);
-		if (!isset($this->request['path'][1]) || !isset($_GET[xsrf::token()]))
+		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
 		$this->user->logout();

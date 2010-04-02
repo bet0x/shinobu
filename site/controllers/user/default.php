@@ -11,7 +11,7 @@ class default_controller extends CmsWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated())
+		if (!$this->user->authenticated)
 			$this->redirect(url('user/login'));
 	}
 
@@ -74,9 +74,8 @@ class default_controller extends CmsWebController
 				$new_email = true;
 		}
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
-
 			if ($new_password)
 				$args['form']['password'] = $args['form']['changed_password'];
 

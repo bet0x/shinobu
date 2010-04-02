@@ -13,7 +13,7 @@ class add_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get a list of groups
@@ -55,9 +55,9 @@ class add_controller extends CmsWebController
 		$errors = array();
 
 		// Check username length and availability
-		if (strlen($args['form']['username']) < 3)
+		if (utf8_strlen($args['form']['username']) < 3)
 			$errors['username'] = 'Usernames must be at least 3 characters long. Please choose another (longer) username.';
-		elseif (strlen($args['form']['username']) > 20)
+		elseif (utf8_strlen($args['form']['username']) > 20)
 			$errors['username'] = 'Usernames must not be more than 20 characters long. Please choose another (shorter) username.';
 		else
 		{

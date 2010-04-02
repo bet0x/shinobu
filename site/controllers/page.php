@@ -14,8 +14,7 @@ class page_controller extends CmsWebController
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_private, p.show_meta, p.pub_date, p.edit_date, u.username AS author
 			FROM '.DB_PREFIX.'pages AS p LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id
-			WHERE p.id='.$this->request['args'].'
-			AND p.is_published=1 LIMIT 1')
+			WHERE p.id='.$this->request['args'].' AND p.is_published=1 LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		$page_data = $result->fetch_assoc();

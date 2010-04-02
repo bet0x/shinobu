@@ -28,7 +28,7 @@ class edit_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get usergroup data
@@ -97,13 +97,13 @@ class edit_controller extends CmsWebController
 		if (strlen($args['form']['description']) > 255)
 			$errors['description'] = 'The description must not be more than 255 characters long. Please choose another (shorter) description.';
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
-			$this->db->query('UPDATE '.DB_PREFIX.'usergroups SET '.
-				'name="'.$this->db->escape($args['form']['name']).'", '.
-				'user_title="'.$this->db->escape($args['form']['user_title']).'", '.
-				'description="'.$this->db->escape($args['form']['description']).'" '.
-				'WHERE id='.$this->request['args'])
+			$this->db->query('UPDATE '.DB_PREFIX.'usergroups SET
+				name="'.$this->db->escape($args['form']['name']).'",
+				user_title="'.$this->db->escape($args['form']['user_title']).'",
+				description="'.$this->db->escape($args['form']['description']).'"
+				WHERE id='.$this->request['args'])
 				or error($this->db->error, __FILE__, __LINE__);
 
 			// Store permissions

@@ -13,7 +13,7 @@ class edit_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get menu item information
@@ -50,15 +50,15 @@ class edit_controller extends CmsWebController
 		$errors = array();
 
 		// Check name
-		if (strlen($args['form']['name']) < 3)
+		if (utf8_strlen($args['form']['name']) < 3)
 			$errors['name'] = 'The name must be at least 3 characters long. Please choose another (longer) name.';
-		elseif (strlen($args['form']['name']) > 255)
+		elseif (utf8_strlen($args['form']['name']) > 255)
 			$errors['name'] = 'The name must not be more than 255 characters long. Please choose another (shorter) name.';
 
 		// Check path
-		if (strlen($args['form']['path']) < 1)
+		if (utf8_strlen($args['form']['path']) < 1)
 			$errors['path'] = 'The path must be at least 1 character long. Please choose another (longer) path.';
-		elseif (strlen($args['form']['path']) > 255)
+		elseif (utf8_strlen($args['form']['path']) > 255)
 			$errors['path'] = 'The path must not be more than 255 characters long. Please choose another (shorter) path.';
 
 		// Check position
@@ -68,12 +68,13 @@ class edit_controller extends CmsWebController
 		elseif ($args['form']['position'] > 255)
 			$errors['position'] = 'The position must not be higher than 255. Please choose a lower number.';
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
 			$this->db->query('UPDATE '.DB_PREFIX.'menu SET
 				name="'.$this->db->escape($args['form']['name']).'",
 				path="'.$this->db->escape($args['form']['path']).'",
-				position="'.$this->db->escape($args['form']['position']).'"')
+				position="'.$this->db->escape($args['form']['position']).'"
+				WHERE id='.$this->request['args'])
 				or error($this->db->error, __FILE__, __LINE__);
 
 			return tpl::render('redirect', array(

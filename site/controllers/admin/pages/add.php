@@ -11,7 +11,7 @@ class add_controller extends CmsWebController
 {
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 
@@ -45,16 +45,16 @@ class add_controller extends CmsWebController
 		$now = time();
 
 		// Check title
-		if (strlen($args['form']['title']) < 1)
+		if (utf8_strlen($args['form']['title']) < 1)
 			$errors['title'] = 'The title must be at least 1 character long. Please choose another (longer) title.';
-		elseif (strlen($args['form']['title']) > 255)
+		elseif (utf8_strlen($args['form']['title']) > 255)
 			$errors['title'] = 'The title must not be more than 255 characters long. Please choose another (shorter) title.';
 
 		// Check content
 		$args['form']['content'] = convert_linebreaks($args['form']['content']);
-		if (strlen($args['form']['content']) < 1)
+		if (utf8_strlen($args['form']['content']) < 1)
 			$errors['content'] = 'A page can not be empty. Please provide some content.';
-		elseif (strlen($args['form']['content']) > 65535)
+		elseif (utf8_strlen($args['form']['content']) > 65535)
 			$errors['content'] = 'The page has too much content. Please remove some content.';
 
 		// Check options
@@ -62,7 +62,7 @@ class add_controller extends CmsWebController
 		$args['form']['is_private'] = isset($args['form']['is_private']) ? 1 : 0;
 		$args['form']['show_meta'] = isset($args['form']['show_meta']) ? 1 : 0;
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
 			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (author_id, title, content,
 				is_published, is_private, show_meta, pub_date) VALUES(

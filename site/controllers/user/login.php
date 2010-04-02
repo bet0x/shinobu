@@ -11,7 +11,7 @@ class login_controller extends CmsWebController
 {
 	protected function prepare()
 	{
-		if ($this->user->authenticated())
+		if ($this->user->authenticated)
 			$this->redirect(SYSTEM_BASE_URL);
 	}
 

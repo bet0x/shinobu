@@ -11,10 +11,10 @@ class delete_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		if (!isset($_GET[utils::token()]))
+		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
 		// Check if user exists

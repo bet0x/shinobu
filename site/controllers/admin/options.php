@@ -13,7 +13,7 @@ class options_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_5))
+		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
@@ -61,9 +61,9 @@ class options_controller extends CmsWebController
 		$errors = array();
 
 		// Check website title
-		if (strlen($args['form']['website_title']) < 1)
+		if (utf8_strlen($args['form']['website_title']) < 1)
 			$errors['website_title'] = 'The website title must at least be 1 character long. Please choose another (longer) title.';
-		elseif (strlen($args['form']['website_title']) > 50)
+		elseif (utf8_strlen($args['form']['website_title']) > 50)
 			$errors['website_title'] = 'The website title must not be more than 50 characters long. Please choose another (shorter) title.';
 
 		// Check `allow_new_registrations`
@@ -92,7 +92,7 @@ class options_controller extends CmsWebController
 		if (strlen($args['form']['time_format']) > 50)
 			$errors['time_format'] = 'The time format must not be more than 50 characters long. Please choose another (shorter) format.';
 
-		if (count($errors) === 0)
+		if (empty($errors))
 		{
 			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'config SET value=? WHERE name=?')
 				or error($this->db->error, __FILE__, __LINE__);

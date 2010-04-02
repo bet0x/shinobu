@@ -1,7 +1,7 @@
 <?php
 
 # =============================================================================
-# site/basecontrollers.php
+# site/base.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
@@ -27,14 +27,12 @@ abstract class CmsWebController extends BaseController
 		$this->user = $this->load_module('user', $this->db);
 		$this->acl = $this->load_module('acl', $this->db);
 
-		$authenticated = $this->user->authenticated();
-
 		// Set some template variables
 		tpl::set('website_title', $this->config->website_title);
-		tpl::set('authenticated', $authenticated);
+		tpl::set('authenticated', $this->user->authenticated);
 
 		// Do some extra things for authenticated users
-		if ($authenticated)
+		if ($this->user->authenticated)
 		{
 			$this->acl->set_gid($this->user->data['group_id']);
 
@@ -42,7 +40,7 @@ abstract class CmsWebController extends BaseController
 			tpl::set('admin_view', $this->acl->check('administration', ACL_PERM_1));
 		}
 
-		// Load menu
+		// Load main menu
 		$main_menu = array();
 		$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
 			or error($this->db->error, __FILE__, __LINE__);

@@ -32,16 +32,17 @@ $sys_cookie_secure   = 0;
 $sys_cookie_seed     = '&^7hyY&*88uhY&'; // Some random characters should be entered here. Example: &^7hyY&*88uhY&
 $sys_cookie_lifetime = 34560000; // 400 days
 
-// Use Mbstring or the native implementation?
-define('UTF8_USE_MBSTRING', true);
-#define('UTF8_USE_NATIVE', true);
-
 // Paths
 define('SYS_INCLUDE', SYS.'/site/include');
 define('SYS_LIB', SYS_INCLUDE.'/lib');
 define('SYS_CONTROL', SYS.'/site/controllers');
 define('SYS_TEMPLATE', SYS.'/site/templates');
 define('SYS_STATIC', SYS.'/static');
+
+// UTF-8 Configuration (comment all 3 constants to disable the UTF-8 library)
+define('UTF8', SYS_LIB.'/utf8');
+define('UTF8_USE_MBSTRING', true);
+#define('UTF8_USE_NATIVE', true);
 
 // ACL constants
 define('ACL_PERM_1', 1);
