@@ -13,7 +13,6 @@ TODO
    * Groups
      - Improve ACL/Permission management GUI
    * Pages
-     + Tooltips (publication and last revision date)
      - Markdown toolbar
      - Child pages
      - TOC option
@@ -26,7 +25,6 @@ TODO
  - Pages system
    = TOC (Table Of Contents) generation
    - Nested/Child pages
-   + Hide metadata
  - Localization system
  - Documentation (API, tutorials/examples, usage)
  - Template parser

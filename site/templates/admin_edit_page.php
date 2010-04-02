@@ -4,7 +4,8 @@
 <div id="admin-content">
 	<h2><?php echo u_htmlencode($page_title) ?></h2>
 
-	<p>Info</p>
+	<p>Writen by <?php echo u_htmlencode($values['author']) ?> on <?php echo $values['pub_date'] ?>.
+	<?php echo $values['edit_date'] ? 'Last edited on '.$values['edit_date'].'' : '' ?></p>
 
 	<?php if (count($errors) > 0): ?>
 	<h4><strong>The following errors need to be corrected before a new page can be added:</strong></h4>
@@ -29,7 +30,7 @@
 		<p>
 			<label<?php if (isset($errors['content'])) echo ' class="error-field"' ?>>
 				<strong>Content <span>(required)</span></strong>
-				<textarea name="form[content]" rows="15" cols="40"><?php echo u_htmlencode($values['content']) ?></textarea>
+				<textarea name="form[content]" rows="20" cols="40"><?php echo u_htmlencode($values['content']) ?></textarea>
 			</label>
 		</p>
 		<p class="description"><a href="http://daringfireball.net/projects/markdown/syntax">Markdown</a> can be used to format the content of the

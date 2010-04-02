@@ -5,8 +5,6 @@
 	<h2>Pages</h2>
 
 	<?php if (isset($pages[0])): ?>
-	<p>Info.</p>
-
 	<?php echo $pagination ?>
 
 	<form accept-charset="utf-8" method="post" action="<?php echo url('admin/pages/batch') ?>">

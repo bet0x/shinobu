@@ -18,13 +18,18 @@ class edit_controller extends CmsWebController
 
 		// Get page information
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.show_meta
-			FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')
+		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.pub_date,
+			p.edit_date, p.show_meta, u.username AS author
+			FROM '.DB_PREFIX.'pages AS p  LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id WHERE p.id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		$this->_page_data = $result->fetch_assoc();
 		if (is_null($this->_page_data))
 			return $this->send_error(404);
+
+		$this->load_timedate();
+		$this->_page_data['pub_date'] = $this->timedate->date($this->_page_data['pub_date']);
+		$this->_page_data['edit_date'] = $this->_page_data['edit_date'] != '0' ? $this->timedate->date($this->_page_data['edit_date']) : null;
 	}
 
 	public function GET($args)
