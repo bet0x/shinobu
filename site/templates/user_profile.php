@@ -1,5 +1,7 @@
 <?php require 'header.php' ?>
 
+<h2><?php echo u_htmlencode($page_title) ?></h2>
+
 <p>On this page you can change or update your password, settings and e-mail address. Under each field there is a description that explains
 everything. Please read those texts.</p>
 

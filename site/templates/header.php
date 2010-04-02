@@ -13,7 +13,7 @@
 <div id="header">
 	<h1>
 		<a href="<?php echo SYSTEM_BASE_URL ?>"><?php echo u_htmlencode($website_title) ?></a>
-		<span><?php echo isset($website_section) ? u_htmlencode($website_section) : u_htmlencode($page_title) ?></span>
+		<?php echo isset($website_section) ? '<span>'.u_htmlencode($website_section).'</span>' : '' ?>
 	</h1>
 
 	<div id="main-navigation">

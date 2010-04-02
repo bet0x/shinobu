@@ -1,5 +1,7 @@
 <?php require 'header.php' ?>
 
+<h2><?php echo u_htmlencode($page_title) ?></h2>
+
 <p>By registering yourself on this website you will gain access to member-only features on this website. Fill in all the required fields and
 click <em>register</em>.</p>
 

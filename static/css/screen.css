@@ -47,11 +47,11 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 ---------------------------------------------------------*/
 
 /* Header */
-#header { position: relative;padding: 55px 0 1em; border-bottom: 1px solid #ddd }
+#header { position: relative;padding: 55px 0 1.2em;border-bottom: 1px solid #ddd }
 #header h1 { margin: 0 }
 #header h1 a:link, #header h1 a:visited { color: #222;text-decoration: none }
 #header h1 a:hover, #header h1 a:active { border-bottom: 2px solid #000 }
-#header h1 span { font-size: 0.5em;color: #555 }
+#header h1 span { line-height: 1em;font-size: 0.5em;color: #555 }
 
 /* Top navigation bar */
 #main-navigation { position: absolute;top: 0;right: 0 }
@@ -71,7 +71,7 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 /* --- Footer
 ---------------------------------------------------------*/
 
-#footer { margin-top: 1.5em;border-top: 1px solid #dcdcdc;clear: both }
+#footer { border-top: 1px solid #dcdcdc;clear: both }
 #footer p { margin: 0;padding: 1em 0;font-size: 0.9em }
 #poweredby { float: right }
 
@@ -167,7 +167,6 @@ label.error-field input:focus, label.error-field textarea:focus
 
 #admin-content h2:first-child
     { margin-top: 0.89em }
-#admin-content form { margin-bottom: 0 }
 
 /* --- Misc
 ---------------------------------------------------------*/

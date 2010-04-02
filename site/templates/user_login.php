@@ -1,5 +1,7 @@
 <?php require 'header.php' ?>
 
+<h2><?php echo u_htmlencode($page_title) ?></h2>
+
 <?php if ($error): ?>
 <p>The username or password you have entered is not correct, please try again.</p>
 <?php else: ?>
