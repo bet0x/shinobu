@@ -7,6 +7,8 @@
 	<p>New users can be added with the <em>add a new user</em> button. Multiple users can be deleted at the same time by checking the
 	   checkboxes and clicking the <em>delete</em> button. You can not delete yourself.</p>
 
+	<?php echo $pagination ?>
+
 	<form accept-charset="utf-8" method="post" action="<?php echo url('admin/users/batch') ?>">
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>

@@ -14,8 +14,12 @@ class default_controller extends CmsWebController
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_4))
 			$this->redirect(SYSTEM_BASE_URL);
 
+		$current_page = $this->request['args'] ? intval($this->request['args']) : 1;
+		$start_offset = ($current_page-1) * 20;
+
 		$m_items = array();
-		$result = $this->db->query('SELECT id, name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
+		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS id, name, path FROM '.DB_PREFIX.'menu
+			ORDER BY position, name ASC LIMIT '.$start_offset.',20')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
@@ -23,13 +27,21 @@ class default_controller extends CmsWebController
 			while ($row = $result->fetch_assoc())
 				$m_items[] = $row;
 		}
+		elseif ($current_page !== 1)
+			return $this->send_error(404);
+
+		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error, __FILE__, __LINE__);
+		list($item_count) = $result->fetch_row();
+
+		$pagination = pagination($item_count, 20, $current_page, url('admin/menu:%d'));
 
 		return tpl::render('admin_menu', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Menu',
 			'subsection' => 'menu',
 			'admin_perms' => $this->acl->get('administration'),
-			'm_items' => $m_items
+			'm_items' => $m_items,
+			'pagination' => $pagination
 			));
 	}
 }

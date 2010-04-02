@@ -7,6 +7,8 @@
 	<?php if (isset($pages[0])): ?>
 	<p>Info.</p>
 
+	<?php echo $pagination ?>
+
 	<form accept-charset="utf-8" method="post" action="<?php echo url('admin/pages/batch') ?>">
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>

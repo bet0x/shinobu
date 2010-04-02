@@ -14,9 +14,12 @@ class default_controller extends CmsWebController
 		if (!$this->user->authenticated() || !$this->acl->check('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 
+		$current_page = $this->request['args'] ? intval($this->request['args']) : 1;
+		$start_offset = ($current_page-1) * 20;
+
 		$users = array();
-		$result = $this->db->query('SELECT u.id, u.username, g.user_title FROM '.DB_PREFIX.'users AS u, '.
-			DB_PREFIX.'usergroups AS g WHERE g.id=u.group_id')
+		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS u.id, u.username, g.user_title FROM '.DB_PREFIX.'users AS u, '.
+			DB_PREFIX.'usergroups AS g WHERE g.id=u.group_id ORDER BY u.username LIMIT '.$start_offset.',20')
 			or error($this->db->error, __FILE__, __LINE__);
 
 		if ($result->num_rows > 0)
@@ -24,13 +27,21 @@ class default_controller extends CmsWebController
 			while ($row = $result->fetch_assoc())
 				$users[] = $row;
 		}
+		else
+			return $this->send_error(404);
+
+		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error, __FILE__, __LINE__);
+		list($user_count) = $result->fetch_row();
+
+		$pagination = pagination($user_count, 20, $current_page, url('admin/users:%d'));
 
 		return tpl::render('admin_users', array(
 			'website_section' => 'Administration',
 			'page_title' => 'Users',
 			'subsection' => 'users',
 			'admin_perms' => $this->acl->get('administration'),
-			'users' => $users
+			'users' => $users,
+			'pagination' => $pagination
 			));
 	}
 }

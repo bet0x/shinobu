@@ -12,6 +12,8 @@
 	   <strong>slash</strong> (/) are external paths anything else will be transformed intro something like
 	   <strong>http://example.com/?q=user</strong> (an internal path).</p>
 
+	<?php echo $pagination ?>
+
 	<form accept-charset="utf-8" method="post" action="<?php echo url('admin/menu/batch') ?>">
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>

@@ -10,6 +10,8 @@
 	<p class="note"><strong>Note:</strong> Groups that contain users can not be deleted. All users in those groups should be moved
 	                before they can be deleted.</p>
 
+	<?php echo $pagination ?>
+
 	<ul class="group-list">
 	<?php foreach ($usergroups as $index => $group): ?>
 		<li class="row-<?php echo $index % 2 ? 'odd' : 'even' ?>">

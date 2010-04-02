@@ -12,11 +12,6 @@ TODO
      = Configuration options for HTML meta tags in the configuration file
    * Groups
      - Improve ACL/Permission management GUI
-     + Pagination in group list
-   * Users
-     + Pagination
-   * Menu
-     + Pagination
    * Pages
      + Tooltips (publication and last revision date)
      - Markdown toolbar
