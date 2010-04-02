@@ -18,11 +18,11 @@
 			<div class="name"><strong><?php echo u_htmlencode($group['name']) ?></strong></div>
 			<div class="description"><?php echo $group['description'] ? u_htmlencode($group['description']) : '&nbsp;' ?></div>
 			<div class="actions">
-				<a href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a> &middot;
+				<a class="tiny-button" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>" title="Edit">/</a>
 				<?php if ($group['user_count'] > 0): ?>
-				<span class="disabled-link">Delete</span>
+				<span class="tiny-button">X</span>
 				<?php else: ?>
-				<a href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>">Delete</a>
+				<a class="tiny-button" href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
 				<?php endif ?>
 			</div>
 		</li>

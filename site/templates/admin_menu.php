@@ -24,8 +24,8 @@
 				<div class="checkbox"><input id ="ch-<?php echo $item['id'] ?>" type="checkbox" name="m_items[]" value="<?php echo $item['id'] ?>" /></div>
 				<div class="name"><label for="ch-<?php echo $item['id'] ?>"><strong><?php echo u_htmlencode($item['name']) ?></strong></label> (<?php echo u_htmlencode($item['path']) ?>)</div>
 				<div class="actions">
-					<a href="<?php echo url('admin/menu/edit:'.$item['id']) ?>">Edit</a> &middot;
-					<a href="<?php echo url('admin/menu/delete:'.$item['id']), '&amp;', xsrf::token() ?>">Delete</a>
+					<a class="tiny-button" href="<?php echo url('admin/menu/edit:'.$item['id']) ?>" title="Edit">/</a>
+					<a class="tiny-button" href="<?php echo url('admin/menu/delete:'.$item['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
 				</div>
 			</li>
 		<?php endforeach ?>

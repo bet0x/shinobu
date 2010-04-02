@@ -19,8 +19,8 @@
 				<div class="checkbox"><input id ="ch-<?php echo $user['id'] ?>" type="checkbox" name="users[]" value="<?php echo $user['id'] ?>" /></div>
 				<div class="name"><label for="ch-<?php echo $user['id'] ?>"><strong><?php echo u_htmlencode($user['username']) ?></strong></label> (<?php echo u_htmlencode($user['user_title']) ?>)</div>
 				<div class="actions">
-					<a href="<?php echo url('admin/users/edit:'.$user['id']) ?>">Edit</a> &middot;
-					<a href="<?php echo url('admin/users/delete:'.$user['id']), '&amp;', xsrf::token() ?>">Delete</a>
+					<a class="tiny-button" href="<?php echo url('admin/users/edit:'.$user['id']) ?>" title="Edit">/</a>
+					<a class="tiny-button" href="<?php echo url('admin/users/delete:'.$user['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
 				</div>
 			</li>
 		<?php endforeach ?>

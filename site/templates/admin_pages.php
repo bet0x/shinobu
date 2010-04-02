@@ -19,8 +19,8 @@
 				<div class="checkbox"><input id ="ch-<?php echo $page['id'] ?>" type="checkbox" name="pages[]" value="<?php echo $page['id'] ?>" /></div>
 				<div class="name"><label for="ch-<?php echo $page['id'] ?>"><strong><?php echo u_htmlencode($page['title']) ?></strong></label> (<?php echo u_htmlencode($page['author']) ?>)</div>
 				<div class="actions">
-					<a href="<?php echo url('admin/pages/edit:'.$page['id']) ?>">Edit</a> &middot;
-					<a href="<?php echo url('admin/pages/delete:'.$page['id']), '&amp;', xsrf::token() ?>">Delete</a>
+					<a class="tiny-button" href="<?php echo url('admin/pages/edit:'.$page['id']) ?>" title="Edit">/</a>
+					<a class="tiny-button" href="<?php echo url('admin/pages/delete:'.$page['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
 				</div>
 			</li>
 		<?php endforeach ?>

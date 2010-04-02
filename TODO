@@ -26,7 +26,7 @@ TODO
  - Pages system
    = TOC (Table Of Contents) generation
    - Nested/Child pages
-   - Metadata
+   + Hide metadata
  - Localization system
  - Documentation (API, tutorials/examples, usage)
  - Template parser
