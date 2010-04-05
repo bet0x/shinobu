@@ -4,7 +4,6 @@ TODO
 = Not top priority
 * In progress
 - Still needs to be done
-+ Needs to be done before Alpha1
 
  - Administration panel
    - Options
@@ -28,4 +27,4 @@ TODO
  - Localization system
  - Documentation (API, tutorials/examples, usage)
  - Template parser
- + An installer
+ - An installer

@@ -1,13 +1,13 @@
 Shinobu 0.4
 ===========
 
-Shinobu is a minimalistic framework/CMS written in PHP5 and uses MySQLi
+Shinobu is a simple framework/CMS written in PHP5 and uses MySQLi
 to store its data. My intention if not to provide a big, feature overloaded
 system, but a simple system that provides some basic features and is easy to
 extend (for a PHP developer) and easy to use.
 
-Note: Shinobu is currently under development and it may happen that some
-things do not work.
+Shinobu is currently under development and it may happen that some
+things do not work. And one should not use Shinobu in production.
 
 Download
 --------
@@ -17,14 +17,26 @@ Git.  Just use the following command:
 
     git clone git://github.com/FSX/shinobu.git
 
-An archived version can also be downloaded from http://github.com/FSX/shinobu.
+Or download a Zip/Tarball from:
+
+ - Zip: http://github.com/FSX/shinobu/zipball/master
+ - Tar: http://github.com/FSX/shinobu/tarball/master
+
+All tagged releases can be found at:
+
+ - http://github.com/FSX/shinobu/downloads
 
 Installation
 ------------
 
- 1. Import mysql.sql into your database.
- 2. Rename include/sample.config.php to include/config.php
- 3. Adjust all the needed variables in include/config.php
+ 1. Create a database for Shinobu.
+ 2. Import mysql.sql into the database you just created.
+ 3. Rename `site/sample.config.php` to `site/config.php`
+ 4. Adjust database and cookie settings in `site/config.php`.
+ 5. Go to the URL where Shinobu is installed.
+
+There are a umber of example users imported in the database. All these users
+have the same password, `password`.
 
 Requirements
 ------------
@@ -37,7 +49,7 @@ Requirements
 Contact/Support
 ---------------
 
-You can find me at #shinobu on irc.irchighway.net.
+You can find me at `#shinobu` on `irc.irchighway.net`.
 
 License
 -------

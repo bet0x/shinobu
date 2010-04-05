@@ -21,7 +21,7 @@ class page_controller extends CmsWebController
 		if (is_null($page_data))
 			return $this->send_error(404);
 
-		if ($page_data['is_private'] == 1 && !$this->user->authenticated())
+		if ($page_data['is_private'] == 1 && !$this->user->authenticated)
 			$this->redirect(url('user/login'));
 
 		if ($page_data['show_meta'] == '1')

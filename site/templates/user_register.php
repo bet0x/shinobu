@@ -23,7 +23,7 @@ click <em>register</em>.</p>
 			<input type="text" name="form[username]" maxlength="20"<?php echo ' value="'.u_htmlencode($values['username']).'"' ?> />
 		</label>
 	</p>
-	<p class="description">A unique (nick)name, which is used to identify you. A username can be between 3 and 40 characters long.
+	<p class="description">A unique (nick)name, which is used to identify you. A username can be between 2 and 20 characters long.
 	                       After the registration the username can not be changed. Only if you have a really good reason.</p>
 	<p class="multiple-fields">
 		<label<?php if (isset($errors['password'])) echo ' class="error-field"' ?>>
@@ -44,7 +44,7 @@ click <em>register</em>.</p>
 		</label>
 		<label class="confirm-field<?php if (isset($errors['email'])) echo ' error-field' ?>">
 			<strong>Confirm e-mail address <span>(required)</span></strong>
-			<input type="text" name="form[confirm_email]" maxlength="40" />
+			<input type="text" name="form[confirm_email]" maxlength="255" />
 		</label>
 	</p>
 	<p class="description">Your e-mail address will not be visible to members or visitors, except administrators and moderators.
