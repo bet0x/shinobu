@@ -11,7 +11,7 @@ class user
 {
 	private $data_fields = array('id', 'username', 'password', 'salt', 'hash', 'email', 'group_id'),
 	        $db = null;
-	public $data = array(), $authenticated = false;
+	public $data = array(), $authenticated = false, $acl = array();
 
 	public function __construct(db $db = null)
 	{
@@ -25,7 +25,7 @@ class user
 		if (($cookie = get_cookie('user')))
 		{
 			// Get user data
-			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, g.id AS group_id, g.user_title AS title '.
+			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, u.group_id, g.user_title AS title '.
 				'FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
 				'WHERE u.id='.intval($cookie['id']).' AND g.id=u.group_id LIMIT 1')
 				or error($this->db->error, __FILE__, __LINE__);
@@ -40,6 +40,7 @@ class user
 		}
 	}
 
+	// Remove from this class
 	/* Create a login cookie for the user (only affects the current user/visitor)
 	1 = successful login, 2 = already logged in, 3 = user does not exist,
 	4 = wrong password */
@@ -54,7 +55,8 @@ class user
 		$password = trim($password);
 
 		// Check if user exists and fetch data
-		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users WHERE username="'.$username.'" LIMIT 1')
+		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users
+			WHERE username="'.$username.'" LIMIT 1')
 			or error($this->db->error, __FILE__, __LINE__);
 		$fetch = $result->fetch_row();
 
@@ -79,6 +81,32 @@ class user
 		set_cookie('user', null, time()-3600);
 	}
 
+	public function get_acl($acl_id)
+	{
+		if (isset($this->acl[$acl_id]))
+			return $this->acl[$acl_id];
+
+		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->data['group_id'].'
+			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error, __FILE__, __LINE__);
+
+		if ($result->num_rows === 0)
+			return false;
+
+		$permissions = $result->fetch_row();
+		$this->acl[$acl_id] = (int) $permissions[0];
+
+		return $this->acl[$acl_id];
+	}
+
+	public function check_acl($acl_id, $bits)
+	{
+		if (!isset($this->get_acl[$acl_id]))
+			$this->get_acl('administration');
+
+		return $this->acl[$acl_id] & $bits;
+	}
+
+	// Remove from this class
 	// Add new user
 	public function add($username, $group_id, $password, $email)
 	{
@@ -102,6 +130,7 @@ class user
 		return $this->db->insert_id;
 	}
 
+	// Remove from this class
 	// Update user data
 	public function update($id, $new_data = array())
 	{
@@ -122,22 +151,6 @@ class user
 			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$this->db->escape($v).'"';
 
 		return $this->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
-			or error($this->db->error, __FILE__, __LINE__);
-	}
-
-	// Remove a user
-	public function remove($id)
-	{
-		// Check if user exists
-		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE id='.intval($id).' LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
-		$fetch = $result->fetch_row();
-
-		if (!$fetch)
-			return false;
-
-		// Remove user
-		return $this->db->query('DELETE FROM '.DB_PREFIX.'users WHERE id='.intval($id))
 			or error($this->db->error, __FILE__, __LINE__);
 	}
 }

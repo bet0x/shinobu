@@ -28,7 +28,7 @@ class edit_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_6))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get usergroup data
@@ -65,7 +65,7 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => $this->_group_data,
 			'errors' => array(),
 			'permissions' => $this->_group_permissions
@@ -143,7 +143,7 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => $this->_group_data,
 			'errors' => $errors,
 			'permissions' => $this->_group_permissions

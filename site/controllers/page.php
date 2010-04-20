@@ -12,6 +12,15 @@ class page_controller extends CmsWebController
 	public function GET($args)
 	{
 		$this->request['args'] = intval($this->request['args']);
+
+		if (($page_data = cache::read('page_'.$this->request['args'])))
+		{
+			return tpl::render('page', array(
+				'page_title' => $page_data['title'],
+				'page_data' => $page_data,
+				));
+		}
+
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_private, p.show_meta, p.pub_date, p.edit_date, u.username AS author
 			FROM '.DB_PREFIX.'pages AS p LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id
 			WHERE p.id='.$this->request['args'].' AND p.is_published=1 LIMIT 1')
@@ -33,6 +42,8 @@ class page_controller extends CmsWebController
 
 		require SYS_LIB.'/markdown/markdown.php';
 		$page_data['content'] = Markdown($page_data['content']);
+
+		cache::write('page_'.$this->request['args'], $page_data);
 
 		return tpl::render('page', array(
 			'page_title' => $page_data['title'],

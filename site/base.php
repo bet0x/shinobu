@@ -25,7 +25,6 @@ abstract class CmsWebController extends BaseController
 		$this->db = $this->load_module('db');
 		$this->config = $this->load_module('config', $this->db);
 		$this->user = $this->load_module('user', $this->db);
-		$this->acl = $this->load_module('acl', $this->db);
 
 		// Set some template variables
 		tpl::set('website_title', $this->config->website_title);
@@ -34,25 +33,30 @@ abstract class CmsWebController extends BaseController
 		// Do some extra things for authenticated users
 		if ($this->user->authenticated)
 		{
-			$this->acl->set_gid($this->user->data['group_id']);
-
 			tpl::set('username', $this->user->data['username']);
-			tpl::set('admin_view', $this->acl->check('administration', ACL_PERM_1));
+			tpl::set('admin_view', $this->user->check_acl('administration', ACL_PERM_1));
 		}
 
 		// Load main menu
-		$main_menu = array();
-		$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
-			or error($this->db->error, __FILE__, __LINE__);
+		if (!($main_menu = cache::read('main_menu')))
+		{
+			$main_menu = array();
+			$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
+				or error($this->db->error, __FILE__, __LINE__);
 
-		if ($result->num_rows > 0)
-			while ($row = $result->fetch_assoc())
+			if ($result->num_rows > 0)
 			{
-				if ($row['path'][0] != '/' && !preg_match('/^(https?|ftp|irc)/i', $row['path']))
-					$row['path'] = url($row['path']);
+				while ($row = $result->fetch_assoc())
+				{
+					if ($row['path'][0] != '/' && !preg_match('/^(https?|ftp|irc)/i', $row['path']))
+						$row['path'] = url($row['path']);
 
-				$main_menu[] = $row;
+					$main_menu[] = $row;
+				}
 			}
+
+			cache::write('main_menu', $main_menu);
+		}
 
 		tpl::set('main_menu', $main_menu);
 

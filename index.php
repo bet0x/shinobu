@@ -7,7 +7,7 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-#$start_timer = microtime();
+$start_timer = microtime();
 
 error_reporting(E_ALL);
 define('SYS', dirname(__FILE__));
@@ -20,8 +20,25 @@ setlocale(LC_CTYPE, 'C');
 require SYS.'/site/config.php';
 require SYS_INCLUDE.'/functions.php';
 
-// Disable evil stuff
-disable_magic_quotes();
+// Turn off magic_quotes_runtime
+if (get_magic_quotes_runtime())
+    set_magic_quotes_runtime(0);
+
+// Strip slashes from GET/POST/COOKIE (if magic_quotes_gpc is enabled)
+if (get_magic_quotes_gpc())
+{
+	function stripslashes_array($array)
+	{
+		return is_array($array) ? array_map('stripslashes_array', $array) : stripslashes($array);
+	}
+
+	$_GET = stripslashes_array($_GET);
+	$_POST = stripslashes_array($_POST);
+	$_COOKIE = stripslashes_array($_COOKIE);
+	$_REQUEST = stripslashes_array($_REQUEST);
+}
+
+// Unset any variables instantiated as a result of register_globals being enabled
 unregister_globals();
 
 if (defined('UTF8'))
@@ -71,6 +88,7 @@ $application = new Application();
 echo $application->output;
 
 // This is just for testing
-#echo "\n\n", round(get_microtime(microtime()) - get_microtime($start_timer), 5),
-#     's - ', file_size(memory_get_usage()), ' - ',
-#     file_size(memory_get_peak_usage());
+$stop_timer = microtime();
+echo "\n\n", round(get_microtime($stop_timer) - get_microtime($start_timer), 5),
+     's - ', file_size(memory_get_usage()), ' - ',
+     file_size(memory_get_peak_usage());

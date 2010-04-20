@@ -13,7 +13,7 @@ class edit_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get page information
@@ -39,7 +39,7 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Edit page: '.$this->_page_data['title'],
 			'subsection' => 'pages',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'errors' => array(),
 			'values' => $this->_page_data
 			));
@@ -86,6 +86,8 @@ class edit_controller extends CmsWebController
 				edit_date='.$now.' WHERE id='.$this->request['args'])
 				or error($this->db->error, __FILE__, __LINE__);
 
+			cache::clear('page_'.$this->request['args'].'.json');
+
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The page has been successfully updated. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
@@ -97,7 +99,7 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Edit page: '.$this->_page_data['title'],
 			'subsection' => 'pages',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'errors' => array(),
 			'values' => $this->_page_data
 			));

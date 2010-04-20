@@ -18,6 +18,9 @@ class config
 	{
 		$this->db = $db;
 
+		if (($this->config = cache::read('config')))
+			return;
+
 		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config')
 			or error($this->db->error, __FILE__, __LINE__);
 
@@ -42,6 +45,8 @@ class config
                        	$this->config[$row['name']] = $row['value'];
 			}
 		}
+
+		cache::write('config', $this->config);
 	}
 
 	public function __get($name)

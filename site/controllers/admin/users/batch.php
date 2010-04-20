@@ -11,7 +11,7 @@ class batch_controller extends CmsWebController
 {
 	public function POST($args)
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_3))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_3))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))

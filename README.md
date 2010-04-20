@@ -33,7 +33,8 @@ Installation
  2. Import mysql.sql into the database you just created.
  3. Rename `site/sample.config.php` to `site/config.php`
  4. Adjust database and cookie settings in `site/config.php`.
- 5. Go to the URL where Shinobu is installed.
+ 5. Create a directory, called `cache`, in `site/` and make it writable.
+ 6. Go to the URL where Shinobu is installed.
 
 There are a umber of example users imported in the database. All these users
 have the same password, `password`.

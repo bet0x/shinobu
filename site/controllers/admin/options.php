@@ -13,7 +13,7 @@ class options_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_5))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
@@ -34,7 +34,7 @@ class options_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),
 			'time_format_example' => $this->timedate->time(time()),
@@ -105,6 +105,8 @@ class options_controller extends CmsWebController
 
 			$stmt->close();
 
+			cache::clear('config.json');
+
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>All options have been successfully updated. You will be redirected to the '.
 				                      'previous page in 2 seconds.</p>',
@@ -117,7 +119,7 @@ class options_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->acl->get('administration'),
+			'admin_perms' => $this->user->get_acl('administration'),
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),
 			'time_format_example' => $this->timedate->time(time()),

@@ -15,7 +15,6 @@
 class Application
 {
 	public $output = '';
-	private $request_methods = array('GET', 'POST', 'PUT', 'DELETE', 'HEAD');
 
 	public function __construct()
 	{
@@ -63,7 +62,7 @@ class Application
 		// Get request method (Default is GET)
 		if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest')
 			$request_type = 'AJAX';
-		elseif (in_array($_SERVER['REQUEST_METHOD'], $this->request_methods))
+		else
 			$request_type = $_SERVER['REQUEST_METHOD'];
 
 		// Set controller arguments
@@ -75,10 +74,10 @@ class Application
 		// Start the controller
 		$controller_instance = new $class_name($request);
 
-		if ($controller_instance->interrupt)
-			$this->output = $controller_instance->pre_output;
-		else
+		if (!$controller_instance->interrupt)
 			$this->output = $controller_instance->$request_type($args);
+		else
+			$this->output = $controller_instance->pre_output;
 	}
 }
 
@@ -125,6 +124,53 @@ class tpl
 
 		if ($clear)
 			self::clear();
+	}
+}
+
+// Cache class
+class cache
+{
+	// Write a file to the cache
+	static public function rwrite($filename, $data)
+	{
+		return file_put_contents(SYS_CACHE.'/'.$filename, $data);
+	}
+
+	// Read a file from the cache
+	static public function rread($filename)
+	{
+		return file_get_contents(SYS_CACHE.'/'.$filename);
+	}
+
+	// Read a Json file from the cache, decode it and return the data
+	static public function read($name, $assoc = true)
+	{
+		return json_decode(@file_get_contents(SYS_CACHE.'/'.$name.'.json'), $assoc);
+	}
+
+	// Write a Json to the cache
+	static public function write($name, $data)
+	{
+		return file_put_contents(SYS_CACHE.'/'.$name.'.json', json_encode($data));
+	}
+
+	// Check if file exists in the cache
+	static public function exists($filename)
+	{
+		return file_exists(SYS_CACHE.'/'.$filename);
+	}
+
+	// Clear specified files or clear the whole cache
+	static public function clear()
+	{
+		$files = func_get_args();
+
+		if (!isset($files[0]))
+			$files = scandir(SYS_CACHE);
+
+		foreach ($files as $file)
+			if ($file != '.' && $file != '..')
+				@unlink(SYS_CACHE.'/'.$file);
 	}
 }
 
@@ -242,12 +288,13 @@ class BaseController
 
 	/* This is an empty function that's always executed by the constructor of
 	the base controller.  This function can be overwritten to execute  or
-	process certin things before the request method function is executed. */
+	process certain things before the request method function is executed. */
 	protected function prepare()
 	{
 		return null;
 	}
 
+	// Loads a module
 	protected function load_module($name, $args = null, $suffix = '')
 	{
 		static $modules = array();
@@ -256,12 +303,7 @@ class BaseController
 			return $modules[$name.$suffix];
 
 		if (!isset($modules[$name]))
-		{
-			if (!file_exists(SYS_INCLUDE.'/modules/'.$name.'.php'))
-				return false;
-
 			require SYS_INCLUDE.'/modules/'.$name.'.php';
-		}
 
 		$modules[$name.$suffix] = new $name($args);
 		return $modules[$name.$suffix];
@@ -294,7 +336,7 @@ class BaseController
 		header('location: '.$location); exit;
 	}
 
-	/* Be default all request method function return a 405 (Method Not Allowed)
+	/* By default all request method function return a 405 (Method Not Allowed)
 	error. Controllers should extend the BaseController and overwrite these
 	function. */
 	public function GET($args) { return $this->send_error(405); }

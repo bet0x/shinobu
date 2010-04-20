@@ -11,7 +11,7 @@ class batch_controller extends CmsWebController
 {
 	public function POST($args)
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
@@ -38,6 +38,7 @@ class batch_controller extends CmsWebController
 			{
 				$stmt->bind_param('i', $pid);
 				$stmt->execute();
+				cache::clear('page_'.$pid.'.json');
 				$deleted_row_count += $stmt->affected_rows;
 			}
 
@@ -61,6 +62,7 @@ class batch_controller extends CmsWebController
 			{
 				$stmt->bind_param('ii', $publish, $pid);
 				$stmt->execute();
+				cache::clear('page_'.$pid.'.json');
 				$changed_row_count += $stmt->affected_rows;
 			}
 

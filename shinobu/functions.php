@@ -7,32 +7,10 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// Disable magic quotes
-function disable_magic_quotes()
-{
-	// Turn off magic_quotes_runtime
-	if (get_magic_quotes_runtime())
-		set_magic_quotes_runtime(false);
-
-	// Strip slashes from GET/POST/COOKIE (if magic_quotes_gpc is enabled)
-	if (get_magic_quotes_gpc())
-	{
-		function stripslashes_array($array)
-		{
-			return is_array($array) ? array_map('stripslashes_array', $array) : stripslashes($array);
-		}
-
-		$_GET = stripslashes_array($_GET);
-		$_POST = stripslashes_array($_POST);
-		$_COOKIE = stripslashes_array($_COOKIE);
-		$_REQUEST = stripslashes_array($_REQUEST);
-	}
-}
-
 // Unset any variables instantiated as a result of register_globals being enabled
 function unregister_globals()
 {
-	$register_globals = @ini_get('register_globals');
+	$register_globals = ini_get('register_globals');
 	if ($register_globals === '' || $register_globals === '0' || strtolower($register_globals) === 'off')
 		return;
 
@@ -158,26 +136,34 @@ function convert_linebreaks($str)
 // Get extension from filename (returns the extension without the dot)
 function get_ext($file_name)
 {
-	return strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+	return strtolower(substr($filename, strrpos($filename, '.') + 1));
 }
 
 // Converts the file size in bytes to a human readable file size
-function file_size($size)
+function file_size($size, $base10 = false)
 {
-	$units = array('B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB');
+	static $units;
 
-	for ($i = 0; $size > 1024; $i++)
-		$size /= 1024;
+    if (!isset($units))
+        $units = array(1000 => array('kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'),
+                       1024 => array('KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'));
 
-	return round($size, 2).' '.$units[$i];
+    $base = $base10 ? 1000 : 1024;
+
+	for ($i = 0; $size > $base; $i++)
+    {
+		$size /= $base;
+
+        if ($size < $base)
+            return round($size, 2).' '.$units[$base][$i];
+    }
+
+    return;
 }
 
 // Get microtime
 function get_microtime($microtime = false)
 {
-	if (!$microtime)
-		$microtime = microtime();
-
 	list($usec, $sec) = explode(' ', $microtime);
 	return ((float)$usec + (float)$sec);
 }

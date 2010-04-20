@@ -11,7 +11,7 @@ class delete_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated || !$this->acl->check('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($_GET[xsrf::token()]))
@@ -29,6 +29,8 @@ class delete_controller extends CmsWebController
 		// Delete menu item
 		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'])
 			or error($this->db->error, __FILE__, __LINE__);
+
+		cache::clear('page_'.$this->request['args'].'.json');
 
 		// Redirect
 		return tpl::render('redirect', array(

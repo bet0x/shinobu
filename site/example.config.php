@@ -37,6 +37,7 @@ define('SYS_INCLUDE', SYS.'/shinobu');
 define('SYS_LIB', SYS_INCLUDE.'/lib');
 define('SYS_CONTROL', SYS.'/site/controllers');
 define('SYS_TEMPLATE', SYS.'/site/templates');
+define('SYS_CACHE', SYS.'/site/cache');
 define('SYS_STATIC', SYS.'/static');
 
 // UTF-8 Configuration (comment all 3 constants to disable the UTF-8 library)
