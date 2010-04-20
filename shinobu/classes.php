@@ -14,7 +14,7 @@
 // the controller and the method that needs to respond to the request.
 class Application
 {
-	public $output = '';
+	public $output;
 
 	public function __construct()
 	{
@@ -81,30 +81,51 @@ class Application
 	}
 }
 
-// The template class
+/**
+ * A simple template class.
+ */
 class tpl
 {
 	static private $vars = array();
 
-	// Set a variable
+	/**
+	 * Set a template variable.
+	 *
+	 * @param string $ident
+	 * @param mixed $value
+	 */
 	static public function set($ident, $value)
 	{
 		self::$vars[$ident] = $value;
 	}
 
-	// Get a variable.  Returns false if it doesn't exist.
+	/**
+	 * Get a template variable.
+	 *
+	 * @param string $ident
+	 * @return mixed
+	 */
 	static public function get($ident)
 	{
-		return isset(self::$vars[$ident]) ? self::$vars[$ident] : false;
+		return self::$vars[$ident];
 	}
 
-	// Clear all variables
+	/**
+	 * Clear all template variables.
+	 */
 	static public function clear()
 	{
 		self::$vars = array();
 	}
 
-	// Render the template
+	/**
+	 * Render a template.
+	 *
+	 * @param string $template_name
+	 * @param array $local_vars
+	 * @param boolean $clear
+	 * @return string
+	 */
 	static public function render($template_name, $local_vars = false, $clear = true)
 	{
 		if (file_exists(SYS_TEMPLATE.'/'.$template_name.'.php'))
@@ -127,40 +148,74 @@ class tpl
 	}
 }
 
-// Cache class
+/**
+ * A simple cache class.
+ */
 class cache
 {
-	// Write a file to the cache
+	/**
+	 * Write a file to the cache.
+	 *
+	 * @param string $filename
+	 * @param string $data
+	 * @return mixed Returns the number of bytes that were written to the file, or FALSE on failure.
+	 */
 	static public function rwrite($filename, $data)
 	{
-		return file_put_contents(SYS_CACHE.'/'.$filename, $data);
+		return @file_put_contents(SYS_CACHE.'/'.$filename, $data);
 	}
 
-	// Read a file from the cache
+	/**
+	 * Read a file from the cache.
+	 *
+	 * @param string $filename
+	 * @return mixed Returns the read data or FALSE on failure.
+	 */
 	static public function rread($filename)
 	{
-		return file_get_contents(SYS_CACHE.'/'.$filename);
+		return @file_get_contents(SYS_CACHE.'/'.$filename);
 	}
 
-	// Read a Json file from the cache, decode it and return the data
+	/**
+	 * Read a Json file from the cache.
+	 *
+	 * @param string $name
+	 * @param boolean $assoc
+	 * @return mixed
+	 */
 	static public function read($name, $assoc = true)
 	{
 		return json_decode(@file_get_contents(SYS_CACHE.'/'.$name.'.json'), $assoc);
 	}
 
-	// Write a Json to the cache
+	/**
+	 * Write a Json file to the cache.
+	 *
+	 * @param string $name
+	 * @param mixed $data
+	 * @return mixed Returns the number of bytes that were written to the file, or FALSE on failure.
+	 */
 	static public function write($name, $data)
 	{
 		return file_put_contents(SYS_CACHE.'/'.$name.'.json', json_encode($data));
 	}
 
-	// Check if file exists in the cache
+	/**
+	 * Check file existance in the cache
+	 *
+	 * @param string $filename
+	 * @return boolean
+	 */
 	static public function exists($filename)
 	{
 		return file_exists(SYS_CACHE.'/'.$filename);
 	}
 
-	// Clear specified files or clear the whole cache
+	/**
+	 * Clear specified file(s) or clear the whole cache.
+	 *
+	 * @param string
+	 */
 	static public function clear()
 	{
 		$files = func_get_args();
@@ -174,14 +229,22 @@ class cache
 	}
 }
 
-// A class with web related functions
+/**
+ * A simple XSRF class.
+ */
 class xsrf
 {
 	static private $_token = false;
 
-	// Generate an XSRF token and store it in a cookie, but first check if the
-	// cookie already exists or if the token is already generated.  Then return it.
-	// See: http://en.wikipedia.org/wiki/Cross-site_request_forgery
+	/**
+	 * Generate an XSRF token.
+	 *
+	 * Generate an XSRF token and store it in a cookie, but first check if the
+	 * cookie already exists or if the token is already generated.  Then return it.
+	 * See: http://en.wikipedia.org/wiki/Cross-site_request_forgery
+	 *
+	 * @return string
+	 */
 	static function token()
 	{
 		if (($token = get_cookie('xsrf')) !== false)
@@ -195,8 +258,12 @@ class xsrf
 		return self::$_token;
 	}
 
-	// Compare $token with the XSRF token.  Generate an XSRF token if
-	// self::$_xsrf_token is false.
+	/**
+	 * Compare XSRF token with $token.
+	 *
+	 * @param string $token
+	 * @return boolean
+	 */
 	static function check_cookie($token)
 	{
 		if (!self::$_token)
@@ -205,8 +272,11 @@ class xsrf
 		return $token == self::$_token;
 	}
 
-	// Return a hidden form field with the XSRF token.  Generate an XSRF token
-	// if self::$_xsrf_token is false.
+	/**
+	 * Return a hidden form field with the XSRF token.
+	 *
+	 * @return string
+	 */
 	static function form_html()
 	{
 		if (!self::$_token)

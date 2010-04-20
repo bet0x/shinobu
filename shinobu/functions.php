@@ -7,7 +7,9 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// Unset any variables instantiated as a result of register_globals being enabled
+/**
+ * Unset any variables instantiated as a result of register_globals being enabled.
+ */
 function unregister_globals()
 {
 	$register_globals = ini_get('register_globals');
@@ -34,7 +36,13 @@ function unregister_globals()
 	}
 }
 
-// Sends an error message. Used by database and cache functions
+/**
+ * Send an error message to the browser.
+ *
+ * @param string|array $messages
+ * @param boolean $file
+ * @param boolean $line
+ */
 function error($messages, $file = false, $line = false)
 {
 	// Send (no-cache) headers
@@ -60,7 +68,17 @@ function error($messages, $file = false, $line = false)
 	exit;
 }
 
-// Set a cookie
+/**
+ * Set a cookie.
+ *
+ * @global string $sys_cookie_name
+ * @global string $sys_cookie_path
+ * @global string $sys_cookie_domain
+ * @global int $sys_cookie_secure
+ * @param string $name
+ * @param mixed $value
+ * @param int $expire
+ */
 function set_cookie($name, $value, $expire = 0)
 {
 	global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
@@ -75,7 +93,13 @@ function set_cookie($name, $value, $expire = 0)
 			$sys_cookie_domain, $sys_cookie_secure);
 }
 
-// Get a cookie
+/**
+ * Get a cookie.
+ *
+ * @global string $sys_cookie_name
+ * @param string $name
+ * @return mixed
+ */
 function get_cookie($name)
 {
 	global $sys_cookie_name;
@@ -83,19 +107,35 @@ function get_cookie($name)
 	return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
 }
 
-// Generate and return an url to a controller
+/**
+ * Generate and return an url to a controller.
+ *
+ * @param string $relative_path
+ * @return string
+ */
 function url($relative_path = null)
 {
 	return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
 }
 
-// Append a ?v=<timestamp of last modification> to a static file
+/**
+ * Append a ?v=<timestamp of last modification> to a static file
+ *
+ * @param string $file_path
+ * @return string
+ */
 function static_url($file_path)
 {
 	return SYSTEM_BASE_URL.'/static/'.$file_path.'?v='.filemtime(SYS_STATIC.'/'.$file_path);
 }
 
-// Generates a sha1 hash from a string
+/**
+ * Generate a SHA1 hash from a string.
+ *
+ * @param string $str
+ * @param string $salt
+ * @return string
+ */
 function generate_hash($str, $salt = '')
 {
 	if (!$str || !isset($salt[0]))
@@ -104,7 +144,11 @@ function generate_hash($str, $salt = '')
 	return sha1($salt.sha1($str)); // Returns a 40 character long hash
 }
 
-// Generates a salt
+/**
+ * Generate a salt.
+ *
+ * @return string
+ */
 function generate_salt()
 {
 	$key = '';
@@ -115,31 +159,57 @@ function generate_salt()
 	return $key; // Returns a 20 character long salt
 }
 
-// Get the IP address from the visitor
+/**
+ * Get the IP address from the visitor.
+ *
+ * @return string
+ */
 function get_remote_address()
 {
 	return $_SERVER['REMOTE_ADDR'];
 }
 
-// Encodes the contents of $str so that they are safe to output on an (X)HTML page
+/**
+ * Encode HTML characters in a string.
+ *
+ * @param string $str
+ * @return string
+ */
 function u_htmlencode($str)
 {
 	return htmlspecialchars($str, ENT_QUOTES, 'UTF-8');
 }
 
-// Convert all linebreakes (Windows, Mac) to Unix linebreaks
+/**
+ * Convert all linebreakes (Windows, Mac) to Unix linebreaks.
+ *
+ * @param string $str
+ * @return string
+ */
 function convert_linebreaks($str)
 {
 	return str_replace(array("\r\n", "\r"), array("\n"), $str);
 }
 
-// Get extension from filename (returns the extension without the dot)
-function get_ext($file_name)
+/**
+ * Get extension from filename.
+ *
+ * @param string $filename
+ * @return string The file extension without the dot.
+ */
+function get_ext($filename)
 {
 	return strtolower(substr($filename, strrpos($filename, '.') + 1));
 }
 
-// Converts the file size in bytes to a human readable file size
+/**
+ * Convert the file size in bytes to a human readable file size.
+ *
+ * @staticvar array $units
+ * @param int $size
+ * @param boolean $base10
+ * @return float
+ */
 function file_size($size, $base10 = false)
 {
 	static $units;
@@ -161,8 +231,13 @@ function file_size($size, $base10 = false)
     return;
 }
 
-// Get microtime
-function get_microtime($microtime = false)
+/**
+ * Get microtime
+ *
+ * @param string $microtime
+ * @return float
+ */
+function get_microtime($microtime)
 {
 	list($usec, $sec) = explode(' ', $microtime);
 	return ((float)$usec + (float)$sec);
