@@ -7,11 +7,9 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-// Note: All methods that are prefixed with an _ are meant for internal use.
-// That means they are not used outside the class.
-
-// This class handles the request.  It processes the request string and calls
-// the controller and the method that needs to respond to the request.
+/**
+ * The Application class processes the request and calls the controller.
+ */
 class Application
 {
 	public $output;
@@ -286,8 +284,13 @@ class xsrf
 	}
 }
 
-// A base class for controllers
-// This class contains all the supported requests methods
+/**
+ * The BaseController class.
+ *
+ * BaseController contains all the functions and variables for a controller.
+ * This class (or children of this class) is called by the Applications class
+ * after a request has been processed.
+ */
 class BaseController
 {
 	protected $request = false;
@@ -352,19 +355,35 @@ class BaseController
 		$this->request = $request;
 		$this->pre_output = $this->prepare();
 
-		if (!is_null($this->pre_output))
+		if ($this->pre_output)
 			$this->interrupt = true;
 	}
 
-	/* This is an empty function that's always executed by the constructor of
-	the base controller.  This function can be overwritten to execute  or
-	process certain things before the request method function is executed. */
+	/**
+	 * An empty function.
+	 *
+	 * This is an empty function that's always executed by the constructor of
+	 * the base controller.  This function can be overwritten to execute  or
+	 * process certain things before the request method function is executed.
+	 *
+	 * @access protected
+	 * @return null
+	 */
 	protected function prepare()
 	{
 		return null;
 	}
 
-	// Loads a module
+	/**
+	 * Load a module.
+	 *
+	 * @access protected
+	 * @staticvar array $modules
+	 * @param string $name
+	 * @param mixed $args
+	 * @param string $suffix
+	 * @return object
+	 */
 	protected function load_module($name, $args = null, $suffix = '')
 	{
 		static $modules = array();
@@ -379,7 +398,12 @@ class BaseController
 		return $modules[$name.$suffix];
 	}
 
-	// Send content type header
+	/**
+	 * Send content type header.
+	 *
+	 * @access protected
+	 * @param string $type
+	 */
 	protected function set_mimetype($type)
 	{
 		if (isset($this->_mimetypes[$type]))
@@ -388,7 +412,13 @@ class BaseController
 			header('Content-type: text/plain; charset=utf-8');
 	}
 
-	// Send an error to the client (e.g. 404, 500)
+	/**
+	 * Send an error to the client (e.g. 404, 500).
+	 *
+	 * @access public
+	 * @param int $status_code
+	 * @return string
+	 */
 	public function send_error($status_code)
 	{
 		if (!isset($this->_status_codes[$status_code]))
@@ -400,7 +430,12 @@ class BaseController
 		return $status_code.': '.$this->_status_codes[$status_code];
 	}
 
-	// Redirect a client to an other URL
+	/**
+	 * Redirect a client to an other URL.
+	 *
+	 * @access protected
+	 * @param string $location
+	 */
 	protected function redirect($location)
 	{
 		header('location: '.$location); exit;
