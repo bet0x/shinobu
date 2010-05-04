@@ -7,8 +7,6 @@
 	<p>All options for your website, system modules and libraries.</p>
 
 	<?php if (count($errors) > 0): ?>
-	<h4><strong>The following errors need to be corrected before all options will be stored:</strong></h4>
-
 	<ul class="form-errors">
 		<?php foreach ($errors as $e) echo '<li>'.$e.'</li>'."\n" ?>
 	</ul>

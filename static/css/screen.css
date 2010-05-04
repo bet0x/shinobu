@@ -1,39 +1,78 @@
 /* --- Reset
 ---------------------------------------------------------*/
 
-html, body        { background-color: #fff;padding: 0;margin: 0;height: 100% }
-body              { font-size: 85%;line-height: 1.5em;color: #222 }
-body              { font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif }
+html, body {
+  background-color: #fff;
+  padding: 0;
+  margin: 0;
+  height: 100% }
+body {
+  font-family: "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Verdana, Arial, sans-serif;
+  font-size: 87%;
+  line-height: 1.7em;
+  color: #222 }
 
-a:link, a:visited { color: #A52B2A;text-decoration: underline }
-a:hover, a:active { color: #521414 }
-a img             { border: 1px solid #222 }
+a:link, a:visited {
+  text-decoration: none;
+  font-weight: bold;
+  color: #EE3D40 }
 
-p                 { margin: 1.5em 0 }
-img               { margin: 0;padding: 0 }
+a:hover, a:active { color: black }
+a img { border: 1px solid #222 }
+p { margin: 1.5em 0 }
+img  { margin: 0;padding: 0 }
 
 h1,h2,h3,h4,h5,h6 { font-weight: normal;color: #444 }
 
-h1                { margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
-h2                { margin: 0.75em 0;font-size: 1.8em }
-h3                { margin: 1em 0;font-size: 1.5em;line-height: 1em }
-h4                { margin: 1.25em 0;font-size: 1.2em;line-height: 1.25 }
-h5                { margin: 1.5em 0;font-size: 1em;font-weight: bold }
-h6                { font-weight: bold;font-size: 1em }
+h1 { margin-bottom: 0.5em;font-size: 3em;line-height: 1em }
+h2 { margin: 0.75em 0;font-size: 2em }
+h3 { margin: 1em 0;font-size: 1.5em;line-height: 1em }
+h4 { margin: 1.25em 0;font-size: 1.2em;line-height: 1.25 }
+h5 { margin: 1.5em 0;font-size: 1em;font-weight: bold }
+h6 { font-weight: bold;font-size: 1em }
+blockquote {
+  margin: 0 1em 0 2em;
+  padding-left: 1.1em;
+  font-style: italic;
+  color: #555;
+  border-left: 1px solid #ddd }
+blockquote, em {
+  font-size: 0.9em;
+  font-family: 'DejaVu Serif', 'Bitstream Vera Serif', serif }
 
-blockquote        { margin: 0 1em;font-style: italic;font-size: 0.9em;color: #555 }
+code {
+  padding: 1px 3px;
+  background: #eee;
+  color: #454545;
+  text-shadow: #ccc 0px 1px 1px }
+pre { margin: 1.5em 0 1.5em 0.5em }
+pre, code {
+  font-family: 'DejaVu Sans Mono', Consolas, Inconsolata, 'Lucida Console', monospace }
+pre code {
+  display: inline-block;
+  padding: 0.3em 0.8em;
+  overflow-x: auto;
+  white-space: pre-wrap }
 
-pre               { margin: 1.5em 0 1.5em;padding: 0.5em;background: #fefefe;border: 1px dashed #444 }
-pre, code         { font-family: Consolas, 'andale mono', 'monotype.com', 'lucida console', monospace;color: #555 }
-pre code          { display: block;overflow-x: auto;white-space: pre }
+table, th, td { border-color: #bbb;border-style: solid }
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  border-width: 0 0 1px 1px }
+th, td {
+  padding: 0.3em 1em;
+  border-width: 1px;
+  border-left-color: #f1f1f1;
+  text-align: left }
+th { background: #eee;border-bottom-color: #ddd;font-weight: bold }
+td { border-bottom-color: #efefef;font-weight: normal }
 
-table, th, td     { border-color: #bbb;border-style: solid }
-table             { border-collapse: separate;border-spacing: 0;border-width: 0 0 1px 1px }
-th, td            { padding: 0.3em 1em;border-width: 1px;border-left-color: #f1f1f1;text-align: left }
-th                { background: #eee;border-bottom-color: #ddd;font-weight: bold }
-td                { border-bottom-color: #efefef;font-weight: normal }
-
-hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
+hr {
+  margin: 2em;
+  border: 0;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #efefef;
+  height: 0 }
 
 /* --- Layouts
 ---------------------------------------------------------*/
@@ -47,25 +86,42 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 ---------------------------------------------------------*/
 
 /* Header */
-#header { position: relative;padding: 55px 0 1.2em;border-bottom: 1px solid #ddd }
+#header {
+  position: relative;
+  padding: 55px 0 1.2em;
+  border-bottom: 1px solid #ddd }
 #header h1 { margin: 0 }
-#header h1 a:link, #header h1 a:visited { color: #222;text-decoration: none }
+#header h1 a:link, #header h1 a:visited {
+  color: #222;
+  text-decoration: none;
+  font-weight: normal }
 #header h1 a:hover, #header h1 a:active { border-bottom: 2px solid #000 }
 #header h1 span { line-height: 1em;font-size: 0.5em;color: #555 }
 
 /* Top navigation bar */
 #main-navigation { position: absolute;top: 0;right: 0 }
-#main-navigation ul
-    { float: left;margin: 0 0 0 1em;padding: 0;list-style: none;
-      background: #403b36;padding: 0.5em 1em;color: #807b74;font-size: 0.8em;
-      border-bottom-left-radius: 5px;border-bottom-right-radius: 5px;
-	  -moz-border-radius-bottomleft: 5px;-moz-border-radius-bottomright: 5px;
-	  -webkit-border-bottom-left-radius: 5px;-webkit-border-bottom-right-radius: 5px;
-	  border: 1px solid #26221F }
+#main-navigation ul {
+  float: left;
+  margin: 0 0 0 1em;
+  list-style: none;
+  background: #403b36;
+  padding: 0.5em 1em;
+  color: #807b74;
+  font-size: 0.8em;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  -moz-border-radius-bottomleft: 5px;
+  -moz-border-radius-bottomright: 5px;
+  -webkit-border-bottom-left-radius: 5px;
+  -webkit-border-bottom-right-radius: 5px;
+  border: 1px solid #26221F }
 #main-navigation li { display: inline }
 
-#main-navigation a:link, #main-navigation a:visited
-	{ color: #fff;text-decoration: none;text-shadow: 1px 1px 1px #000 }
+#main-navigation a:link, #main-navigation a:visited {
+  color: #fff;
+  text-decoration: none;
+  text-shadow: 1px 1px 1px #000;
+  font-weight: normal }
 #main-navigation a:hover, #main-navigation a:active { color: #bbb }
 
 /* --- Footer
@@ -78,95 +134,138 @@ hr                { border: 0;border-top: 1px dotted #aaa;height: 0 }
 /* --- Forms
 ---------------------------------------------------------*/
 
-input, textarea, select
-	{ background: #fff;border-width: 1px;border-style: solid;
-	  border-color: #9a9a9a #ededed #eee #9b9b9b }
-input:focus, textarea:focus, select:focus { outline: none;background: #FFFDEE }
-
 .form-style-one { margin: 1.5em 0 }
 .form-style-one p, .form-style-two p { clear: left;overflow: auto }
-.form-style-one p.description
-	{ margin-top: -1.2em;font-size:0.8em;width: 40em }
-.form-style-one span.description
-	{ display: block;margin: 0.5em 0;font-size:0.8em }
+.form-style-one p.description {
+  margin-top: -1.2em;
+  font-size:0.8em;
+  width: 40em }
+.form-style-one span.description {
+  display: block;
+  margin: 0.5em 0;
+  font-size:0.8em }
 .form-style-one .confirm-field { color: #666 }
-.form-style-one p.multiple-fields label
-    { float: left;margin-right: 1.5em }
-.form-style-one p.non-text-fields strong
-    { margin-bottom: 0.6em }
-.form-style-one p.non-text-fields label
-	{ display: block;margin-top: 0.3em;cursor: pointer;font-size:0.8em }
-.form-style-one label strong, .form-style-one p.non-text-fields strong
-	{ display: block }
-.form-style-one label strong
-	{ cursor: pointer }
-.form-style-one label strong span
-	{ position: relative;top: -0.6em;font-weight: normal;font-size: 0.65em;
-	  color: #971010;cursor: auto }
+.form-style-one p.multiple-fields label {
+  float: left;
+  margin-right: 1.5em }
+.form-style-one p.non-text-fields strong {
+  margin-bottom: 0.6em }
+.form-style-one p.non-text-fields label {
+  display: block;
+  margin-top: 0.3em;
+  cursor: pointer;
+  font-size:0.8em }
+.form-style-one label strong, .form-style-one p.non-text-fields strong {
+  display: block;
+  color: #333 }
+.form-style-one label strong {
+  cursor: pointer }
+.form-style-one label strong span {
+  position: relative;
+  top: -0.6em;
+  font-weight: normal;
+  font-size: 0.65em;
+  color: #971010;
+  cursor: auto }
 
-label input[type=text],
-label input[type=password],
-label select, textarea
-	{ padding: 0.3em 0.4em;width: 19em }
-label[for] { cursor: pointer }
-.form-style-one textarea { width: 98% }
+input[type=file], input[type=text],
+input[type=password], textarea, select {
+  padding: 5px;
+  border: 1px solid #ddd;
+  outline: none;
+  width: 16em;
+  background: #fff;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px; }
+input[type=file]:focus, input[type=text]:focus,
+input[type=password]:focus, textarea:focus, select:focus {
+  border-color: #00C3FF }
+input[disabled] {
+  background: #eee }
+label[for] {
+  cursor: pointer }
+.form-style-one textarea {
+  width: 98% }
 
-.form-style-one p.buttons
-	{ margin: 1.5em 0 0;padding: 1.5em 0 0;border-top: 1px solid #ddd }
+.form-style-one p.buttons {
+  margin: 1.5em 0 0;
+  padding: 1.5em 0 0;
+  border-top: 1px solid #ddd }
 
-input[type=submit],
-input[type=reset]
-	{ background: #eee;padding: 0.4em 0.5em;cursor: pointer;
-	  border-width: 1px;border-style: solid;
-	  border-color: #aaa #595959 #565656 #ababab }
-input[type=submit]:focus,
-input[type=reset]:focus
-	{ background: #dcdcdc }
+input[type=submit], .inline-button {
+  -webkit-border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-box-shadow: 0 1px 2px #ddd;
+  -moz-box-shadow: 0 1px 2px #ddd;
+  padding: 6px 10px;
+  border: solid 1px #999;
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#ddd));
+  color: #333;
+  text-decoration: none;
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  text-shadow: 0px 1px 1px #fff;
+  line-height: 1em }
 
-label.error-field input, label.error-field textarea
-	{ background: #ffdada }
-label.error-field input:focus, label.error-field textarea:focus
-	{ background: #ffb1b1 }
+input[type=submit]:hover {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#E6E4E4)) }
+
+input[type=submit]:active {
+  background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#fff), to(#c7c7c7)) }
+
+label.error-field input, label.error-field textarea,
+label.error-field input:focus, label.error-field textarea:focus {
+  border-color: #FF6600 }
 
 /* --- Redirect
 ---------------------------------------------------------*/
 
-.redirect-box
-	{ margin: 1.5em auto;padding: 0 1.5em;width: 50% }
+.redirect-box { margin: 1.5em auto;padding: 0 1.5em;width: 50% }
 .redirect-box h1 { font-size: 1.5em }
 .redirect-box .skip-redirect { font-size: 0.8em }
 
 /* --- Administration navigation and content
 ---------------------------------------------------------*/
 
-#admin-navigation
-    { margin: 2em 0 1.5em;border-left: 1px solid #ccc;font-size: 0.8em }
-#admin-navigation ul { margin: 0;padding: 0;list-style: none }
+#admin-navigation {
+  margin: 2em 0 1.5em;
+  border-left: 1px solid #ccc;
+  font-size: 0.8em }
+#admin-navigation ul {
+  margin: 0;
+  padding: 0;
+  list-style: none }
 
-#admin-navigation ul a:link, #admin-navigation ul a:visited
-    { display: block;padding: 0.5em;text-indent: 1em;color: #333;
-      text-decoration: none }
+#admin-navigation ul a:link, #admin-navigation ul a:visited {
+  display: block;
+  padding: 0.5em;
+  text-indent: 1em;
+  color: #333;
+  text-decoration: none;
+  font-weight: normal }
 
 .section-information a.anav-info, .section-options a.anav-options,
 .section-groups a.anav-groups, .section-users a.anav-users,
 .section-menu a.anav-menu, .section-pages a.anav-pages,
-#admin-navigation ul a:hover, #admin-navigation ul a:active
-    { background: #eee;padding: 0.5em;text-indent: 1em;color: #333;
-      text-decoration: none;
-      border-top-right-radius: 3px;
-      border-bottom-right-radius: 3px;
-	  -moz-border-radius-topright: 3px;
-      -moz-border-radius-bottomright: 3px;
-	  -webkit-border-top-right-radius: 3px;
-      -webkit-border-bottom-right-radius: 3px }
+#admin-navigation ul a:hover, #admin-navigation ul a:active {
+  background: #eee;
+  padding: 0.5em;text-indent: 1em;color: #333;
+  text-decoration: none;
+  border-top-right-radius: 3px;
+  border-bottom-right-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-bottomright: 3px;
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-bottom-right-radius: 3px }
 
 .section-information a.anav-info, .section-options a.anav-options,
 .section-groups a.anav-groups, .section-users a.anav-users,
-.section-menu a.anav-menu, .section-pages a.anav-pages
-    { background: #dedede }
+.section-menu a.anav-menu, .section-pages a.anav-pages {
+  background: #dedede }
 
-#admin-content h2:first-child
-    { margin-top: 0.89em }
+#admin-content h2:first-child {
+  margin-top: 0.89em }
 
 /* --- Misc
 ---------------------------------------------------------*/
@@ -175,43 +274,55 @@ label.error-field input:focus, label.error-field textarea:focus
 div.clear { clear: both;height: 0 }
 span.disabled-link { color: #666 }
 p.note { font-style: italic;color: #e20 }
-
 .align-right { text-align: right }
 
-a.tiny-button:link, a.tiny-button:visited, span.tiny-button
-    { padding: 0em 0.4em;background: #444;color: #eee;font-size: 0.8em;
-      display: inline-block;width: 0.8em;height: 1.6em;line-height: 1.6em;
-      text-align: center;
-      border-radius: 2px;-moz-border-radius: 2px;-webkit-border-radius: 2px }
-a.tiny-button:hover, a.tiny-button:active
-    { background: #E31441 }
+a.tiny-button:link, a.tiny-button:visited, span.tiny-button {
+  padding: 0 0.3em 0 0.4em;
+  background: #444;
+  color: #eee;
+  font-size: 0.8em;
+  display: inline-block;
+  width: 0.8em;
+  height: 1.7em;
+  line-height: 1.7em;
+  text-align: center;
+  font-weight: normal;
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px }
+a.tiny-button:hover, a.tiny-button:active { background: #E31441 }
 span.tiny-button { background: #999 }
 
 /* Inline buttons */
-input.inline-button, a.inline-button:link, a.inline-button:visited,
-a.inline-button:hover
-	{ background: #eee;padding: 0.2em 0.3em;cursor: pointer;
-	  border-width: 1px;border-style: solid;text-decoration: none;
-	  border-color: #aaa #595959 #565656 #ababab;color: #111;
-      font-size: 1em }
-input.inline-button:focus, a.inline-button:active
-	{ background: #dcdcdc }
+input.inline-button, a.inline-button:link,
+a.inline-button:visited, a.inline-button:hover {
+  padding: 0.3em 0.3em;
+  cursor: pointer;
+  color: #111;
+  font-weight: normal }
 
 /* Infolist */
-dl.infolist dt
-    { width: 150px;font-weight: bold;text-align: right;margin-top: 1em }
-dl.infolist dt:first-child
-    { margin-top: 0 }
+dl.infolist dt {
+  width: 150px;
+  font-weight: bold;
+  text-align: right;
+  margin-top: 0.5em }
+dl.infolist dt:first-child { margin-top: 0 }
 dl.infolist dd { margin-left: 170px }
-dl.infolist dt + dd { margin-top: -1.48em }
+dl.infolist dt + dd { margin-top: -1.58em }
 
 /* Lists */
-.group-list, .user-list
-    { margin: 1.5em 0;padding: 0;list-style: none;font-size: 0.9em }
-.group-list li:first-child, .user-list li:first-child
-    { border-top: 1px solid #ccc }
-.group-list li, .user-list li
-    { padding: 0.3em 0.5em;border-bottom: 1px solid #ccc;overflow: auto }
+.group-list, .user-list {
+  margin: 1.5em 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.9em }
+.group-list li:first-child, .user-list li:first-child {
+  border-top: 1px solid #ccc }
+.group-list li, .user-list li {
+  padding: 0.3em 0.5em;
+  border-bottom: 1px solid #ccc;
+  overflow: auto }
 
 .group-list a, .user-list a { text-decoration: none }
 .group-list li.row-even, .user-list li.row-even { background: #efefef }
@@ -227,14 +338,27 @@ dl.infolist dt + dd { margin-top: -1.48em }
 .user-list li.marked-row { background: #ffdada }
 
 /* Page metadata box */
-.metadata
-    { margin: 2em 0;text-align: right }
-.metadata span
-    { padding: 0.5em 1em;border: 1px solid #ddd;background: #eee; }
+.metadata {
+  font-size: 0.8em;
+  text-align: right }
+.metadata span {
+  display: inline-block;
+  padding: 0.5em 1em;
+  background: -webkit-gradient(linear, 0% 100%, 0% 0%, from(#e2e2e2), to(#e9e9e9));
+  -webkit-border-top-right-radius: 3px;
+  -webkit-border-top-left-radius: 3px;
+  -moz-border-radius-topright: 3px;
+  -moz-border-radius-topleft: 3px;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px }
 
 /* Pagination */
 .pagination { font-size: 0.9em }
-.pagination a { text-decoration: none }
+.pagination a { text-decoration: none;font-weight: normal }
 .pagination span { color: #666 }
 
-
+/* Rounded corners */
+pre, code {
+  border-radius: 2px;
+  -moz-border-radius: 2px;
+  -webkit-border-radius: 2px }

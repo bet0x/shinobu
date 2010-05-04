@@ -6,8 +6,6 @@
 click <em>register</em>.</p>
 
 <?php if (count($errors) > 0): ?>
-<h4><strong>The following errors need to be corrected before you can register:</strong></h4>
-
 <ul class="form-errors">
 <?php foreach ($errors as $e) echo "\t", '<li>', $e, '</li>', "\n" ?>
 </ul>

@@ -7,8 +7,6 @@
 	<p>Only the <em>name</em> field is required, but it's recommended that you also provide a user title and a group description.</p>
 
 	<?php if (count($errors) > 0): ?>
-	<h4><strong>The following errors need to be corrected before everything will be stored:</strong></h4>
-
 	<ul class="form-errors">
 		<?php foreach ($errors as $e) echo '<li>'.$e.'</li>'."\n" ?>
 	</ul>

@@ -8,8 +8,6 @@
 	<?php echo $values['edit_date'] ? 'Last edited on '.$values['edit_date'].'' : '' ?></p>
 
 	<?php if (count($errors) > 0): ?>
-	<h4><strong>The following errors need to be corrected before a new page can be added:</strong></h4>
-
 	<ul class="form-errors">
 	<?php foreach ($errors as $e) echo "\t", '<li>', $e, '</li>', "\n" ?>
 	</ul>

@@ -9,8 +9,6 @@
 	   <strong>http://example.com/?q=user</strong> (an internal path).</p>
 
 	<?php if (count($errors) > 0): ?>
-	<h4><strong>The following errors need to be corrected before a new menu item can be stored:</strong></h4>
-
 	<ul class="form-errors">
 	<?php foreach ($errors as $e) echo "\t", '<li>', $e, '</li>', "\n" ?>
 	</ul>
