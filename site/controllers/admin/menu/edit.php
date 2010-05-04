@@ -19,7 +19,7 @@ class edit_controller extends CmsWebController
 		// Get menu item information
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT m.* FROM '.DB_PREFIX.'menu AS m WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$this->_m_item_data = $result->fetch_assoc();
 		if (is_null($this->_m_item_data))
@@ -75,7 +75,7 @@ class edit_controller extends CmsWebController
 				path="'.$this->db->escape($args['form']['path']).'",
 				position="'.$this->db->escape($args['form']['position']).'"
 				WHERE id='.$this->request['args'])
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The menu item has been updated. You will be redirected to the previous page in 2 seconds.</p>',

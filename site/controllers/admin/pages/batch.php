@@ -32,7 +32,7 @@ class batch_controller extends CmsWebController
 		{
 			$deleted_row_count = 0;
 			$stmt = $this->db->prepare('DELETE FROM '.DB_PREFIX.'pages WHERE id=?')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			foreach ($args['pages'] as $pid)
 			{
@@ -56,7 +56,7 @@ class batch_controller extends CmsWebController
 			$publish = isset($args['form_publish_selected_pages']) ? 1 : 0;
 			$changed_row_count = 0;
 			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'pages SET is_published=? WHERE id=?')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			foreach ($args['pages'] as $pid)
 			{

@@ -21,7 +21,7 @@ class edit_controller extends CmsWebController
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.pub_date,
 			p.edit_date, p.show_meta, u.username AS author
 			FROM '.DB_PREFIX.'pages AS p  LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id WHERE p.id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$this->_page_data = $result->fetch_assoc();
 		if (is_null($this->_page_data))
@@ -84,7 +84,7 @@ class edit_controller extends CmsWebController
 				is_private='.$args['form']['is_private'].',
 				show_meta='.$args['form']['show_meta'].',
 				edit_date='.$now.' WHERE id='.$this->request['args'])
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			cache::clear('page_'.$this->request['args'].'.json');
 

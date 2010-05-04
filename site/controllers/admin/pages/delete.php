@@ -20,7 +20,7 @@ class delete_controller extends CmsWebController
 		// Check if menu item exists
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$user_data = $result->fetch_row();
 		if (is_null($user_data))
@@ -28,7 +28,7 @@ class delete_controller extends CmsWebController
 
 		// Delete menu item
 		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'])
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		cache::clear('page_'.$this->request['args'].'.json');
 

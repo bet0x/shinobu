@@ -70,12 +70,32 @@ class Application
 			$args = null;
 
 		// Start the controller
-		$controller_instance = new $class_name($request);
+		try
+		{
+			$controller_instance = new $class_name($request);
 
-		if (!$controller_instance->interrupt)
-			$this->output = $controller_instance->$request_type($args);
-		else
-			$this->output = $controller_instance->pre_output;
+			if (!$controller_instance->interrupt)
+				$this->output = $controller_instance->$request_type($args);
+			else
+				$this->output = $controller_instance->pre_out;
+		}
+		catch (Exception $e)
+		{
+			// Send (no-cache) headers
+			header('Expires: Thu, 21 Jul 1977 07:30:00 GMT');
+			header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
+			header('Cache-Control: post-check=0, pre-check=0', false);
+			header('Pragma: no-cache'); // For HTTP/1.0 compability
+			header('Content-type: text/plain; charset=utf-8');
+
+			// Print exception info
+			echo $e->getMessage(), "\n\n";
+			echo '#- ', $e->getFile(), '(', $e->getLine(), ')', "\n";
+			echo $e->getTraceAsString();
+
+			// Stop execution
+			exit;
+		}
 	}
 }
 
@@ -139,7 +159,7 @@ class tpl
 			return ob_get_clean();
 		}
 		else
-			error('Template could not be found!', __FILE__, __LINE__);
+			error('Template could not be found!');
 
 		if ($clear)
 			self::clear();
@@ -152,26 +172,26 @@ class tpl
 class cache
 {
 	/**
-	 * Write a file to the cache.
+	 * Write an array to the cache.
 	 *
-	 * @param string $filename
-	 * @param string $data
+	 * @param string $name
+	 * @param array $array
 	 * @return mixed Returns the number of bytes that were written to the file, or FALSE on failure.
 	 */
-	static public function rwrite($filename, $data)
+	static public function awrite($name, $array)
 	{
-		return @file_put_contents(SYS_CACHE.'/'.$filename, $data);
+        return file_put_contents(SYS_CACHE.'/'.$name.'.php', '<?php'."\n\n".'return '.var_export($array, true).';');
 	}
 
 	/**
-	 * Read a file from the cache.
+	 * Read an array from the cache.
 	 *
-	 * @param string $filename
-	 * @return mixed Returns the read data or FALSE on failure.
+	 * @param string $name
+	 * @return array Returns the read data or FALSE on failure.
 	 */
-	static public function rread($filename)
+	static public function aread($name)
 	{
-		return @file_get_contents(SYS_CACHE.'/'.$filename);
+		return file_exists(SYS_CACHE.'/'.$name.'.php') ? require SYS_CACHE.'/'.$name.'.php' : false;
 	}
 
 	/**
@@ -371,7 +391,7 @@ class BaseController
 	 */
 	protected function prepare()
 	{
-		return null;
+		return;
 	}
 
 	/**

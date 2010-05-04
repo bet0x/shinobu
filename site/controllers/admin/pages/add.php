@@ -73,7 +73,7 @@ class add_controller extends CmsWebController
 				'.$args['form']['is_private'].',
 				'.$args['form']['show_meta'].',
 				'.$now.')')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The page has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',

@@ -29,7 +29,7 @@ class add_controller extends CmsWebController
 
 		// Get permissions
 		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		while ($row = $result->fetch_assoc())
 		{
@@ -99,12 +99,12 @@ class add_controller extends CmsWebController
 			$this->db->query('INSERT INTO '.DB_PREFIX.'usergroups (name, description) VALUES('.
 				'"'.$this->db->escape($args['form']['name']).'", '.
 				'"'.$this->db->escape($args['form']['description']).'")')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 			$group_id = intval($this->db->insert_id);
 
 			// Create and store permissions
 			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'acl_groups (acl_id, group_id, permissions) VALUES(?, ?, ?)')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			foreach ($this->acl_ids as $acl_id)
 			{

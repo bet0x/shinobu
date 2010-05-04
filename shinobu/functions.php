@@ -37,35 +37,13 @@ function unregister_globals()
 }
 
 /**
- * Send an error message to the browser.
+ * A wrapper for throwing a new exception.
  *
- * @param string|array $messages
- * @param boolean $file
- * @param boolean $line
+ * @param string $messages
  */
-function error($messages, $file = false, $line = false)
+function error($message)
 {
-	// Send (no-cache) headers
-	header('Expires: Thu, 21 Jul 1977 07:30:00 GMT');
-	header('Last-Modified: '.gmdate('D, d M Y H:i:s').' GMT');
-	header('Cache-Control: post-check=0, pre-check=0', false);
-	header('Pragma: no-cache'); // For HTTP/1.0 compability
-	header('Content-type: text/plain; charset=utf-8');
-
-	if (is_array($messages))
-		foreach ($messages as $message)
-			echo $message, "\n";
-	else
-		echo $messages, "\n";
-
-	// Show the file name and line number when development mode is enabled
-	if (SYSTEM_DEVEL)
-	{
-		echo $file ? "\n".'File: '.$file : null;
-		echo $line ? "\n".'Line: '.$line : null;
-	}
-
-	exit;
+	throw new Exception($message);
 }
 
 /**

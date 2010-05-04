@@ -21,7 +21,7 @@ class default_controller extends CmsWebController
 		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS p.id, p.title, p.is_published, u.username AS author
 			FROM '.DB_PREFIX.'pages AS p LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id ORDER BY p.id ASC
 			LIMIT '.$start_offset.',20')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		if ($result->num_rows > 0)
 		{
@@ -36,7 +36,7 @@ class default_controller extends CmsWebController
 		elseif ($current_page !== 1)
 			return $this->send_error(404);
 
-		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error, __FILE__, __LINE__);
+		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
 		list($page_count) = $result->fetch_row();
 
 		$pagination = pagination($page_count, 20, $current_page, url('admin/pages:%d'));

@@ -28,7 +28,7 @@ class user
 			$result = $this->db->query('SELECT u.id, u.username, u.salt, u.hash, u.email, u.group_id, g.user_title AS title '.
 				'FROM '.DB_PREFIX.'users AS u, '.DB_PREFIX.'usergroups AS g '.
 				'WHERE u.id='.intval($cookie['id']).' AND g.id=u.group_id LIMIT 1')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 			$this->data = $result->fetch_assoc();
 
 			if ($this->data)
@@ -57,7 +57,7 @@ class user
 		// Check if user exists and fetch data
 		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users
 			WHERE username="'.$username.'" LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 		$fetch = $result->fetch_row();
 
 		if (!$fetch)
@@ -87,7 +87,7 @@ class user
 			return $this->acl[$acl_id];
 
 		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->data['group_id'].'
-			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error, __FILE__, __LINE__);
+			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error);
 
 		if ($result->num_rows === 0)
 			return false;
@@ -124,7 +124,7 @@ class user
 				"'.$this->db->escape($password).'",
 				"'.$this->db->escape($salt).'",
 				"'.$this->db->escape($hash).'",
-				"'.$this->db->escape($email).'")') or error($this->db->error, __FILE__, __LINE__);
+				"'.$this->db->escape($email).'")') or error($this->db->error);
 
 		// Return the ID of the added user
 		return $this->db->insert_id;
@@ -151,6 +151,6 @@ class user
 			$data_sql[] = is_int($v) ? $k.'='.intval($v) : $k.'="'.$this->db->escape($v).'"';
 
 		return $this->db->query('UPDATE '.DB_PREFIX.'users SET '.implode(', ', $data_sql).' WHERE id='.intval($id))
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 	}
 }

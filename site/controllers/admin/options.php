@@ -17,7 +17,7 @@ class options_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		if ($result->num_rows > 0)
 		{
@@ -95,7 +95,7 @@ class options_controller extends CmsWebController
 		if (empty($errors))
 		{
 			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'config SET value=? WHERE name=?')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			foreach ($args['form'] as $name => $value)
 			{

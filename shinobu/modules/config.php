@@ -7,9 +7,6 @@
 # License: zlib/libpng, see the COPYING file for details
 # =============================================================================
 
-# TODO
-# - Add caching and a cache loader.
-
 class config
 {
 	private $config = array(), $db = null;
@@ -22,7 +19,7 @@ class config
 			return;
 
 		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		if ($result->num_rows > 0)
 		{

@@ -35,7 +35,7 @@ class edit_controller extends CmsWebController
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT g.*, p.permissions FROM '.DB_PREFIX.'usergroups AS g, '.
 			DB_PREFIX.'acl_groups AS p WHERE id='.$this->request['args'].' AND p.group_id=g.id LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$this->_group_data = $result->fetch_assoc();
 		if (is_null($this->_group_data))
@@ -43,7 +43,7 @@ class edit_controller extends CmsWebController
 
 		// Get permissions
 		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		while ($row = $result->fetch_assoc())
 		{
@@ -104,13 +104,13 @@ class edit_controller extends CmsWebController
 				user_title="'.$this->db->escape($args['form']['user_title']).'",
 				description="'.$this->db->escape($args['form']['description']).'"
 				WHERE id='.$this->request['args'])
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			// Store permissions
 			if (isset($args['acl']))
 			{
 				$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'acl_groups SET permissions=? WHERE acl_id=? AND group_id=?')
-					or error($this->db->error, __FILE__, __LINE__);
+					or error($this->db->error);
 
 				foreach ($args['acl'] as $acl_id => $acl)
 				{
@@ -128,7 +128,7 @@ class edit_controller extends CmsWebController
 			}
 			else
 				$this->db->query('UPDATE '.DB_PREFIX.'acl_groups SET permissions=0 WHERE group_id='.$this->request['args'])
-					or error($this->db->error, __FILE__, __LINE__);
+					or error($this->db->error);
 
 			// Redirect
 			return tpl::render('redirect', array(

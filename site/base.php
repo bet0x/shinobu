@@ -42,7 +42,7 @@ abstract class CmsWebController extends BaseController
 		{
 			$main_menu = array();
 			$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			if ($result->num_rows > 0)
 			{

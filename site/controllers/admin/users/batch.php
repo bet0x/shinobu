@@ -44,7 +44,7 @@ class batch_controller extends CmsWebController
 			// Remove users
 			$deleted_row_count = 0;
 			$stmt = $this->db->prepare('DELETE FROM '.DB_PREFIX.'users WHERE id=?')
-				or error($this->db->error, __FILE__, __LINE__);
+				or error($this->db->error);
 
 			foreach ($args['users'] as $uid)
 			{

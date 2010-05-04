@@ -20,7 +20,7 @@ class default_controller extends CmsWebController
 		$users = array();
 		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS u.id, u.username, g.user_title FROM '.DB_PREFIX.'users AS u, '.
 			DB_PREFIX.'usergroups AS g WHERE g.id=u.group_id ORDER BY u.username LIMIT '.$start_offset.',20')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		if ($result->num_rows > 0)
 		{
@@ -30,7 +30,7 @@ class default_controller extends CmsWebController
 		else
 			return $this->send_error(404);
 
-		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error, __FILE__, __LINE__);
+		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
 		list($user_count) = $result->fetch_row();
 
 		$pagination = pagination($user_count, 20, $current_page, url('admin/users:%d'));

@@ -19,7 +19,7 @@ class edit_controller extends CmsWebController
 		// Get user information
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT u.* FROM '.DB_PREFIX.'users AS u WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$this->_user_data = $result->fetch_assoc();
 		if (is_null($this->_user_data))
@@ -27,7 +27,7 @@ class edit_controller extends CmsWebController
 
 		// Get a list of groups
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		if ($result->num_rows > 0)
 		{
@@ -74,7 +74,7 @@ class edit_controller extends CmsWebController
 				$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users
 					WHERE UPPER(username)=UPPER("'.$this->db->escape($args['form']['username']).'")
 					OR UPPER(username)=UPPER("'.$this->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
-					or error($this->db->error, __FILE__, __LINE__);
+					or error($this->db->error);
 
 				if ($result->num_rows === 1)
 					$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
@@ -119,7 +119,7 @@ class edit_controller extends CmsWebController
 			{
 				$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.
 					$this->db->escape($args['form']['email']).'" LIMIT 1')
-					or error($this->db->error, __FILE__, __LINE__);
+					or error($this->db->error);
 
 				if ($result->num_rows === 1)
 					$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';

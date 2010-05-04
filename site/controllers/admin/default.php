@@ -51,7 +51,7 @@ class default_controller extends CmsWebController
 
 		// Calculate total database size/row count (only MySQLi for now)
 		$result = $this->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
-			or error($this->db->error, __FILE__, __LINE__);
+			or error($this->db->error);
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;
 		while ($status = $result->fetch_assoc())
@@ -65,7 +65,7 @@ class default_controller extends CmsWebController
 		{
 			// Get uptime, users and load average
 			if (!preg_match('%^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$%', trim(shell_exec('uptime')), $matches))
-				error('Could not get uptime.', __FILE__, __LINE__);
+				error('Could not get uptime.');
 
 			list (, $sys_info['uptime'], $sys_info['users'], ) = $matches;
 
