@@ -25,5 +25,5 @@ TODO
    - Nested/Child pages
  - Localization system
  * Documentation (API, tutorials/examples, usage)
- - Template parser
+ - Template engine
  - An installer

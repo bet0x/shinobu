@@ -33,7 +33,7 @@ class default_controller extends CmsWebController
 		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
 		list($user_count) = $result->fetch_row();
 
-		$pagination = pagination($user_count, 20, $current_page, url('admin/users:%d'));
+		$pagination = pagination($current_page, $user_count, url('admin/users:%d'));
 
 		return tpl::render('admin_users', array(
 			'website_section' => 'Administration',

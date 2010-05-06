@@ -92,45 +92,54 @@ abstract class CmsWebController extends BaseController
 }
 
 // Generates HTML pagination links
-function pagination($item_count, $limit, $cur_page, $link)
+function pagination($cur_page_nr, $items, $link, $limit = 20)
 {
-	$page_count = ceil($item_count / $limit);
+	$page_count = ceil($items / $limit);
 
-	if ($page_count <= 1)
+	if ($page_count == 1 || $cur_page_nr > $page_count)
 		return;
 
-	$pages = $page_range = array();
+	// Define some important variables
+	$prev_nr = 0;
+	$range = 3;
+	$padding = array(0 => 3, 1 => 2, 2 => 1, 3 => 0);
+	$html = array();
 
-	// Calculate range
-	$lowest = $cur_page - 3 < 2 ? 2 : $cur_page - 3;
-	$highest = $cur_page + 3 > $page_count-1 ? $page_count-1 : $cur_page + 3;
+	// Calculate start- and endpoint
+	$start = $cur_page_nr-$range < 1 ? 1 : $cur_page_nr-$range;
+	$end = $cur_page_nr+$range > $page_count ? $page_count : $cur_page_nr+$range;
 
-	if ($page_count > 7)
+	// Calculate left and right padding
+	$left_padding = $padding[$end - $cur_page_nr];
+	$right_padding = $padding[$cur_page_nr - $start];
+
+	// Add padding to the start- and endpoint
+	$start = $start - $left_padding < 1 ? 1 : $start - $left_padding;
+	$end = $right_padding + $end > $page_count ? $page_count : $right_padding + $end;
+
+	$page_nrs = range($start, $end);
+
+	// Add a first and last page if necessary
+	if ($start != 1)
+		array_unshift($page_nrs, 1);
+	if ($end < $page_count)
+		$page_nrs[] = $page_count;
+
+	// Previous page link
+	$html[] = $cur_page_nr > 1 ? '<a href="'.sprintf($link, ($cur_page_nr-1)).'">Previous</a>' : '<span>Previous</span>';
+
+	// Shoop da loop
+	foreach ($page_nrs as $i => $nr)
 	{
-		$range_padding = array(-1 => 4, 0 => 3, 1 => 2, 2 => 1, 3 => 0);
-		$page_range = range(
-			$lowest - $range_padding[$highest - $cur_page],
-			$highest + $range_padding[$cur_page - $lowest]);
+		if ($prev_nr+1 < $nr)
+			$html[] = '&hellip;';
+
+		$html[] = '<a href="'.sprintf($link, $nr).'">'.($nr == $cur_page_nr ? '<strong>['.$nr.']</strong>' : $nr).'</a>';
+		$prev_nr = $nr;
 	}
-	elseif ($page_count > 2)
-		$page_range = range($lowest, $highest);
 
-	// Previous and first page links
-	$pages[] = $cur_page > 1 ? '<a href="'.sprintf($link, ($cur_page-1)).'">Previous</a>' : '<span>Previous</span>';
-	$pages[] = '<a href="'.sprintf($link, 1).'">'.($cur_page == 1 ? '<strong>1</strong>' : '1').'</a>';
+	// Next page link
+	$html[] = $cur_page_nr < $page_count ? '<a href="'.sprintf($link, $cur_page_nr+1).'">Next</a>' : '<span>Next</span>';
 
-	if ($cur_page > 5) $pages[] = '&hellip;';
-
-	// Pages that are in the range
-	foreach ($page_range as $nr)
-		$pages[] = '<a href="'.sprintf($link, $nr).'">'.($cur_page == $nr ? '<strong>'.$nr.'</strong>' : $nr).'</a>';
-
-	if ($cur_page < $page_count-4) $pages[] = '&hellip;';
-
-	// Last and previous page links
-	$pages[] = '<a href="'.sprintf($link, $page_count).'">'.($cur_page == $page_count ?
-		'<strong>'.$page_count.'</strong>' : $page_count).'</a>';
-	$pages[] = $cur_page < $page_count ? '<a href="'.sprintf($link, $cur_page+1).'">Next</a>' : '<span>Next</span>';
-
-	return '<p class="pagination">'.implode('&nbsp;&nbsp;', $pages).'</p>';
+	return '<p class="pagination">'.implode('&nbsp;&nbsp;', $html).'</p>';
 }
