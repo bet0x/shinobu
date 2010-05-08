@@ -4,8 +4,8 @@
 <div id="admin-content">
 	<h2><?php echo u_htmlencode($page_title) ?></h2>
 
-	<p>Writen by <?php echo u_htmlencode($values['author']) ?> on <?php echo $values['pub_date'] ?>.
-	<?php echo $values['edit_date'] ? 'Last edited on '.$values['edit_date'].'' : '' ?></p>
+	<p>Written on <?php echo $values['pub_date'] ?>.
+	<?php echo $values['edit_date'] ? 'Last edited on '.$values['edit_date'].'' : '' ?>.</p>
 
 	<?php if (count($errors) > 0): ?>
 	<ul class="form-errors">

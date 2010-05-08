@@ -18,8 +18,8 @@ class default_controller extends CmsWebController
 		$start_offset = ($current_page-1) * 20;
 
 		$pages = array();
-		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS p.id, p.title, p.is_published, u.username AS author
-			FROM '.DB_PREFIX.'pages AS p LEFT JOIN '.DB_PREFIX.'users AS u ON u.id=p.author_id ORDER BY p.id ASC
+		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS p.id, p.title, p.is_published
+			FROM '.DB_PREFIX.'pages AS p ORDER BY p.id ASC
 			LIMIT '.$start_offset.',20')
 			or error($this->db->error);
 

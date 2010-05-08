@@ -64,9 +64,8 @@ class add_controller extends CmsWebController
 
 		if (empty($errors))
 		{
-			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (author_id, title, content,
+			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (title, content,
 				is_published, is_private, show_meta, pub_date) VALUES(
-				'.intval($this->user->data['id']).',
 				"'.$this->db->escape($args['form']['title']).'",
 				"'.$this->db->escape($args['form']['content']).'",
 				'.$args['form']['is_published'].',
