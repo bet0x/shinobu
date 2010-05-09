@@ -11,25 +11,15 @@
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
-		<ul class="user-list">
-		<?php foreach ($pages as $index => $page): ?>
-			<li class="row-<?php echo $index % 2 ? 'odd' : 'even', $page['is_published'] == '0' ? ' marked-row' : '' ?>">
-				<div class="checkbox"><input id ="ch-<?php echo $page['id'] ?>" type="checkbox" name="pages[]" value="<?php echo $page['id'] ?>" /></div>
-				<div class="name"><label for="ch-<?php echo $page['id'] ?>"><strong><?php echo u_htmlencode($page['title']) ?></strong></label> (<?php echo u_htmlencode($page['author']) ?>)</div>
-				<div class="actions">
-					<a class="tiny-button" href="<?php echo url('admin/pages/edit:'.$page['id']) ?>" title="Edit">/</a>
-					<a class="tiny-button" href="<?php echo url('admin/pages/delete:'.$page['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
-				</div>
-			</li>
-		<?php endforeach ?>
-		</ul>
+		<div class="nested-list">
+			<?php echo $page_list_html ?>
+		</div>
 
 		<p class="align-right">
-			<input class="inline-button" type="submit" value="Delete" name="form_delete_selected_pages" />,
-			<input class="inline-button" type="submit" value="publish" name="form_publish_selected_pages" /> or
+			<input class="inline-button" type="submit" value="Publish" name="form_publish_selected_pages" /> or
 			<input class="inline-button" type="submit" value="unpublish" name="form_unpublish_selected_pages" />
 			all selected pages or
-			<a class="inline-button" href="<?php echo url('admin/pages/add') ?>">add a new page</a>.
+			<a class="inline-button" href="<?php echo url('admin/pages/add:'.$last_page_right) ?>">add a new page</a>.
 		</p>
 	</form>
 	<?php else: ?>

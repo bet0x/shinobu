@@ -13,7 +13,7 @@ TODO
      - Improve ACL/Permission management GUI
    * Pages
      - Markdown toolbar
-     - Child pages
+     * Nested pages
      - TOC option
    = Files (filemanager)
  - Libraries

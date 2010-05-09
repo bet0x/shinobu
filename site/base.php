@@ -91,7 +91,7 @@ abstract class CmsWebController extends BaseController
 	}
 }
 
-// Generates HTML pagination links
+// Generate HTML pagination links
 function pagination($cur_page_nr, $items, $link, $limit = 20)
 {
 	$page_count = ceil($items / $limit);

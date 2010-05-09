@@ -18,7 +18,7 @@ a:link, a:visited {
   color: #EE3D40 }
 
 a:hover, a:active { color: black }
-a img { border: 1px solid #222 }
+a img { border: none }
 p { margin: 1.5em 0 }
 img  { margin: 0;padding: 0 }
 
@@ -267,6 +267,24 @@ label.error-field input:focus, label.error-field textarea:focus {
 #admin-content h2:first-child {
   margin-top: 0.89em }
 
+/* --- Icons
+---------------------------------------------------------*/
+
+a.edit-icon, a.delete-icon, a.add-icon {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  text-indent: -9999em;
+  line-height: 1.1em;
+  background: url(../img/icons/edit.gif) no-repeat 0 0 }
+a.edit-icon:hover, a.delete-icon:hover, a.add-icon:hover {
+  background-position: 100% 0 }
+
+a.add-icon { background: url(../img/icons/add.gif) no-repeat 0 0 }
+a.edit-icon { background: url(../img/icons/edit.gif) no-repeat 0 0 }
+a.delete-icon { background: url(../img/icons/delete.gif) no-repeat 0 0 }
+
+
 /* --- Misc
 ---------------------------------------------------------*/
 
@@ -337,6 +355,23 @@ dl.infolist dt + dd { margin-top: -1.58em }
 .user-list .actions { float: right;width: 18%;text-align: right }
 .user-list li.marked-row { background: #ffdada }
 
+.nested-list ul {
+  margin: 1.5em 0;
+  padding: 0;
+  list-style: none }
+.nested-list ul ul {
+  margin: 0;
+  padding-left: 1.5em }
+
+.nested-list li { margin: 0.5em 0 }
+.nested-list li .list-row { padding: 0.3em 0.55em 0.3em 0.3em }
+.nested-list li .row-even { background: #e9e9e9 }
+.nested-list li .row-odd { background: #f1f1f1 }
+.nested-list li .marked-row { background: #f4dae0 }
+.nested-list li .list-row:hover { background: #dedede }
+.nested-list li .marked-row:hover { background: #e4bdc5 }
+.nested-list li .list-row .actions { float: right }
+
 /* Page metadata box */
 .metadata {
   font-size: 0.8em;
@@ -351,6 +386,7 @@ dl.infolist dt + dd { margin-top: -1.58em }
   -moz-border-radius-topleft: 3px;
   border-top-right-radius: 3px;
   border-top-left-radius: 3px }
+.metadata a { font-weight: normal }
 
 /* Pagination */
 .pagination { font-size: 0.9em }
@@ -360,7 +396,7 @@ dl.infolist dt + dd { margin-top: -1.58em }
 .pagination span { color: #666 }
 
 /* Rounded corners */
-pre, code {
+pre, code, .nested-list li .list-row {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px }

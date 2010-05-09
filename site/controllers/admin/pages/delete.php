@@ -17,17 +17,23 @@ class delete_controller extends CmsWebController
 		if (!isset($_GET[xsrf::token()]))
 			return $this->send_error(403);
 
-		// Check if menu item exists
+		// Check if page exists
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
+		$result = $this->db->query('SELECT lft, rgt, rgt-lft+1 AS width FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error);
 
-		$user_data = $result->fetch_row();
-		if (is_null($user_data))
+		$page_data = $result->fetch_assoc();
+		if (is_null($page_data))
 			return $this->send_error(404);
 
-		// Delete menu item
-		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'])
+		// Delete page an all its children
+		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE lft BETWEEN '.$page_data['lft'].' AND '.$page_data['rgt'])
+			or error($this->db->error);
+
+		$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt-'.$page_data['width'].' WHERE rgt > '.$page_data['rgt'])
+			or error($this->db->error);
+
+		$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft-'.$page_data['width'].' WHERE lft > '.$page_data['rgt'])
 			or error($this->db->error);
 
 		cache::clear('page_'.$this->request['args'].'.json');

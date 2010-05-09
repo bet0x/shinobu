@@ -13,6 +13,9 @@ class add_controller extends CmsWebController
 	{
 		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
+
+		// 'lft' of the container
+		$this->request['args'] = intval($this->request['args']);
 	}
 
 	public function GET($args)
@@ -22,6 +25,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
+			'parent_left' => $this->request['args'],
 			'errors' => array(),
 			'values' => array(
 				'title' => '',
@@ -64,15 +68,26 @@ class add_controller extends CmsWebController
 
 		if (empty($errors))
 		{
+			//$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
+
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt > '.$this->request['args'])
+				or error($this->db->error);
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft+2 WHERE lft > '.$this->request['args'])
+				or error($this->db->error);
+
 			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (title, content,
-				is_published, is_private, show_meta, pub_date) VALUES(
+				is_published, is_private, show_meta, pub_date, lft, rgt) VALUES(
 				"'.$this->db->escape($args['form']['title']).'",
 				"'.$this->db->escape($args['form']['content']).'",
 				'.$args['form']['is_published'].',
 				'.$args['form']['is_private'].',
 				'.$args['form']['show_meta'].',
-				'.$now.')')
+				'.$now.',
+				'.($this->request['args']).',
+				'.($this->request['args'] + 1).')')
 				or error($this->db->error);
+
+			//$this->db->query('UNLOCK TABLES') or error($this->db->error);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The page has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',
@@ -86,6 +101,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
+			'parent_left' => $this->request['args'],
 			'errors' => $errors,
 			'values' => $args['form']
 			));

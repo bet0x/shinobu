@@ -8,6 +8,7 @@
 <div class="metadata">
 	<span>Written on <?php echo $page_data['pub_date'] ?>.
 	<?php echo $page_data['edit_date'] ? 'Last edited on '.$page_data['edit_date'].'.' : '' ?></span>
+	<span><a href="#header">Top</a></span>
 </div>
 <?php endif ?>
 

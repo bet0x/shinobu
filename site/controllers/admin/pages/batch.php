@@ -27,31 +27,7 @@ class batch_controller extends CmsWebController
 				));
 		}
 
-		// A delete action
-		if (isset($args['form_delete_selected_pages']))
-		{
-			$deleted_row_count = 0;
-			$stmt = $this->db->prepare('DELETE FROM '.DB_PREFIX.'pages WHERE id=?')
-				or error($this->db->error);
-
-			foreach ($args['pages'] as $pid)
-			{
-				$stmt->bind_param('i', $pid);
-				$stmt->execute();
-				cache::clear('page_'.$pid.'.json');
-				$deleted_row_count += $stmt->affected_rows;
-			}
-
-			$stmt->close();
-
-			return tpl::render('redirect', array(
-				'redirect_message' => '<p>'.$deleted_row_count.' page(s) successfully deleted. '.
-									  'You will be redirected to the previous page in 2 seconds.</p>',
-				'redirect_delay' => 2,
-				'destination_url' => url('admin/pages')
-				));
-		}
-		elseif (isset($args['form_publish_selected_pages']) || isset($args['form_unpublish_selected_pages']))
+		if (isset($args['form_publish_selected_pages']) || isset($args['form_unpublish_selected_pages']))
 		{
 			$publish = isset($args['form_publish_selected_pages']) ? 1 : 0;
 			$changed_row_count = 0;
