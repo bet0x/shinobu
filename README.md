@@ -46,7 +46,6 @@ Requirements
  * PHP >= 5.2.0 (http://php.net/)
  * MySQLi (http://php.net/manual/en/book.mysqli.php)
  * Filter (http://php.net/filter)
- * DOM (http://php.net/manual/en/book.dom.php)
  * Json (http://php.net/manual/en/book.json.php)
 
 Contact/Support

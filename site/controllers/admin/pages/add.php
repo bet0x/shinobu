@@ -9,13 +9,22 @@
 
 class add_controller extends CmsWebController
 {
+	protected $parent_left, $parent_right;
+
 	public function prepare()
 	{
 		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		// 'lft' of the container
-		$this->request['args'] = intval($this->request['args']);
+		// TODO: Check if there is a record with these values
+		if (strpos($this->request['args'], '/') !== false)
+		{
+			list($this->parent_left, $this->parent_right) = explode('/', $this->request['args']);
+			$this->parent_left = intval($this->parent_left);
+			$this->parent_right = intval($this->parent_right);
+		}
+		else
+			return $this->send_error(400);
 	}
 
 	public function GET($args)
@@ -25,7 +34,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
-			'parent_left' => $this->request['args'],
+			'parent_left' => $this->parent_left.'/'.$this->parent_right,
 			'errors' => array(),
 			'values' => array(
 				'title' => '',
@@ -70,9 +79,9 @@ class add_controller extends CmsWebController
 		{
 			//$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
 
-			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt > '.$this->request['args'])
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt >= '.$this->parent_right)
 				or error($this->db->error);
-			$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft+2 WHERE lft > '.$this->request['args'])
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft+2 WHERE lft > '.$this->parent_right)
 				or error($this->db->error);
 
 			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (title, content,
@@ -83,8 +92,8 @@ class add_controller extends CmsWebController
 				'.$args['form']['is_private'].',
 				'.$args['form']['show_meta'].',
 				'.$now.',
-				'.($this->request['args']).',
-				'.($this->request['args'] + 1).')')
+				'.$this->parent_right.',
+				'.($this->parent_right + 1).')')
 				or error($this->db->error);
 
 			//$this->db->query('UNLOCK TABLES') or error($this->db->error);
@@ -101,7 +110,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
-			'parent_left' => $this->request['args'],
+			'parent_left' => $this->parent_left.'/'.$this->parent_right,
 			'errors' => $errors,
 			'values' => $args['form']
 			));
