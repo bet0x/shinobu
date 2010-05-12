@@ -370,6 +370,12 @@ dl.infolist dt + dd { margin-top: -1.58em }
   font-weight: normal }
 .pagination span { color: #666 }
 
+/* Breadcrumbs */
+.breadcrumbs {
+  font-size: 0.8em }
+.breadcrumbs a {
+  font-weight: normal }
+
 /* Rounded corners */
 pre, code, .record-list li .list-row {
   border-radius: 2px;

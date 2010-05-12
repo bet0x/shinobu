@@ -43,6 +43,23 @@ class page_controller extends CmsWebController
 		require SYS_LIB.'/markdown/markdown.php';
 		$page_data['content'] = Markdown($page_data['content']);
 
+		// Breadcrumbs
+		$result = $this->db->query('SELECT parent.id, parent.title FROM '.DB_PREFIX.'pages AS node,
+			'.DB_PREFIX.'pages AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt
+			AND node.id='.$this->request['args'].' ORDER BY parent.lft')
+			or error($this->db->error);
+
+		$page_data['breadcrumbs'][] = '<a href="'.SYSTEM_BASE_URL.'">Home</a>';
+		while ($row = $result->fetch_assoc())
+		{
+			if ($row['id'] != $this->request['args'])
+				$page_data['breadcrumbs'][] = '<a href="'.url('page:'.$row['id']).'">'.u_htmlencode($row['title']).'</a>';
+			else
+				$page_data['breadcrumbs'][] = '<span class="you-are-here">'.u_htmlencode($row['title']).'</span>';
+		}
+
+		$page_data['breadcrumbs'] = implode(' &#187; ', $page_data['breadcrumbs']);
+
 		cache::write('page_'.$this->request['args'], $page_data);
 
 		return tpl::render('page', array(

@@ -1,5 +1,7 @@
 <?php require 'header.php' ?>
 
+<p class="breadcrumbs"><?php echo $page_data['breadcrumbs'] ?></p>
+
 <h2><?php echo u_htmlencode($page_title) ?></h2>
 
 <?php echo $page_data['content'] ?>
