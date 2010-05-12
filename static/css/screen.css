@@ -355,22 +355,22 @@ dl.infolist dt + dd { margin-top: -1.58em }
 .user-list .actions { float: right;width: 18%;text-align: right }
 .user-list li.marked-row { background: #ffdada }
 
-.nested-list ul {
+.record-list ul {
   margin: 1.5em 0;
   padding: 0;
   list-style: none }
-.nested-list ul ul {
+.record-list ul ul {
   margin: 0;
   padding-left: 1.5em }
 
-.nested-list li { margin: 0.5em 0 }
-.nested-list li .list-row { padding: 0.3em 0.55em 0.3em 0.3em }
-.nested-list li .row-even { background: #e9e9e9 }
-.nested-list li .row-odd { background: #f1f1f1 }
-.nested-list li .marked-row { background: #f4dae0 }
-.nested-list li .list-row:hover { background: #dedede }
-.nested-list li .marked-row:hover { background: #e4bdc5 }
-.nested-list li .list-row .actions { float: right }
+.record-list li { margin: 0.5em 0 }
+.record-list li .list-row { padding: 0.3em 0.55em 0.3em 0.3em }
+.record-list li .row-even { background: #e9e9e9 }
+.record-list li .row-odd { background: #f1f1f1 }
+.record-list li .marked-row { background: #f4dae0 }
+.record-list li .list-row:hover { background: #dedede }
+.record-list li .marked-row:hover { background: #e4bdc5 }
+.record-list li .list-row .actions { float: right }
 
 /* Page metadata box */
 .metadata {
@@ -396,7 +396,7 @@ dl.infolist dt + dd { margin-top: -1.58em }
 .pagination span { color: #666 }
 
 /* Rounded corners */
-pre, code, .nested-list li .list-row {
+pre, code, .record-list li .list-row {
   border-radius: 2px;
   -moz-border-radius: 2px;
   -webkit-border-radius: 2px }

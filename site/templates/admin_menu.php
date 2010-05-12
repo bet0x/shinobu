@@ -18,18 +18,22 @@
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
-		<ul class="user-list">
-		<?php foreach ($m_items as $index => $item): ?>
-			<li class="row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
-				<div class="checkbox"><input id ="ch-<?php echo $item['id'] ?>" type="checkbox" name="m_items[]" value="<?php echo $item['id'] ?>" /></div>
-				<div class="name"><label for="ch-<?php echo $item['id'] ?>"><strong><?php echo u_htmlencode($item['name']) ?></strong></label> (<?php echo u_htmlencode($item['path']) ?>)</div>
-				<div class="actions">
-					<a class="tiny-button" href="<?php echo url('admin/menu/edit:'.$item['id']) ?>" title="Edit">/</a>
-					<a class="tiny-button" href="<?php echo url('admin/menu/delete:'.$item['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
-				</div>
-			</li>
-		<?php endforeach ?>
-		</ul>
+		<div class="record-list">
+			<ul>
+			<?php foreach ($m_items as $index => $item): ?>
+				<li>
+					<div class="list-row row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
+						<input id ="ch-<?php echo $item['id'] ?>" type="checkbox" name="m_items[]" value="<?php echo $item['id'] ?>" />
+						<label for="ch-<?php echo $item['id'] ?>"><strong><?php echo u_htmlencode($item['name']) ?></strong></label> (<?php echo u_htmlencode($item['path']) ?>)
+						<span class="actions">
+							<a class="edit-icon" href="<?php echo url('admin/menu/edit:'.$item['id']) ?>">Edit</a>
+							<a class="delete-icon" href="<?php echo url('admin/menu/delete:'.$item['id']), '&amp;', xsrf::token() ?>">Delete</a>
+						</span>
+					</div>
+				</li>
+			<?php endforeach ?>
+			</ul>
+		</div>
 
 		<p class="align-right">
 			<input class="inline-button" type="submit" value="Delete" name="form_delete_selected_m_items" /> all selected items or

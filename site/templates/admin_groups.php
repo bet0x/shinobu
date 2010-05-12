@@ -12,22 +12,24 @@
 
 	<?php echo $pagination ?>
 
-	<ul class="group-list">
-	<?php foreach ($usergroups as $index => $group): ?>
-		<li class="row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
-			<div class="name"><strong><?php echo u_htmlencode($group['name']) ?></strong></div>
-			<div class="description"><?php echo $group['description'] ? u_htmlencode($group['description']) : '&nbsp;' ?></div>
-			<div class="actions">
-				<a class="tiny-button" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>" title="Edit">/</a>
-				<?php if ($group['user_count'] > 0): ?>
-				<span class="tiny-button">X</span>
-				<?php else: ?>
-				<a class="tiny-button" href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>" title="Delete">X</a>
-				<?php endif ?>
-			</div>
-		</li>
-	<?php endforeach ?>
-	</ul>
+	<div class="record-list">
+		<ul>
+		<?php foreach ($usergroups as $index => $group): ?>
+			<li>
+				<div class="list-row row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
+					&nbsp;<strong><?php echo u_htmlencode($group['name']) ?></strong>
+					<?php echo $group['description'] ? ' / '.u_htmlencode($group['description']) : '' ?>
+					<span class="actions">
+						<a class="edit-icon" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a>
+						<?php if ($group['user_count'] < 1): ?>
+						<a class="delete-icon" href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>">Delete</a>
+						<?php endif ?>
+					</span>
+				</div>
+			</li>
+		<?php endforeach ?>
+		</ul>
+	</div>
 
 	<p class="align-right"><a class="inline-button" href="<?php echo url('admin/groups/add') ?>">Add new group</a></p>
 </div>

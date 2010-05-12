@@ -11,7 +11,7 @@
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
-		<div class="nested-list">
+		<div class="record-list">
 			<?php echo $page_list_html ?>
 		</div>
 
