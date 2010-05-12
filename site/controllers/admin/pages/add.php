@@ -9,22 +9,37 @@
 
 class add_controller extends CmsWebController
 {
-	protected $parent_left, $parent_right;
+	protected $parent_right;
 
 	public function prepare()
 	{
 		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		// TODO: Check if there is a record with these values
-		if (strpos($this->request['args'], '/') !== false)
+		$this->request['args'] = intval($this->request['args']);
+
+		if ($this->request['args'] > 0)
 		{
-			list($this->parent_left, $this->parent_right) = explode('/', $this->request['args']);
-			$this->parent_left = intval($this->parent_left);
-			$this->parent_right = intval($this->parent_right);
+			$result = $this->db->query('SELECT rgt FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
+				or error($this->db->error);
+
+			$page_data = $result->fetch_assoc();
+			if (is_null($page_data))
+				return $this->send_error(404);
+			else
+				$this->parent_right = intval($page_data['rgt']);
 		}
 		else
-			return $this->send_error(400);
+		{
+			$result = $this->db->query('SELECT MAX(rgt) AS rgt FROM '.DB_PREFIX.'pages LIMIT 1')
+				or error($this->db->error);
+
+			$page_data = $result->fetch_assoc();
+			if (is_null($page_data))
+				$this->parent_right = 0;
+			else
+				$this->parent_right = intval($page_data['rgt']) + 1;
+		}
 	}
 
 	public function GET($args)
@@ -34,7 +49,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
-			'parent_left' => $this->parent_left.'/'.$this->parent_right,
+			'page_id' => $this->request['args'],
 			'errors' => array(),
 			'values' => array(
 				'title' => '',
@@ -110,7 +125,7 @@ class add_controller extends CmsWebController
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
 			'admin_perms' => $this->user->get_acl('administration'),
-			'parent_left' => $this->parent_left.'/'.$this->parent_right,
+			'page_id' => $this->request['args'],
 			'errors' => $errors,
 			'values' => $args['form']
 			));

@@ -330,31 +330,6 @@ dl.infolist dd { margin-left: 170px }
 dl.infolist dt + dd { margin-top: -1.58em }
 
 /* Lists */
-.group-list, .user-list {
-  margin: 1.5em 0;
-  padding: 0;
-  list-style: none;
-  font-size: 0.9em }
-.group-list li:first-child, .user-list li:first-child {
-  border-top: 1px solid #ccc }
-.group-list li, .user-list li {
-  padding: 0.3em 0.5em;
-  border-bottom: 1px solid #ccc;
-  overflow: auto }
-
-.group-list a, .user-list a { text-decoration: none }
-.group-list li.row-even, .user-list li.row-even { background: #efefef }
-.group-list li.row-odd, .user-list li.row-odd { background: #f9f9f9 }
-
-.group-list .name { float: left;clear: both;width: 21% }
-.group-list .description { float: left;width: 59% }
-.group-list .actions { float: right;width: 18%;text-align: right }
-
-.user-list .checkbox { float: left;clear: both;width: 4.5% }
-.user-list .name { float: left;width: 76.5% }
-.user-list .actions { float: right;width: 18%;text-align: right }
-.user-list li.marked-row { background: #ffdada }
-
 .record-list ul {
   margin: 1.5em 0;
   padding: 0;

@@ -10,7 +10,7 @@
 	</ul>
 	<?php endif ?>
 
-	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('admin/pages/add:'.$parent_left) ?>">
+	<form accept-charset="utf-8" class="form-style-one" method="post" action="<?php echo url('admin/pages/add:'.$page_id) ?>">
 		<div>
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>

@@ -19,7 +19,7 @@
 			<input class="inline-button" type="submit" value="Publish" name="form_publish_selected_pages" /> or
 			<input class="inline-button" type="submit" value="unpublish" name="form_unpublish_selected_pages" />
 			all selected pages or
-			<a class="inline-button" href="<?php echo url('admin/pages/add:'.$last_page_right) ?>">add a new page</a>.
+			<a class="inline-button" href="<?php echo url('admin/pages/add') ?>">add a new page</a>.
 		</p>
 	</form>
 	<?php else: ?>
