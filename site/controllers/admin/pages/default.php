@@ -60,9 +60,9 @@ class default_controller extends CmsWebController
 	<input id ="ch-'.$row['id'].'" type="checkbox" name="pages[]" value="'.$row['id'].'" />
 	<label for="ch-'.$row['id'].'"><strong>'.u_htmlencode($row['title']).'</strong></label>
 	<span class="actions">
-		<a class="add-icon" href="'.url('admin/pages/add:'.$row['id']).'">Add</a>
-		<a class="edit-icon" href="'.url('admin/pages/edit:'.$row['id']).'">Edit</a>
-		<a class="delete-icon" href="'.url('admin/pages/delete:'.$row['id']).'&amp;'.xsrf::token().'">Delete</a>
+		<a class="add-icon" title="Add" href="'.url('admin/pages/add:'.$row['id']).'">Add</a>
+		<a class="edit-icon" title="Edit" href="'.url('admin/pages/edit:'.$row['id']).'">Edit</a>
+		<a class="delete-icon" title="Delete" href="'.url('admin/pages/delete:'.$row['id']).'&amp;'.xsrf::token().'">Delete</a>
 	</span>
 </div>';
 

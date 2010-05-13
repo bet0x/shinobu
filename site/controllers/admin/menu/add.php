@@ -68,6 +68,8 @@ class add_controller extends CmsWebController
 				"'.$this->db->escape($args['form']['position']).'")')
 				or error($this->db->error);
 
+			cache::clear('main_menu.json');
+
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The menu item has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,

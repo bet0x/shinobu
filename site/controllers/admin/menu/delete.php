@@ -30,6 +30,8 @@ class delete_controller extends CmsWebController
 		$this->db->query('DELETE FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'])
 			or error($this->db->error);
 
+		cache::clear('main_menu.json');
+
 		// Redirect
 		return tpl::render('redirect', array(
 			'redirect_message' => '<p>Menu item has been successfully deleted. You will be redirected to the '.

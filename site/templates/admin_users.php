@@ -21,8 +21,8 @@
 						<input id ="ch-<?php echo $user['id'] ?>" type="checkbox" name="users[]" value="<?php echo $user['id'] ?>" />
 						<label for="ch-<?php echo $user['id'] ?>"><strong><?php echo u_htmlencode($user['username']) ?></strong></label> (<?php echo u_htmlencode($user['user_title']) ?>)
 						<span class="actions">
-							<a class="edit-icon" href="<?php echo url('admin/users/edit:'.$user['id']) ?>">Edit</a>
-							<a class="delete-icon" href="<?php echo url('admin/users/delete:'.$user['id']), '&amp;', xsrf::token() ?>">Delete</a>
+							<a class="edit-icon" title="Edit" href="<?php echo url('admin/users/edit:'.$user['id']) ?>">Edit</a>
+							<a class="delete-icon" title="Delete" href="<?php echo url('admin/users/delete:'.$user['id']), '&amp;', xsrf::token() ?>">Delete</a>
 						</span>
 					</div>
 				</li>

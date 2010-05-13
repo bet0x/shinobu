@@ -43,6 +43,8 @@ class batch_controller extends CmsWebController
 
 			$stmt->close();
 
+			cache::clear('main_menu.json');
+
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>'.$deleted_row_count.' menu item(s) successfully deleted. '.
 									  'You will be redirected to the previous page in 2 seconds.</p>',

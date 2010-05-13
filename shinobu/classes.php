@@ -427,7 +427,7 @@ class BaseController
 	protected function set_mimetype($type)
 	{
 		if (isset($this->_mimetypes[$type]))
-			header('Content-type: '.$this->_mimetypes.'; charset=utf-8');
+			header('Content-type: '.$this->_mimetypes[$type].'; charset=utf-8');
 		else
 			header('Content-type: text/plain; charset=utf-8');
 	}

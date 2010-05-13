@@ -20,9 +20,9 @@
 					&nbsp;<strong><?php echo u_htmlencode($group['name']) ?></strong>
 					<?php echo $group['description'] ? ' / '.u_htmlencode($group['description']) : '' ?>
 					<span class="actions">
-						<a class="edit-icon" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a>
+						<a class="edit-icon" title="Edit" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a>
 						<?php if ($group['user_count'] < 1): ?>
-						<a class="delete-icon" href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>">Delete</a>
+						<a class="delete-icon" title="Delete" href="<?php echo url('admin/groups/delete:'.$group['id']), '&amp;', xsrf::token() ?>">Delete</a>
 						<?php endif ?>
 					</span>
 				</div>
