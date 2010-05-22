@@ -77,6 +77,8 @@ class edit_controller extends CmsWebController
 				WHERE id='.$this->request['args'])
 				or error($this->db->error);
 
+			cache::clear('main_menu.json');
+
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The menu item has been updated. You will be redirected to the previous page in 2 seconds.</p>',
 				'redirect_delay' => 2,
