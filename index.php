@@ -17,7 +17,7 @@ define('SYS', dirname(__FILE__));
 setlocale(LC_CTYPE, 'C');
 
 // Load configuration, functions and libraries
-require SYS.'/site/config.php';
+require SYS.'/application/config.php';
 require SYS_INCLUDE.'/functions.php';
 
 // Turn off magic_quotes_runtime
@@ -81,7 +81,7 @@ elseif (defined('UTF8_USE_NATIVE'))
 require SYS_INCLUDE.'/classes.php';
 
 // Load base controllers
-require SYS.'/site/base.php';
+require SYS.'/application/base.php';
 
 // Return content to the visitor
 $application = new Application();

@@ -33,11 +33,11 @@ $sys_cookie_seed     = '&^7hyY&*88uhY&'; // Some random characters should be ent
 $sys_cookie_lifetime = 34560000; // 400 days
 
 // Paths
-define('SYS_INCLUDE', SYS.'/shinobu');
+define('SYS_INCLUDE', SYS.'/framework');
 define('SYS_LIB', SYS_INCLUDE.'/lib');
-define('SYS_CONTROL', SYS.'/site/controllers');
-define('SYS_TEMPLATE', SYS.'/site/templates');
-define('SYS_CACHE', SYS.'/site/cache');
+define('SYS_CONTROL', SYS.'/application/controllers');
+define('SYS_TEMPLATE', SYS.'/application/templates');
+define('SYS_CACHE', SYS.'/application/cache');
 define('SYS_STATIC', SYS.'/static');
 
 // UTF-8 Configuration (comment all 3 constants to disable the UTF-8 library)
