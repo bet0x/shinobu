@@ -5,7 +5,7 @@
 	<h2>Menu</h2>
 
 	<?php if (isset($m_items[0])): ?>
-	<p>New menu items can be added with the <em>add a new item</em> button. Multiple itemsx can be deleted at the same time by checking the
+	<p>New menu items can be added with the <em>add a new item</em> button. Multiple items can be deleted at the same time by checking the
 	   checkboxes and clicking the <em>delete</em> button, if there are any items.</p>
 
 	<p>The URLs or paths, which are between the parentheses, that start with <strong>http/https/ftp/irc</strong> or with a

@@ -5,7 +5,7 @@
 	<h2><?php echo u_htmlencode($page_title) ?></h2>
 
 	<p>If the path starts with <strong>http/https/ftp/irc</strong> or with a
-	   <strong>slash</strong> (/) it is an external path, otherwise it will be transformed intro something like
+	   <strong>slash</strong> (/) it is an external path, otherwise it will be transformed into something like
 	   <strong>http://example.com/?q=user</strong> (an internal path).</p>
 
 	<?php if (count($errors) > 0): ?>
@@ -24,7 +24,7 @@
 				<input type="text" name="form[name]" maxlength="255"<?php echo ' value="'.u_htmlencode($values['name']).'"' ?> />
 			</label>
 		</p>
-		<p class="description">A name must not be shorther than 3 characters or longer than 255 characters.</p>
+		<p class="description">A name must not be shorter than 3 characters or longer than 255 characters.</p>
 
 		<p>
 			<label<?php if (isset($errors['path'])) echo ' class="error-field"' ?>>
