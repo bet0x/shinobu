@@ -44,9 +44,10 @@ Requirements
 
  * A webserver (Nginx, Lighttpd, Apache, etc.)
  * PHP >= 5.2.0 (http://php.net/)
- * MySQLi (http://php.net/manual/en/book.mysqli.php)
- * Filter (http://php.net/filter)
- * Json (http://php.net/manual/en/book.json.php)
+ * MySQLi PHP extension (http://php.net/manual/en/book.mysqli.php)
+ * Filter PHP extension (http://php.net/filter)
+ * Json PHP extension (http://php.net/manual/en/book.json.php)
+ * MySQL 5 (http://www.mysql.com/)
 
 Contact/Support
 ---------------

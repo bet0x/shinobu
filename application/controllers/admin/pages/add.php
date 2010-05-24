@@ -92,7 +92,7 @@ class add_controller extends CmsWebController
 
 		if (empty($errors))
 		{
-			//$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
+			$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
 
 			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt >= '.$this->parent_right)
 				or error($this->db->error);
@@ -111,7 +111,7 @@ class add_controller extends CmsWebController
 				'.($this->parent_right + 1).')')
 				or error($this->db->error);
 
-			//$this->db->query('UNLOCK TABLES') or error($this->db->error);
+			$this->db->query('UNLOCK TABLES') or error($this->db->error);
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The page has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',

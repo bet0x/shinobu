@@ -27,6 +27,8 @@ class delete_controller extends CmsWebController
 			return $this->send_error(404);
 
 		// Delete page an all its children
+		$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
+
 		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE lft BETWEEN '.$page_data['lft'].' AND '.$page_data['rgt'])
 			or error($this->db->error);
 
@@ -35,6 +37,8 @@ class delete_controller extends CmsWebController
 
 		$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft-'.$page_data['width'].' WHERE lft > '.$page_data['rgt'])
 			or error($this->db->error);
+
+		$this->db->query('UNLOCK TABLES') or error($this->db->error);
 
 		cache::clear('page_'.$this->request['args'].'.json');
 
