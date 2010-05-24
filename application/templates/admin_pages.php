@@ -4,7 +4,7 @@
 <div id="admin-content">
 	<h2>Pages</h2>
 
-	<?php if (isset($pages[0])): ?>
+	<?php if (isset($page_html[0])): ?>
 	<?php echo $pagination ?>
 
 	<form accept-charset="utf-8" method="post" action="<?php echo url('admin/pages/batch') ?>">
@@ -12,7 +12,7 @@
 			<?php echo xsrf::form_html(), "\n" ?>
 		</div>
 		<div class="record-list">
-			<?php echo $page_list_html ?>
+			<?php echo $page_html ?>
 		</div>
 
 		<p class="align-right">
