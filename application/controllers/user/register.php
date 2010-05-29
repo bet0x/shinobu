@@ -1,7 +1,7 @@
 <?php
 
 # =============================================================================
-# site/controllers/user/register.php
+# application/controllers/user/register.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details

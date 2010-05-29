@@ -1,7 +1,7 @@
 <?php
 
 # =============================================================================
-# site/controllers/admin/menu/batch.php
+# application/controllers/admin/menu/batch.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
