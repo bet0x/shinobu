@@ -13,14 +13,12 @@ TODO
      - Improve ACL/Permission management GUI
    * Pages
      - Markdown toolbar
-     - TOC option
    = Files (filemanager)
  - Libraries
    * Time and date functions/helpers
      - Localization
    = E-mail
  - Pages system
-   = TOC (Table Of Contents) generation
    - Nested/Child pages
  - Localization system
  * Documentation (API, tutorials/examples, usage)

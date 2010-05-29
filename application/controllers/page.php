@@ -1,7 +1,7 @@
 <?php
 
 # =============================================================================
-# site/controllers/page.php
+# application/controllers/page.php
 #
 # Copyright (c) 2009-2010 Frank Smit
 # License: zlib/libpng, see the COPYING file for details
@@ -21,7 +21,8 @@ class page_controller extends CmsWebController
 				));
 		}
 
-		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_private, p.show_meta, p.pub_date, p.edit_date
+		// Fetch page and parse contents
+		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_private, p.show_toc, p.show_meta, p.pub_date, p.edit_date
 			FROM '.DB_PREFIX.'pages AS p
 			WHERE p.id='.$this->request['args'].' AND p.is_published=1 LIMIT 1')
 			or error($this->db->error);
@@ -42,6 +43,10 @@ class page_controller extends CmsWebController
 
 		require SYS_LIB.'/markdown/markdown.php';
 		$page_data['content'] = Markdown($page_data['content']);
+
+		// Table of contents
+		if ($page_data['show_toc'] == '1')
+			$page_data['content'] = generate_toc($page_data['content']);
 
 		// Breadcrumbs
 		$result = $this->db->query('SELECT parent.id, parent.title FROM '.DB_PREFIX.'pages AS node,

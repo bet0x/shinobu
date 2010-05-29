@@ -37,6 +37,8 @@
 			       Publish page, so it's visible to users.</label>
 			<label><input type="checkbox" name="form[is_private]" value="1"<?php echo $values['is_private'] == 1 ? ' checked="checked"' : '' ?> />
 			       Only grant access to this page for registered users.</label>
+			<label><input type="checkbox" name="form[show_toc]" value="1"<?php echo $values['show_toc'] == 1 ? ' checked="checked"' : '' ?> />
+			       Show a table of contents at the top of the page.</label>
 			<label><input type="checkbox" name="form[show_meta]" value="1"<?php echo $values['show_meta'] == 1 ? ' checked="checked"' : '' ?> />
 			       Show information about the author and publication/edit date.</label>
 		</p>

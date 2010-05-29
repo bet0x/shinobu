@@ -56,6 +56,7 @@ class add_controller extends CmsWebController
 				'content' => '',
 				'is_published' => 0,
 				'is_private' => 0,
+				'show_toc' => 0,
 				'show_meta' => 0)
 			));
 	}
@@ -88,6 +89,7 @@ class add_controller extends CmsWebController
 		// Check options
 		$args['form']['is_published'] = isset($args['form']['is_published']) ? 1 : 0;
 		$args['form']['is_private'] = isset($args['form']['is_private']) ? 1 : 0;
+		$args['form']['show_toc'] = isset($args['form']['show_toc']) ? 1 : 0;
 		$args['form']['show_meta'] = isset($args['form']['show_meta']) ? 1 : 0;
 
 		if (empty($errors))
@@ -100,11 +102,12 @@ class add_controller extends CmsWebController
 				or error($this->db->error);
 
 			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (title, content,
-				is_published, is_private, show_meta, pub_date, lft, rgt) VALUES(
+				is_published, is_private, show_toc, show_meta, pub_date, lft, rgt) VALUES(
 				"'.$this->db->escape($args['form']['title']).'",
 				"'.$this->db->escape($args['form']['content']).'",
 				'.$args['form']['is_published'].',
 				'.$args['form']['is_private'].',
+				'.$args['form']['show_meta'].',
 				'.$args['form']['show_meta'].',
 				'.$now.',
 				'.$this->parent_right.',

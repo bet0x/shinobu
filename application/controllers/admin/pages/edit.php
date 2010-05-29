@@ -19,7 +19,7 @@ class edit_controller extends CmsWebController
 		// Get page information
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.pub_date,
-			p.edit_date, p.show_meta
+			p.edit_date, p.show_toc, p.show_meta
 			FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error);
 
@@ -73,6 +73,7 @@ class edit_controller extends CmsWebController
 		// Check options
 		$args['form']['is_published'] = isset($args['form']['is_published']) ? 1 : 0;
 		$args['form']['is_private'] = isset($args['form']['is_private']) ? 1 : 0;
+		$args['form']['show_toc'] = isset($args['form']['show_toc']) ? 1 : 0;
 		$args['form']['show_meta'] = isset($args['form']['show_meta']) ? 1 : 0;
 
 		if (empty($errors))
@@ -82,6 +83,7 @@ class edit_controller extends CmsWebController
 				content="'.$this->db->escape($args['form']['content']).'",
 				is_published='.$args['form']['is_published'].',
 				is_private='.$args['form']['is_private'].',
+				show_toc='.$args['form']['show_toc'].',
 				show_meta='.$args['form']['show_meta'].',
 				edit_date='.$now.' WHERE id='.$this->request['args'])
 				or error($this->db->error);
