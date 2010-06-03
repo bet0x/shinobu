@@ -22,8 +22,9 @@ class default_controller extends CmsWebController
 			'Markdown' => trim(file_get_contents(SYS_LIB.'/markdown/VERSION'))
 			);
 
+		$tmp = explode(' ', $_SERVER['SERVER_SOFTWARE']);
 		$sys_info = array(
-			'webserver' => trim(array_shift(explode(' ', $_SERVER['SERVER_SOFTWARE']))),
+			'webserver' => trim(array_shift($tmp)),
 			'db' => array(
 				'name' => 'MySQLi',
 				'version' => $this->db->server_info),
