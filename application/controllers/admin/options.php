@@ -9,13 +9,24 @@
 
 class options_controller extends CmsWebController
 {
-	private $_usergroups = array();
+	private $_pages = array(0 => 'None'), $_usergroups = array();
 
 	public function prepare()
 	{
 		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_5))
 			$this->redirect(SYSTEM_BASE_URL);
 
+		// Fetch list of pages
+		$result = $this->db->query('SELECT id, title FROM '.DB_PREFIX.'pages WHERE is_published=1 AND is_private=0')
+			or error($this->db->error);
+
+		if ($result->num_rows > 0)
+		{
+			while ($row = $result->fetch_assoc())
+				$this->_pages[$row['id']] = $row['title'];
+		}
+
+		// Fetch list of usergroups
 		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
 			or error($this->db->error);
 
@@ -35,12 +46,14 @@ class options_controller extends CmsWebController
 			'page_title' => 'Options',
 			'subsection' => 'options',
 			'admin_perms' => $this->user->get_acl('administration'),
+			'pages' => $this->_pages,
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),
 			'time_format_example' => $this->timedate->time(time()),
 			'values' => array(
 				'website_title' => $this->config->website_title,
 				'allow_new_registrations' => $this->config->allow_new_registrations,
+				'default_homepage' => $this->config->default_homepage,
 				'default_usergroup' => $this->config->default_usergroup,
 				'timezone' => $this->config->timezone,
 				'date_format' => $this->config->date_format,
@@ -66,7 +79,14 @@ class options_controller extends CmsWebController
 		elseif (utf8_strlen($args['form']['website_title']) > 50)
 			$errors['website_title'] = 'The website title must not be more than 50 characters long. Please choose another (shorter) title.';
 
-		// Check `allow_new_registrations`
+		// Check default homepage
+		if (!isset($this->_pages[intval($args['form']['default_homepage'])]))
+		{
+			$errors['default_homepage'] = 'The chosen (home)page does not exist.';
+			$args['form']['default_homepage'] = 0;
+		}
+
+		// Check allow_new_registrations
 		$args['form']['allow_new_registrations'] = $args['form']['allow_new_registrations'] == '1' ? 1 : 0;
 
 		// Check default usergroup
@@ -120,6 +140,7 @@ class options_controller extends CmsWebController
 			'page_title' => 'Options',
 			'subsection' => 'options',
 			'admin_perms' => $this->user->get_acl('administration'),
+			'pages' => $this->_pages,
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),
 			'time_format_example' => $this->timedate->time(time()),

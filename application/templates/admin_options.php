@@ -24,6 +24,21 @@
 		</p>
 		<p class="description">The title of the website. This field may not contain HTML.</p>
 
+		<p>
+			<label<?php if (isset($errors['default_homepage'])) echo ' class="error-field"' ?>>
+				<strong>Default homepage</strong>
+				<select name="form[default_homepage]">
+					<option value="<?php echo $values['default_homepage'] ?>" selected="selected"><?php echo u_htmlencode($pages[$values['default_homepage']]) ?></option>
+					<option disabled="disabled">----------</option>
+					<?php foreach ($pages as $id => $title): ?>
+					<option value="<?php echo $id ?>"><?php echo u_htmlencode($title) ?></option>
+					<?php endforeach ?>
+				</select>
+			</label>
+		</p>
+		<p class="description">Which page should be displayed on the homepage/frontpage? Select <strong>None</strong> to view no page. Private
+		                       and unpublished pages are not shown in the list.</p>
+
 		<p class="non-text-fields">
 			<strong>Allow new user registrations?</strong>
 			<label><input type="radio" name="form[allow_new_registrations]" value="1"<?php echo $values['allow_new_registrations'] === 1 ? ' checked="checked"' : '' ?>/> Yes</label>
