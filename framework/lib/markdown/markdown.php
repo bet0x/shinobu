@@ -10,7 +10,7 @@
 # Copyright (c) 2004-2006 John Gruber
 # <http://daringfireball.net/projects/markdown/>
 
-
+# Version numbers
 define('MARKDOWN_VERSION', '1.0.1n'); # Sat 10 Oct 2009
 define('MARKDOWNEXTRA_VERSION', '1.2.4'); # Sat 10 Oct 2009
 
@@ -18,7 +18,7 @@ define('MARKDOWNEXTRA_VERSION', '1.2.4'); # Sat 10 Oct 2009
 define('MARKDOWN_EMPTY_ELEMENT_SUFFIX', ' />');
 
 # Define the width of a tab for code blocks.
-define('MARKDOWN_TAB_WIDTH', 4 );
+define('MARKDOWN_TAB_WIDTH', 4);
 
 # Optional title attribute for footnote links and backlinks.
 define('MARKDOWN_FN_LINK_TITLE', '');
@@ -500,7 +500,9 @@ class Markdown_Parser {
 
 	function doHardBreaks($text) {
 		# Do hard breaks:
-		return preg_replace_callback('/ {2,}\n/',
+		# Instead of 2 spaces at the end of a line it's now 2 spaces and a
+		# backslash to make the hardbreak more visible.
+		return preg_replace_callback('/ {2,}\\\\\n/',
 			array(&$this, '_doHardBreaks_callback'), $text);
 	}
 	function _doHardBreaks_callback($matches) {
