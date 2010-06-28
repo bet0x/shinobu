@@ -34,11 +34,9 @@ class register_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!$this->config->allow_new_registrations || !isset($args['form_register']))
+		if (!$this->config->allow_new_registrations || !isset($args['form_register'])
+		    || !isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('user/register'));
-
-		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();

@@ -369,6 +369,7 @@ class BaseController
 		504 => 'Gateway Timeout',
 		505 => 'HTTP Version Not Supported');
 	public $interrupt = false, $pre_output = false;
+	private $_mime_is_set = false;
 
 	public function __construct($request)
 	{
@@ -404,7 +405,7 @@ class BaseController
 	 * @param string $suffix
 	 * @return object
 	 */
-	protected function load_module($name, $args = null, $suffix = '')
+	protected function &load_module($name, &$args = null, $suffix = '')
 	{
 		static $modules = array();
 
@@ -426,10 +427,15 @@ class BaseController
 	 */
 	protected function set_mimetype($type)
 	{
+		if ($this->_mime_is_set)
+			return;
+
 		if (isset($this->_mimetypes[$type]))
 			header('Content-type: '.$this->_mimetypes[$type].'; charset=utf-8');
 		else
 			header('Content-type: text/plain; charset=utf-8');
+
+		$this->_mime_is_set = true;
 	}
 
 	/**

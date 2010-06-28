@@ -15,6 +15,9 @@ class page_controller extends CmsWebController
 
 		if (($page_data = cache::read('page_'.$this->request['args'])))
 		{
+			if ($page_data['is_private'] == 1 && !$this->user->authenticated)
+				$this->redirect(url('user/login'));
+
 			return tpl::render('page', array(
 				'page_title' => $page_data['title'],
 				'page_data' => $page_data,

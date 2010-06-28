@@ -177,7 +177,8 @@ function convert_linebreaks($str)
  */
 function get_ext($filename)
 {
-	return strtolower(substr($filename, strrpos($filename, '.') + 1));
+	$ext = strtolower(substr($filename, strrpos($filename, '.') + 1));
+	return strpos($ext, DIRECTORY_SEPARATOR) === false ? $ext : null;
 }
 
 /**
@@ -202,7 +203,7 @@ function file_size($size, $base10 = false)
     {
 		$size /= $base;
 
-        if ($size < $base)
+        if ($size < $base || $i == 7)
             return round($size, 2).' '.$units[$base][$i];
     }
 

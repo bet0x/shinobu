@@ -66,11 +66,9 @@ class add_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_admin_add_group']))
+		if (!isset($args['form_admin_add_group']) || !isset($args['xsrf_token'])
+		    || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('admin/groups'));
-
-		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();

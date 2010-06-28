@@ -25,11 +25,9 @@ class login_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_login']))
+		if (!isset($args['form_login']) || !isset($args['xsrf_token'])
+		    || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('user/login'));
-
-		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
 
 		if ($this->user->login($args['form']['username'], $args['form']['password']) === 1)
 		{

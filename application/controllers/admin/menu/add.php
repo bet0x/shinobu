@@ -32,11 +32,9 @@ class add_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_add_menu_item']))
+		if (!isset($args['form_add_menu_item']) || !isset($args['xsrf_token'])
+		    || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('admin/menu'));
-
-		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();

@@ -81,6 +81,7 @@ elseif (defined('UTF8_USE_NATIVE'))
 require SYS_INCLUDE.'/classes.php';
 
 // Load base controllers
+require SYS.'/application/functions.php';
 require SYS.'/application/base.php';
 
 // Return content to the visitor
@@ -89,6 +90,6 @@ echo $application->output;
 
 // This is just for testing
 $stop_timer = microtime();
-#echo "\n\n", round(get_microtime($stop_timer) - get_microtime($start_timer), 5),
-#     's - ', file_size(memory_get_usage()), ' - ',
-#     file_size(memory_get_peak_usage());
+echo "\n\n", round(get_microtime($stop_timer) - get_microtime($start_timer), 5),
+     's - ', file_size(memory_get_usage()), ' - ',
+     file_size(memory_get_peak_usage());

@@ -64,7 +64,8 @@ class options_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_admin_options']))
+		if (!isset($args['form_admin_options']) || !isset($args['xsrf_token'])
+		    || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('admin/options'));
 
 		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))

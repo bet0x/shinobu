@@ -15,7 +15,7 @@ class batch_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
+			$this->redirect(url('admin/users'));
 
 		if (!isset($args['users']))
 		{

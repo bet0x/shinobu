@@ -63,11 +63,9 @@ class add_controller extends CmsWebController
 
 	public function POST($args)
 	{
-		if (!isset($args['form_add_page']))
+		if (!isset($args['form_add_page']) || !isset($args['xsrf_token'])
+		    || !xsrf::check_cookie($args['xsrf_token']))
 			$this->redirect(url('admin/pages'));
-
-		if (!isset($args['xsrf_token']) || !xsrf::check_cookie($args['xsrf_token']))
-			return $this->send_error(403);
 
 		$args['form'] = array_map('trim', $args['form']);
 		$errors = array();

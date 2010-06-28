@@ -15,7 +15,7 @@ class delete_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($_GET[xsrf::token()]))
-			return $this->send_error(403);
+			$this->redirect(url('admin/groups'));
 
 		// Check if group exists
 		$this->request['args'] = intval($this->request['args']);

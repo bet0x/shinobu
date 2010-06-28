@@ -68,12 +68,9 @@ class default_controller extends CmsWebController
 			if (!preg_match('%^\d{2}:\d{2}:\d{2} up (.+),  (\d+) users?,  load average: (.+)$%', trim(shell_exec('uptime')), $matches))
 				error('Could not get uptime.');
 
-			list (, $sys_info['uptime'], $sys_info['users'], ) = $matches;
-
-			// Get kernel version and operating system
+			$sys_info['uptime'] = $matches[1];
+			$sys_info['users'] = $matches[2];
 			$sys_info['os'] = trim(shell_exec('uname -r -o'));
-
-			// Get loadavg
 			$sys_info['loadavg'] = implode(' ', sys_getloadavg());
 		}
 

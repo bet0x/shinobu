@@ -13,9 +13,9 @@ class user
 	        $db = null;
 	public $data = array(), $authenticated = false, $acl = array();
 
-	public function __construct(db $db = null)
+	public function __construct(db &$db = null)
 	{
-		$this->db = $db;
+		$this->db =& $db;
 		$this->authenticate();
 	}
 
