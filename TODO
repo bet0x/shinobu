@@ -6,19 +6,35 @@ TODO
 - Still needs to be done
 
  - Administration panel
-   - Options
-     - Localization settings
-     = Configuration options for HTML meta tags in the configuration file
-   * Groups
-     - Improve ACL/Permission management GUI
-   * Pages
-     - Markdown toolbar
-   = Files (filemanager)
+    - Options
+       - Localization settings
+       = Configuration options for HTML meta tags in the configuration file
+    * Pages
+       - Markdown toolbar
+         This also includes and enchanced textarea. For example, indenting text
+         should be possible just like it is in a code editor.
+    = Files (filemanager)
  - Libraries
-   * Time and date functions/helpers
-     - Localization
-   = E-mail
+    * Time and date functions/helpers
+       - Localization
+    = E-mail
+      Probably something similar to: http://gitorious.org/fluxbb/fluxbb/blobs/master/include/email.php
  - Localization system
  * Documentation (API, tutorials/examples, usage)
  - Template engine
+   Write one from scratch or use an existing one (must be fast and lightweight).
  - An installer
+
+
+Still needs research
+====================
+
+The people's names who suggested these are at the end of the items enclosed
+in parentheses.
+
+ - Convert the DB module to a library. (parraccourci)
+ - Extension system. (parraccourci)
+ - Use prepared statements. (lie2815)
+ - Test if references really need to be used in the module loader. (lie2815)
+ - Make it possible to move pages in the page tree.
+ - Redesign permission system and related administration pages.
