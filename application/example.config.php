@@ -40,10 +40,10 @@ define('SYS_TEMPLATE', SYS.'/application/templates');
 define('SYS_CACHE', SYS.'/application/cache');
 define('SYS_STATIC', SYS.'/static');
 
-// UTF-8 Configuration (comment all 3 constants to disable the UTF-8 library)
-define('UTF8', SYS_LIB.'/utf8');
-define('UTF8_USE_MBSTRING', true);
-#define('UTF8_USE_NATIVE', true);
+// UTF-8 Configuration
+define('UTF8', SYS_LIB.'/php-utf8');
+define('PHP_UTF8_MODE', 'mbstring');
+#define('PHP_UTF8_MODE', 'native');
 
 // ACL constants
 define('ACL_PERM_1', 1);
