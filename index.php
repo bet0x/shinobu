@@ -9,7 +9,7 @@
 
 $start_timer = microtime();
 
-error_reporting(E_ALL | E_STRICT);
+error_reporting(-1);
 define('SYS', dirname(__FILE__));
 
 // Force POSIX locale (to prevent functions such as

@@ -70,7 +70,9 @@ class user
 			return 4;
 
 		// 1209600: 2 weeks
-		set_cookie('user', array('id' => $user_id, 'key' => sha1($user_salt.$user_hash)), time() + 1209600);
+		set_cookie('user', array(
+			'id' => $user_id,
+			'key' => sha1($user_salt.$user_hash)), time() + 1209600);
 
 		return 1;
 	}
@@ -81,12 +83,13 @@ class user
 		set_cookie('user', null, time()-3600);
 	}
 
+	// Get an ACL from the database
 	public function get_acl($acl_id)
 	{
 		if (isset($this->acl[$acl_id]))
 			return $this->acl[$acl_id];
 
-		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->data['group_id'].'
+		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'group_acl WHERE group_id='.$this->data['group_id'].'
 			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error);
 
 		if ($result->num_rows === 0)
@@ -98,12 +101,13 @@ class user
 		return $this->acl[$acl_id];
 	}
 
-	public function check_acl($acl_id, $bits)
+	// Check if a user has a certain permission
+	public function check_acl($acl_id, $bit)
 	{
 		if (!isset($this->get_acl[$acl_id]))
 			$this->get_acl('administration');
 
-		return $this->acl[$acl_id] & $bits;
+		return $this->acl[$acl_id] & $bit;
 	}
 
 	// Remove from this class

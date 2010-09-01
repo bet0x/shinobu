@@ -33,7 +33,7 @@ class delete_controller extends CmsWebController
 			// Delete usergroup and ACL groups
 			$this->db->query('DELETE FROM '.DB_PREFIX.'usergroups WHERE id='.$this->request['args'])
 				or error($this->db->error);
-			$this->db->query('DELETE FROM '.DB_PREFIX.'acl_groups WHERE group_id='.$this->request['args'])
+			$this->db->query('DELETE FROM '.DB_PREFIX.'group_acl WHERE group_id='.$this->request['args'])
 				or error($this->db->error);
 
 			$redirect_message = 'Usergroup has been successfully removed.';

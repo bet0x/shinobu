@@ -101,7 +101,7 @@ class add_controller extends CmsWebController
 			$group_id = intval($this->db->insert_id);
 
 			// Create and store permissions
-			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'acl_groups (acl_id, group_id, permissions) VALUES(?, ?, ?)')
+			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'group_acl (acl_id, group_id, permissions) VALUES(?, ?, ?)')
 				or error($this->db->error);
 
 			foreach ($this->acl_ids as $acl_id)
