@@ -60,7 +60,7 @@ License
 Shinobu is licensed undet the Zlib/PNG license, PHP Markdown under the a
 BSD-style open source license and PHP-UTF8 under the GNU/LGPL 2.1.
 
-See the COPYING file for the full licenses.
+See the docs directory for all the license files.
 
 Links
 -----
