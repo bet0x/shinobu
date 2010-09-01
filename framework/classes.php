@@ -89,9 +89,9 @@ class Application
 			header('Content-type: text/plain; charset=utf-8');
 
 			// Print exception info
-			echo $e->getMessage(), "\n\n";
-			echo '#- ', $e->getFile(), '(', $e->getLine(), ')', "\n";
-			echo $e->getTraceAsString();
+			echo $e->getMessage(), "\n\n",
+			     '#- ', $e->getFile(), '(', $e->getLine(), ')', "\n",
+			     $e->getTraceAsString();
 
 			// Stop execution
 			exit;

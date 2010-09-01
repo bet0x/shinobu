@@ -69,7 +69,6 @@ abstract class CmsWebController extends BaseController
 		echo '</pre>';*/
 
 		$this->pre_output = $this->prepare();
-
 		if (!is_null($this->pre_output))
 			$this->interrupt = true;
 	}

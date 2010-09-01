@@ -56,6 +56,7 @@ class default_controller extends CmsWebController
 <div class="list-row row-'.($index % 2 ? 'odd' : 'even').($row['is_published'] == '0' ? ' marked-row' : '').'">
 	<input id ="ch-'.$row['id'].'" type="checkbox" name="pages[]" value="'.$row['id'].'" />
 	<label for="ch-'.$row['id'].'"><strong>'.u_htmlencode($row['title']).'</strong></label>
+	(page:'.$row['id'].')
 	<span class="actions">
 		<a class="add-icon" title="Add" href="'.url('admin/pages/add:'.$row['id']).'">Add</a>
 		<a class="edit-icon" title="Edit" href="'.url('admin/pages/edit:'.$row['id']).'">Edit</a>
