@@ -14,8 +14,6 @@ class default_controller extends CmsWebController
 		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'info'))
 			$this->redirect(SYSTEM_BASE_URL);
 
-		global $db_name;
-
 		$software_versions = array(
 			'Shinobu' => SHINOBU,
 			'PHP-UTF8' => trim(file_get_contents(UTF8.'/VERSION')),
@@ -51,7 +49,7 @@ class default_controller extends CmsWebController
 			$sys_info['php_accelerator'] = 'N/A';
 
 		// Calculate total database size/row count (only MySQLi for now)
-		$result = $this->db->query('SHOW TABLE STATUS FROM `'.$db_name.'`')
+		$result = $this->db->query('SHOW TABLE STATUS FROM `'.conf::$db_name.'`')
 			or error($this->db->error);
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;

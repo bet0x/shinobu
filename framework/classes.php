@@ -45,9 +45,7 @@ class Application
 		// Send a 404 error when the controller could not be found
 		if (!$controller_path)
 		{
-			global $SYSTEM_DEFAULT_CONTROLLER;
-
-			$controller_instance = new $SYSTEM_DEFAULT_CONTROLLER($request);
+			$controller_instance = new conf::$default_controller($request);
 			return $controller_instance->send_error(404);
 		}
 

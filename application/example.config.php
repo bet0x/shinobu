@@ -10,27 +10,6 @@ $port = isset($_SERVER['SERVER_PORT']) && (($_SERVER['SERVER_PORT'] != '80' && $
 // System settings
 define('SHINOBU', '0.4-alpha1');
 define('SYSTEM_BASE_URL', $protocol.$_SERVER['SERVER_NAME'].$port.rtrim(dirname($_SERVER['SCRIPT_NAME']),'/\\'));
-define('REWRITE_URL', false);
-define('SYSTEM_DEVEL', true); // Development mode
-
-$SYSTEM_DEFAULT_CONTROLLER = 'BaseController';
-
-// Database settings
-$db_host       = '';
-$db_name       = '';
-$db_user       = '';
-$db_password   = '';
-$db_flags      = 0;
-
-define('DB_PREFIX', '');
-
-// Cookie settings
-$sys_cookie_name     = 'shinobu04_cookie';
-$sys_cookie_domain   = '';
-$sys_cookie_path     = '/';
-$sys_cookie_secure   = 0;
-$sys_cookie_seed     = '&^7hyY&*88uhY&'; // Some random characters should be entered here. Example: &^7hyY&*88uhY&
-$sys_cookie_lifetime = 34560000; // 400 days
 
 // Paths
 define('SYS_INCLUDE', SYS.'/framework');
@@ -45,12 +24,57 @@ define('UTF8', SYS_LIB.'/php-utf8');
 define('PHP_UTF8_MODE', 'mbstring');
 #define('PHP_UTF8_MODE', 'native');
 
-// ACL constants
-define('ACL_PERM_1', 1);
-define('ACL_PERM_2', 2);
-define('ACL_PERM_3', 4);
-define('ACL_PERM_4', 8);
-define('ACL_PERM_5', 16);
-define('ACL_PERM_6', 32);
-define('ACL_PERM_7', 64);
-define('ACL_PERM_8', 128);
+class conf
+{
+	// System settings
+	static public $default_controller = 'BaseController';
+
+	const REWRITE_URL = false;
+	const DEBUG = true; // Development mode
+
+	// Database settings
+	static public $db_host = 'localhost',
+	              $db_name = 'shinobu',
+	              $db_user = 'root',
+	              $db_password = 'password',
+	              $db_flags = 0;
+
+	// Cookie settings
+	static public $cookie_name = 'shinobu_xampp_cookie',
+	              $cookie_domain = '',
+	              $cookie_path = '/',
+	              $cookie_secure = 0,
+	              $cookie_seed = '&^7hyY&*8dd8uhY&',  // Some random characters should be entered here. Example: &^7hyY&*88uhY&
+	              $cookie_ttl = 34560000; // 400 days
+}
+
+define('DB_PREFIX', ''); // Database table prefix
+
+// A simpel container for permission sets
+class _permission_struct
+{
+	// Define permission sets
+	static public $sets = array(
+		'admin' => array(
+			'info'    => 1,
+			'pages'   => 2,
+			'users'   => 4,
+			'menu'    => 8,
+			'options' => 16,
+			'groups'  => 32,
+			//'' => 64,
+			//'' => 128,
+		),
+
+		'test' => array(
+			'one'   => 1,
+			'two'   => 2,
+			'three' => 4,
+			'four'  => 8,
+			'five'  => 16,
+			'six'   => 32,
+			'seven' => 64,
+			'eight' => 128,
+		)
+	);
+}

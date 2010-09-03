@@ -59,16 +59,14 @@ function error($message)
  */
 function set_cookie($name, $value, $expire = 0)
 {
-	global $sys_cookie_name, $sys_cookie_path, $sys_cookie_domain, $sys_cookie_secure;
-
 	header('P3P: CP="CUR ADM"'); // Enable sending of a P3P header
 
 	if (version_compare(PHP_VERSION, '5.2.0', '>='))
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path,
-			$sys_cookie_domain, $sys_cookie_secure, true);
+		setcookie(conf::$cookie_name.'_'.$name, serialize($value), $expire, conf::$cookie_path,
+			conf::$cookie_domain, conf::$cookie_secure, true);
 	else
-		setcookie($sys_cookie_name.'_'.$name, serialize($value), $expire, $sys_cookie_path.'; HttpOnly',
-			$sys_cookie_domain, $sys_cookie_secure);
+		setcookie(conf::$cookie_name.'_'.$name, serialize($value), $expire, conf::$cookie_path.'; HttpOnly',
+			conf::$cookie_domain, conf::$cookie_secure);
 }
 
 /**
@@ -80,9 +78,7 @@ function set_cookie($name, $value, $expire = 0)
  */
 function get_cookie($name)
 {
-	global $sys_cookie_name;
-
-	return isset($_COOKIE[$sys_cookie_name.'_'.$name]) ? unserialize($_COOKIE[$sys_cookie_name.'_'.$name]) : false;
+	return isset($_COOKIE[conf::$cookie_name.'_'.$name]) ? unserialize($_COOKIE[conf::$cookie_name.'_'.$name]) : false;
 }
 
 /**
@@ -93,7 +89,7 @@ function get_cookie($name)
  */
 function url($relative_path = null)
 {
-	return SYSTEM_BASE_URL.'/'.(REWRITE_URL ? '' : '?q=').$relative_path;
+	return SYSTEM_BASE_URL.'/'.(conf::REWRITE_URL ? '' : '?q=').$relative_path;
 }
 
 /**
