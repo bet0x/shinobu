@@ -18,7 +18,7 @@
 			<li>
 				<div class="list-row row-<?php echo $index % 2 ? 'odd' : 'even' ?>">
 					&nbsp;<strong><?php echo u_htmlencode($group['name']) ?></strong>
-					<?php echo $group['description'] ? ' / '.u_htmlencode($group['description']) : '' ?>
+					(<?php echo $group['user_count'] ?>)
 					<span class="actions">
 						<a class="edit-icon" title="Edit" href="<?php echo url('admin/groups/edit:'.$group['id']) ?>">Edit</a>
 						<?php if ($group['user_count'] < 1): ?>

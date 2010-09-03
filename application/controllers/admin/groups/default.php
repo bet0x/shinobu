@@ -18,7 +18,7 @@ class default_controller extends CmsWebController
 		$start_offset = ($current_page-1) * 20;
 
 		$usergroups = array();
-		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS g.id, g.name, g.description, COUNT(u.group_id) AS user_count FROM
+		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS g.id, g.name, COUNT(u.group_id) AS user_count FROM
 			'.DB_PREFIX.'usergroups AS g LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id LIMIT '.$start_offset.',20')
 			or error($this->db->error);
 
