@@ -39,15 +39,17 @@
 		<p class="description">This is only used for administrative purposes. A short description for each group in the overview
 		                       makes it easier to identify a usergroup.</p>
 
+		<?php foreach (_permission_struct::$sets as $set_id => $set): ?>
 		<p class="non-text-fields">
-			<strong>Permissions</strong>
-			<?php foreach($permissions as $p): ?>
+			<strong>Permissions: <?php echo $set_id ?></strong>
+			<?php foreach($set as $perm_id => $bit): ?>
 			<label>
-				<input type="checkbox" name="acl[<?php echo $p['acl_id'] ?>][<?php echo $p['name'] ?>]" value="1" />
-				<?php echo u_htmlencode($p['desc']) ?>
+				<input type="checkbox" name="perm[<?php echo $set_id ?>][<?php echo $perm_id ?>]" value="1" />
+				<?php echo u_htmlencode($perm_id) ?>
 			</label>
 			<?php endforeach ?>
 		</p>
+		<?php endforeach ?>
 
 		<p class="buttons">
 			<input type="submit" value="Update" name="form_admin_add_group" /> or

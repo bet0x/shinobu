@@ -11,7 +11,7 @@ class default_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_1))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'info'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		global $db_name;
@@ -78,7 +78,6 @@ class default_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Information',
 			'subsection' => 'information',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'software_versions' => $software_versions,
 			'sys_info' => $sys_info
 			));

@@ -13,7 +13,7 @@ class options_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_5))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'options'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Fetch list of pages
@@ -45,7 +45,6 @@ class options_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'pages' => $this->_pages,
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),
@@ -140,7 +139,6 @@ class options_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Options',
 			'subsection' => 'options',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'pages' => $this->_pages,
 			'usergroups' => $this->_usergroups,
 			'date_format_example' => $this->timedate->date(time()),

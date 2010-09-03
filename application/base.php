@@ -25,14 +25,7 @@ abstract class CmsWebController extends BaseController
 
 		// Set some template variables
 		tpl::set('website_title', $this->config->website_title);
-		tpl::set('authenticated', $this->user->authenticated);
-
-		// Do some extra things for authenticated users
-		if ($this->user->authenticated)
-		{
-			tpl::set('username', $this->user->data['username']);
-			tpl::set('admin_view', $this->user->check_acl('administration', ACL_PERM_1));
-		}
+		tpl::set('user', $this->user);
 
 		// Load main menu
 		if (!($main_menu = cache::read('main_menu')))

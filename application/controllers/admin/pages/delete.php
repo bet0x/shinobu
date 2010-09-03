@@ -11,7 +11,7 @@ class delete_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'pages'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($_GET[xsrf::token()]))

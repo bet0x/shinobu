@@ -11,7 +11,7 @@ class delete_controller extends CmsWebController
 {
 	public function GET($args)
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'groups'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		if (!isset($_GET[xsrf::token()]))
@@ -33,7 +33,7 @@ class delete_controller extends CmsWebController
 			// Delete usergroup and ACL groups
 			$this->db->query('DELETE FROM '.DB_PREFIX.'usergroups WHERE id='.$this->request['args'])
 				or error($this->db->error);
-			$this->db->query('DELETE FROM '.DB_PREFIX.'group_acl WHERE group_id='.$this->request['args'])
+			$this->db->query('DELETE FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->request['args'])
 				or error($this->db->error);
 
 			$redirect_message = 'Usergroup has been successfully removed.';

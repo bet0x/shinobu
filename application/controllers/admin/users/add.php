@@ -13,7 +13,7 @@ class add_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_3))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'users'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get a list of groups
@@ -33,7 +33,6 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new user',
 			'subsection' => 'users',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'usergroups' => $this->_usergroups,
 			'errors' => array(),
 			'values' => array(
@@ -121,7 +120,6 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new user',
 			'subsection' => 'users',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'usergroups' => $this->_usergroups,
 			'errors' => $errors,
 			'values' => $args['form']

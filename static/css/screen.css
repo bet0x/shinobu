@@ -150,12 +150,12 @@ hr {
   margin-right: 1.5em }
 .form-style-one p.non-text-fields strong {
   margin-bottom: 0.6em }
-.form-style-one p.non-text-fields label {
+.form-style-one .non-text-fields label {
   display: block;
   margin-top: 0.3em;
   cursor: pointer;
   font-size:0.8em }
-.form-style-one label strong, .form-style-one p.non-text-fields strong {
+.form-style-one label strong, .form-style-one .non-text-fields strong {
   display: block;
   color: #333 }
 .form-style-one label strong {
@@ -217,6 +217,10 @@ input[type=submit]:active {
 label.error-field input, label.error-field textarea,
 label.error-field input:focus, label.error-field textarea:focus {
   border-color: #FF6600 }
+
+.group-block {
+  padding: 0.6em 1em;
+  background: #eee }
 
 /* --- Redirect
 ---------------------------------------------------------*/

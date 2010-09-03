@@ -13,28 +13,16 @@
 
 class edit_controller extends CmsWebController
 {
-	private $_group_data = null, $_group_permissions = array();
-
-	// Permission id => permission byte
-	private $permission_list = array(
-		'permission_01' => ACL_PERM_1,
-		'permission_02' => ACL_PERM_2,
-		'permission_03' => ACL_PERM_3,
-		'permission_04' => ACL_PERM_4,
-		'permission_05' => ACL_PERM_5,
-		'permission_06' => ACL_PERM_6,
-		'permission_07' => ACL_PERM_7,
-		'permission_08' => ACL_PERM_8);
+	private $_group_data;
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'groups'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get usergroup data
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT g.*, p.permissions FROM '.DB_PREFIX.'usergroups AS g, '.
-			DB_PREFIX.'group_acl AS p WHERE id='.$this->request['args'].' AND p.group_id=g.id LIMIT 1')
+		$result = $this->db->query('SELECT g.* FROM '.DB_PREFIX.'usergroups AS g WHERE id='.$this->request['args'].' LIMIT 1')
 			or error($this->db->error);
 
 		$this->_group_data = $result->fetch_assoc();
@@ -42,21 +30,12 @@ class edit_controller extends CmsWebController
 			return $this->send_error(404);
 
 		// Get permissions
-		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
+		$result = $this->db->query('SELECT set_id, bits FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->request['args'])
 			or error($this->db->error);
 
+		$this->_group_data['permissions'] = array();
 		while ($row = $result->fetch_assoc())
-		{
-			foreach ($this->permission_list as $p => $b)
-			{
-				if ($row[$p])
-					$this->_group_permissions[] = array(
-						'acl_id' =>$row['id'],
-						'name' => $p,
-						'check' => $this->_group_data['permissions'] & $b,
-						'desc' => $row[$p]);
-			}
-		}
+			$this->_group_data['permissions'][$row['set_id']] = $row['bits'];
 	}
 
 	public function GET($args)
@@ -65,10 +44,8 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => $this->_group_data,
 			'errors' => array(),
-			'permissions' => $this->_group_permissions
 			));
 	}
 
@@ -105,27 +82,28 @@ class edit_controller extends CmsWebController
 				or error($this->db->error);
 
 			// Store permissions
-			if (isset($args['acl']))
+			if (isset($args['perm']))
 			{
-				$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'group_acl SET permissions=? WHERE acl_id=? AND group_id=?')
+				$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'permissions SET bits=? WHERE set_id=? AND group_id=?')
 					or error($this->db->error);
 
-				foreach ($args['acl'] as $acl_id => $acl)
+				foreach (_permission_struct::$sets as $set_id => $set)
 				{
-					$tmp = 0;
+					$bits = 0;
+					foreach ($set as $perm_id => $bit)
+					{
+						if (isset($args['perm'][$set_id][$perm_id]))
+							$bits |= $bit;
+					}
 
-					foreach ($this->permission_list as $p => $b)
-						if (isset($args['acl'][$acl_id][$p]))
-							$tmp |= $b;
-
-					$stmt->bind_param('isi', $tmp, $acl_id, $this->request['args']);
+					$stmt->bind_param('isi', $bits, $set_id, $this->request['args']);
 					$stmt->execute();
 				}
 
 				$stmt->close();
 			}
 			else
-				$this->db->query('UPDATE '.DB_PREFIX.'group_acl SET permissions=0 WHERE group_id='.$this->request['args'])
+				$this->db->query('UPDATE '.DB_PREFIX.'permissions SET bits=0 WHERE group_id='.$this->request['args'])
 					or error($this->db->error);
 
 			// Redirect
@@ -141,10 +119,8 @@ class edit_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Group: '.$this->_group_data['name'],
 			'subsection' => 'groups',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => $this->_group_data,
 			'errors' => $errors,
-			'permissions' => $this->_group_permissions
 			));
 	}
 }

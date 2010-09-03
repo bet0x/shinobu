@@ -32,10 +32,10 @@
 		<?php endif ?>
 
 		<ul>
-			<?php if ($authenticated): ?>
-			<li><a href="<?php echo url('user') ?>"><?php echo u_htmlencode($username) ?> (Profile)</a></li>
+			<?php if ($user->authenticated): ?>
+			<li><a href="<?php echo url('user') ?>"><?php echo u_htmlencode($user->data['username']) ?> (Profile)</a></li>
 			<li>&middot;</li>
-			<?php if ($admin_view): ?>
+			<?php if ($user->is_allowed('admin', 'info')): ?>
 			<li><a href="<?php echo url('admin') ?>">Administration</a></li>
 			<li>&middot;</li>
 			<?php endif ?>

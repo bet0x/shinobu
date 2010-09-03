@@ -13,7 +13,7 @@ class add_controller extends CmsWebController
 
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_2))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'pages'))
 			$this->redirect(SYSTEM_BASE_URL);
 
 		$this->request['args'] = intval($this->request['args']);
@@ -48,7 +48,6 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'page_id' => $this->request['args'],
 			'errors' => array(),
 			'values' => array(
@@ -125,7 +124,6 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new page',
 			'subsection' => 'pages',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'page_id' => $this->request['args'],
 			'errors' => $errors,
 			'values' => $args['form']

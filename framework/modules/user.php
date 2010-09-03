@@ -83,31 +83,31 @@ class user
 		set_cookie('user', null, time()-3600);
 	}
 
-	// Get an ACL from the database
-	public function get_acl($acl_id)
+	// Get get a group permission set from the database
+	public function _get_permission_set($set_id)
 	{
-		if (isset($this->acl[$acl_id]))
-			return $this->acl[$acl_id];
-
-		$result = $this->db->query('SELECT permissions FROM '.DB_PREFIX.'group_acl WHERE group_id='.$this->data['group_id'].'
-			AND acl_id="'.$this->db->escape($acl_id).'" LIMIT 1') or error($this->db->error);
+		$result = $this->db->query('SELECT bits FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->data['group_id'].'
+			AND set_id="'.$this->db->escape($set_id).'" LIMIT 1') or error($this->db->error);
 
 		if ($result->num_rows === 0)
 			return false;
 
 		$permissions = $result->fetch_row();
-		$this->acl[$acl_id] = (int) $permissions[0];
+		$this->permissions[$set_id] = (int) $permissions[0];
 
-		return $this->acl[$acl_id];
+		return $this->permissions[$set_id];
 	}
 
-	// Check if a user has a certain permission
-	public function check_acl($acl_id, $bit)
+	// Check if a user is allowed to do a certain action
+	public function is_allowed($set_id, $perm_id)
 	{
-		if (!isset($this->get_acl[$acl_id]))
-			$this->get_acl('administration');
+		if (!isset($this->permissions[$set_id]))
+			$this->_get_permission_set($set_id);
 
-		return $this->acl[$acl_id] & $bit;
+		if (!isset(_permission_struct::$sets[$set_id][$perm_id]))
+			return false;
+
+		return $this->permissions[$set_id] & _permission_struct::$sets[$set_id][$perm_id];
 	}
 
 	// Remove from this class

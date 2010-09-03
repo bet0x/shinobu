@@ -9,43 +9,10 @@
 
 class add_controller extends CmsWebController
 {
-	private $_group_data = null, $_group_permissions = array(), $acl_ids = array();
-
-	// Permission id => permission byte
-	private $permission_list = array(
-		'permission_01' => ACL_PERM_1,
-		'permission_02' => ACL_PERM_2,
-		'permission_03' => ACL_PERM_3,
-		'permission_04' => ACL_PERM_4,
-		'permission_05' => ACL_PERM_5,
-		'permission_06' => ACL_PERM_6,
-		'permission_07' => ACL_PERM_7,
-		'permission_08' => ACL_PERM_8);
-
 	public function prepare()
 	{
-		if (!$this->user->authenticated || !$this->user->check_acl('administration', ACL_PERM_6))
+		if (!$this->user->authenticated || !$this->user->is_allowed('admin', 'groups'))
 			$this->redirect(SYSTEM_BASE_URL);
-
-		// Get permissions
-		$result = $this->db->query('SELECT a.* FROM '.DB_PREFIX.'acl AS a')
-			or error($this->db->error);
-
-		while ($row = $result->fetch_assoc())
-		{
-			$this->acl_ids[] = $row['id'];
-
-			foreach ($this->permission_list as $p => $b)
-			{
-				if ($row[$p])
-				{
-					$this->_group_permissions[] = array(
-						'acl_id' => $row['id'],
-						'name' => $p,
-						'desc' => $row[$p]);
-				}
-			}
-		}
 	}
 
 	public function GET($args)
@@ -54,13 +21,11 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new group',
 			'subsection' => 'groups',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => array(
 				'name' => '',
 				'user_title' => '',
 				'description' => ''),
-			'errors' => array(),
-			'permissions' => $this->_group_permissions
+			'errors' => array()
 			));
 	}
 
@@ -87,10 +52,6 @@ class add_controller extends CmsWebController
 		if (utf8_strlen($args['form']['description']) > 255)
 			$errors['description'] = 'The description must not be more than 255 characters long. Please choose another (shorter) description.';
 
-		// If no checkbox is checked, ACL won't be set
-		if (!isset($args['acl']))
-			$args['acl'] = array();
-
 		if (empty($errors))
 		{
 			// Create usergroup
@@ -101,18 +62,19 @@ class add_controller extends CmsWebController
 			$group_id = intval($this->db->insert_id);
 
 			// Create and store permissions
-			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'group_acl (acl_id, group_id, permissions) VALUES(?, ?, ?)')
+			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'permissions (set_id, group_id, bits) VALUES(?, ?, ?)')
 				or error($this->db->error);
 
-			foreach ($this->acl_ids as $acl_id)
+			foreach (_permission_struct::$sets as $set_id => $set)
 			{
-				$permissions = 0;
+				$bits = 0;
+				foreach ($set as $perm_id => $bit)
+				{
+					if (isset($args['perm'][$set_id][$perm_id]))
+						$bits |= $bit;
+				}
 
-				foreach ($this->permission_list as $permission => $byte)
-					if (isset($args['acl'][$acl_id][$permission]))
-						$permissions |= $byte;
-
-				$stmt->bind_param('ssi', $acl_id, $group_id, $permissions);
+				$stmt->bind_param('sii', $set_id, $group_id, $bits);
 				$stmt->execute();
 			}
 
@@ -131,13 +93,11 @@ class add_controller extends CmsWebController
 			'website_section' => 'Administration',
 			'page_title' => 'Add new group',
 			'subsection' => 'groups',
-			'admin_perms' => $this->user->get_acl('administration'),
 			'values' => array(
 				'name' => $args['form']['name'],
 				'user_title' => $args['form']['user_title'],
 				'description' => $args['form']['description']),
-			'errors' => $errors,
-			'permissions' => $this->_group_permissions
+			'errors' => $errors
 			));
 	}
 }

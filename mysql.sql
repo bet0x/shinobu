@@ -5,32 +5,6 @@
 -- --------------------------------------------------------
 
 --
--- Table structure for table `acl`
---
-
-CREATE TABLE IF NOT EXISTS `acl` (
-  `id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `permission_01` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
-  `permission_02` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_03` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_04` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_05` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_06` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_07` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  `permission_08` varchar(255) COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
-  UNIQUE KEY `id` (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `acl`
---
-
-INSERT INTO `acl` (`id`, `permission_01`, `permission_02`, `permission_03`, `permission_04`, `permission_05`, `permission_06`, `permission_07`, `permission_08`) VALUES
-('administration', 'Administration: View administration panel (only view the menu item and administration index)', 'Administration: Create, delete and edit pages', 'Administration: Delete and edit users', 'Administration: Manage menu/navigation items', 'Administration: Change system options', 'Administration: Manage ACL user groups', 'Administration: Manage ACL permissions', '');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `config`
 --
 
@@ -52,30 +26,6 @@ INSERT INTO `config` (`name`, `value`) VALUES
 ('time_format', 'H:i'),
 ('timezone', 'Europe/Andorra'),
 ('default_homepage', '39');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `group_acl`
---
-
-CREATE TABLE IF NOT EXISTS `group_acl` (
-  `acl_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `group_id` int(10) unsigned NOT NULL,
-  `permissions` tinyint(3) unsigned NOT NULL DEFAULT '0',
-  KEY `acl_id` (`acl_id`),
-  KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `group_acl`
---
-
-INSERT INTO `group_acl` (`acl_id`, `group_id`, `permissions`) VALUES
-('administration', 1, 127),
-('administration', 2, 0),
-('administration', 18, 0),
-('administration', 16, 1);
 
 -- --------------------------------------------------------
 
@@ -145,6 +95,35 @@ INSERT INTO `pages` (`id`, `title`, `content`, `is_published`, `is_private`, `sh
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `permissions`
+--
+
+CREATE TABLE IF NOT EXISTS `permissions` (
+  `set_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
+  `group_id` int(10) unsigned NOT NULL,
+  `bits` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  KEY `group_set_id` (`set_id`,`group_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `permissions`
+--
+
+INSERT INTO `permissions` (`set_id`, `group_id`, `bits`) VALUES
+('admin', 1, 63),
+('admin', 2, 0),
+('admin', 18, 0),
+('admin', 16, 1),
+('test', 16, 1),
+('test', 1, 135),
+('test', 18, 0),
+('test', 2, 0),
+('test', 20, 6),
+('admin', 20, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `usergroups`
 --
 
@@ -155,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `usergroups` (
   `description` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=19 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci AUTO_INCREMENT=21 ;
 
 --
 -- Dumping data for table `usergroups`
@@ -165,7 +144,8 @@ INSERT INTO `usergroups` (`id`, `name`, `user_title`, `description`) VALUES
 (1, 'Administrators', 'Administrator', 'Users in this usergroup have no restrictions on the administration panel.'),
 (2, 'Members', 'Member', 'Registered users.'),
 (16, 'Testers', 'Tester', 'A group of test users.'),
-(18, 'Empty', NULL, '');
+(18, 'Empty', NULL, ''),
+(20, 'Test2', NULL, '');
 
 -- --------------------------------------------------------
 
