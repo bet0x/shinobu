@@ -18,8 +18,7 @@ class config
 		if (($this->values = cache::read('config')))
 			return;
 
-		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT name, value FROM '.DB_PREFIX.'config');
 
 		if ($result->num_rows > 0)
 		{

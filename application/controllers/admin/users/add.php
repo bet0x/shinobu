@@ -17,8 +17,7 @@ class add_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Get a list of groups
-		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups');
 
 		if ($result->num_rows > 0)
 		{
@@ -61,8 +60,7 @@ class add_controller extends CmsWebController
 			// Check that the username (or a too similar username) is not already registered
 			$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users
 				WHERE UPPER(username)=UPPER("'.$this->db->escape($args['form']['username']).'")
-				OR UPPER(username)=UPPER("'.$this->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1')
-				or error($this->db->error);
+				OR UPPER(username)=UPPER("'.$this->db->escape(preg_replace('/[^\w]/', '', $args['form']['username'])).'") LIMIT 1');
 
 			if ($result->num_rows === 1)
 				$errors['username'] = 'Someone is already registered with the username '.u_htmlencode($args['form']['username']).'. '.
@@ -94,8 +92,7 @@ class add_controller extends CmsWebController
 		else
 		{
 			$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'users WHERE email="'.
-				$this->db->escape($args['form']['email']).'" LIMIT 1')
-				or error($this->db->error);
+				$this->db->escape($args['form']['email']).'" LIMIT 1');
 
 			if ($result->num_rows === 1)
 				$errors['email'] = 'Someone else is already registered with that email address. Please choose another email address.';

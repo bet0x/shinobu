@@ -19,16 +19,14 @@ class delete_controller extends CmsWebController
 
 		// Check if menu item exists
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT id FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'].' LIMIT 1');
 
 		$user_data = $result->fetch_row();
 		if (is_null($user_data))
 			return $this->send_error(404);
 
 		// Delete menu item
-		$this->db->query('DELETE FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args'])
-			or error($this->db->error);
+		$this->db->query('DELETE FROM '.DB_PREFIX.'menu WHERE id='.$this->request['args']);
 
 		cache::clear('main_menu.json');
 

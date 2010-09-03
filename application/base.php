@@ -31,8 +31,7 @@ abstract class CmsWebController extends BaseController
 		if (!($main_menu = cache::read('main_menu')))
 		{
 			$main_menu = array();
-			$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC')
-				or error($this->db->error);
+			$result = $this->db->query('SELECT name, path FROM '.DB_PREFIX.'menu ORDER BY position, name ASC');
 
 			if ($result->num_rows > 0)
 			{

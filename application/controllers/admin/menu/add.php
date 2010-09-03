@@ -62,8 +62,7 @@ class add_controller extends CmsWebController
 			$this->db->query('INSERT INTO '.DB_PREFIX.'menu (name, path, position) VALUES(
 				"'.$this->db->escape($args['form']['name']).'",
 				"'.$this->db->escape($args['form']['path']).'",
-				"'.$this->db->escape($args['form']['position']).'")')
-				or error($this->db->error);
+				"'.$this->db->escape($args['form']['position']).'")');
 
 			cache::clear('main_menu.json');
 

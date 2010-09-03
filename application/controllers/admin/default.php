@@ -49,8 +49,7 @@ class default_controller extends CmsWebController
 			$sys_info['php_accelerator'] = 'N/A';
 
 		// Calculate total database size/row count (only MySQLi for now)
-		$result = $this->db->query('SHOW TABLE STATUS FROM `'.conf::$db_name.'`')
-			or error($this->db->error);
+		$result = $this->db->query('SHOW TABLE STATUS FROM `'.conf::$db_name.'`');
 
 		$sys_info['db_records'] = $sys_info['db_size'] = 0;
 		while ($status = $result->fetch_assoc())

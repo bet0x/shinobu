@@ -19,8 +19,7 @@ class default_controller extends CmsWebController
 
 		$usergroups = array();
 		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS g.id, g.name, COUNT(u.group_id) AS user_count FROM
-			'.DB_PREFIX.'usergroups AS g LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id LIMIT '.$start_offset.',20')
-			or error($this->db->error);
+			'.DB_PREFIX.'usergroups AS g LEFT JOIN '.DB_PREFIX.'users AS u ON u.group_id=g.id GROUP BY g.id LIMIT '.$start_offset.',20');
 
 		if ($result->num_rows > 0)
 		{
@@ -30,7 +29,7 @@ class default_controller extends CmsWebController
 		else
 			return $this->send_error(404);
 
-		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
+		$result = $this->db->query('SELECT FOUND_ROWS()');
 		list($group_count) = $result->fetch_row();
 
 		$pagination = pagination($current_page, $group_count, url('admin/groups:%d'));

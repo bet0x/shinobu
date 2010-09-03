@@ -57,13 +57,11 @@ class add_controller extends CmsWebController
 			// Create usergroup
 			$this->db->query('INSERT INTO '.DB_PREFIX.'usergroups (name, description) VALUES('.
 				'"'.$this->db->escape($args['form']['name']).'", '.
-				'"'.$this->db->escape($args['form']['description']).'")')
-				or error($this->db->error);
+				'"'.$this->db->escape($args['form']['description']).'")');
 			$group_id = intval($this->db->insert_id);
 
 			// Create and store permissions
-			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'permissions (set_id, group_id, bits) VALUES(?, ?, ?)')
-				or error($this->db->error);
+			$stmt = $this->db->prepare('INSERT INTO '.DB_PREFIX.'permissions (set_id, group_id, bits) VALUES(?, ?, ?)');
 
 			foreach (_permission_struct::$sets as $set_id => $set)
 			{

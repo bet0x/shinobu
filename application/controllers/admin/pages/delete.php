@@ -19,26 +19,18 @@ class delete_controller extends CmsWebController
 
 		// Check if page exists
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT lft, rgt, rgt-lft+1 AS width FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT lft, rgt, rgt-lft+1 AS width FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1');
 
 		$page_data = $result->fetch_assoc();
 		if (is_null($page_data))
 			return $this->send_error(404);
 
 		// Delete page an all its children
-		$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
-
-		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE lft BETWEEN '.$page_data['lft'].' AND '.$page_data['rgt'])
-			or error($this->db->error);
-
-		$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt-'.$page_data['width'].' WHERE rgt > '.$page_data['rgt'])
-			or error($this->db->error);
-
-		$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft-'.$page_data['width'].' WHERE lft > '.$page_data['rgt'])
-			or error($this->db->error);
-
-		$this->db->query('UNLOCK TABLES') or error($this->db->error);
+		$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE');
+		$this->db->query('DELETE FROM '.DB_PREFIX.'pages WHERE lft BETWEEN '.$page_data['lft'].' AND '.$page_data['rgt']);
+		$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt-'.$page_data['width'].' WHERE rgt > '.$page_data['rgt']);
+		$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft-'.$page_data['width'].' WHERE lft > '.$page_data['rgt']);
+		$this->db->query('UNLOCK TABLES');
 
 		cache::clear('page_'.$this->request['args'].'.json');
 

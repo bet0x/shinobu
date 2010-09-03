@@ -19,8 +19,7 @@ class default_controller extends CmsWebController
 
 		$m_items = array();
 		$result = $this->db->query('SELECT SQL_CALC_FOUND_ROWS id, name, path FROM '.DB_PREFIX.'menu
-			ORDER BY position, name ASC LIMIT '.$start_offset.',20')
-			or error($this->db->error);
+			ORDER BY position, name ASC LIMIT '.$start_offset.',20');
 
 		if ($result->num_rows > 0)
 		{
@@ -30,7 +29,7 @@ class default_controller extends CmsWebController
 		elseif ($current_page !== 1)
 			return $this->send_error(404);
 
-		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
+		$result = $this->db->query('SELECT FOUND_ROWS()');
 		list($item_count) = $result->fetch_row();
 
 		$pagination = pagination($current_page, $item_count, url('admin/menu:%d'));

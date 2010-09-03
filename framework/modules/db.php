@@ -41,4 +41,20 @@ class db extends MySQLi
 	{
 		return is_array($str) ? '' : $this->real_escape_string($str);
 	}
+
+	public function query($query, $resultmode = MYSQLI_STORE_RESULT)
+	{
+		if (!$result = parent::query($query, $resultmode))
+			throw new Exception($this->error);
+
+		return $result;
+	}
+
+	public function prepare($query)
+	{
+		if (!$stmt = parent::prepare($query))
+			throw new Exception($this->error);
+
+		return $stmt;
+	}
 }

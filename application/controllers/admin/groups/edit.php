@@ -22,16 +22,14 @@ class edit_controller extends CmsWebController
 
 		// Get usergroup data
 		$this->request['args'] = intval($this->request['args']);
-		$result = $this->db->query('SELECT g.* FROM '.DB_PREFIX.'usergroups AS g WHERE id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT g.* FROM '.DB_PREFIX.'usergroups AS g WHERE id='.$this->request['args'].' LIMIT 1');
 
 		$this->_group_data = $result->fetch_assoc();
 		if (is_null($this->_group_data))
 			return $this->send_error(404);
 
 		// Get permissions
-		$result = $this->db->query('SELECT set_id, bits FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->request['args'])
-			or error($this->db->error);
+		$result = $this->db->query('SELECT set_id, bits FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->request['args']);
 
 		$this->_group_data['permissions'] = array();
 		while ($row = $result->fetch_assoc())
@@ -78,8 +76,7 @@ class edit_controller extends CmsWebController
 				name="'.$this->db->escape($args['form']['name']).'",
 				user_title="'.$this->db->escape($args['form']['user_title']).'",
 				description="'.$this->db->escape($args['form']['description']).'"
-				WHERE id='.$this->request['args'])
-				or error($this->db->error);
+				WHERE id='.$this->request['args']);
 
 			// Store permissions
 			if (isset($args['perm']))
@@ -103,8 +100,7 @@ class edit_controller extends CmsWebController
 				$stmt->close();
 			}
 			else
-				$this->db->query('UPDATE '.DB_PREFIX.'permissions SET bits=0 WHERE group_id='.$this->request['args'])
-					or error($this->db->error);
+				$this->db->query('UPDATE '.DB_PREFIX.'permissions SET bits=0 WHERE group_id='.$this->request['args']);
 
 			// Redirect
 			return tpl::render('redirect', array(

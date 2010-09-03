@@ -56,8 +56,7 @@ class user
 
 		// Check if user exists and fetch data
 		$result = $this->db->query('SELECT id, password, salt, hash FROM '.DB_PREFIX.'users
-			WHERE username="'.$username.'" LIMIT 1')
-			or error($this->db->error);
+			WHERE username="'.$username.'" LIMIT 1');
 		$fetch = $result->fetch_row();
 
 		if (!$fetch)
@@ -87,7 +86,7 @@ class user
 	public function _get_permission_set($set_id)
 	{
 		$result = $this->db->query('SELECT bits FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->data['group_id'].'
-			AND set_id="'.$this->db->escape($set_id).'" LIMIT 1') or error($this->db->error);
+			AND set_id="'.$this->db->escape($set_id).'" LIMIT 1');
 
 		if ($result->num_rows === 0)
 			return false;
@@ -128,7 +127,7 @@ class user
 				"'.$this->db->escape($password).'",
 				"'.$this->db->escape($salt).'",
 				"'.$this->db->escape($hash).'",
-				"'.$this->db->escape($email).'")') or error($this->db->error);
+				"'.$this->db->escape($email).'")');
 
 		// Return the ID of the added user
 		return $this->db->insert_id;

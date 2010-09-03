@@ -22,8 +22,7 @@ class default_controller extends CmsWebController
 			(COUNT(parent.id) - 1) AS depth, node.lft, node.rgt
 			FROM '.DB_PREFIX.'pages AS node, '.DB_PREFIX.'pages AS parent
 			WHERE node.lft BETWEEN parent.lft AND parent.rgt
-			GROUP BY node.id ORDER BY node.lft ASC LIMIT '.$start_offset.',20')
-			or error($this->db->error);
+			GROUP BY node.id ORDER BY node.lft ASC LIMIT '.$start_offset.',20');
 
 		if ($result->num_rows > 0)
 		{
@@ -74,7 +73,7 @@ class default_controller extends CmsWebController
 		elseif ($current_page !== 1)
 			return $this->send_error(404);
 
-		$result = $this->db->query('SELECT FOUND_ROWS()') or error($this->db->error);
+		$result = $this->db->query('SELECT FOUND_ROWS()');
 		list($page_count) = $result->fetch_row();
 
 		$pagination = pagination($current_page, $page_count, url('admin/pages:%d'));

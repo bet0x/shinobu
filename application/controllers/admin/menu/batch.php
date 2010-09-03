@@ -31,8 +31,7 @@ class batch_controller extends CmsWebController
 		if (isset($args['form_delete_selected_m_items']))
 		{
 			$deleted_row_count = 0;
-			$stmt = $this->db->prepare('DELETE FROM '.DB_PREFIX.'menu WHERE id=?')
-				or error($this->db->error);
+			$stmt = $this->db->prepare('DELETE FROM '.DB_PREFIX.'menu WHERE id=?');
 
 			foreach ($args['m_items'] as $mid)
 			{

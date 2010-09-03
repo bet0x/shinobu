@@ -27,8 +27,7 @@ class page_controller extends CmsWebController
 		// Fetch page and parse contents
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_private, p.show_toc, p.show_meta, p.pub_date, p.edit_date
 			FROM '.DB_PREFIX.'pages AS p
-			WHERE p.id='.$this->request['args'].' AND p.is_published=1 LIMIT 1')
-			or error($this->db->error);
+			WHERE p.id='.$this->request['args'].' AND p.is_published=1 LIMIT 1');
 
 		$page_data = $result->fetch_assoc();
 		if (is_null($page_data))
@@ -54,8 +53,7 @@ class page_controller extends CmsWebController
 		// Breadcrumbs
 		$result = $this->db->query('SELECT parent.id, parent.title FROM '.DB_PREFIX.'pages AS node,
 			'.DB_PREFIX.'pages AS parent WHERE node.lft BETWEEN parent.lft AND parent.rgt
-			AND node.id='.$this->request['args'].' ORDER BY parent.lft')
-			or error($this->db->error);
+			AND node.id='.$this->request['args'].' ORDER BY parent.lft');
 
 		$page_data['breadcrumbs'][] = '<a href="'.SYSTEM_BASE_URL.'">Home</a>';
 		while ($row = $result->fetch_assoc())

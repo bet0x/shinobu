@@ -20,8 +20,7 @@ class add_controller extends CmsWebController
 
 		if ($this->request['args'] > 0)
 		{
-			$result = $this->db->query('SELECT rgt FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1')
-				or error($this->db->error);
+			$result = $this->db->query('SELECT rgt FROM '.DB_PREFIX.'pages WHERE id='.$this->request['args'].' LIMIT 1');
 
 			$page_data = $result->fetch_assoc();
 			if (is_null($page_data))
@@ -31,8 +30,7 @@ class add_controller extends CmsWebController
 		}
 		else
 		{
-			$result = $this->db->query('SELECT MAX(rgt) AS rgt FROM '.DB_PREFIX.'pages LIMIT 1')
-				or error($this->db->error);
+			$result = $this->db->query('SELECT MAX(rgt) AS rgt FROM '.DB_PREFIX.'pages LIMIT 1');
 
 			$page_data = $result->fetch_assoc();
 			if (is_null($page_data))
@@ -91,12 +89,10 @@ class add_controller extends CmsWebController
 
 		if (empty($errors))
 		{
-			$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE') or error($this->db->error);
+			$this->db->query('LOCK TABLE '.DB_PREFIX.'pages WRITE');
 
-			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt >= '.$this->parent_right)
-				or error($this->db->error);
-			$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft+2 WHERE lft > '.$this->parent_right)
-				or error($this->db->error);
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET rgt=rgt+2 WHERE rgt >= '.$this->parent_right);
+			$this->db->query('UPDATE '.DB_PREFIX.'pages SET lft=lft+2 WHERE lft > '.$this->parent_right);
 
 			$this->db->query('INSERT INTO '.DB_PREFIX.'pages (title, content,
 				is_published, is_private, show_toc, show_meta, pub_date, lft, rgt) VALUES(
@@ -108,10 +104,9 @@ class add_controller extends CmsWebController
 				'.$args['form']['show_meta'].',
 				'.$now.',
 				'.$this->parent_right.',
-				'.($this->parent_right + 1).')')
-				or error($this->db->error);
+				'.($this->parent_right + 1).')');
 
-			$this->db->query('UNLOCK TABLES') or error($this->db->error);
+			$this->db->query('UNLOCK TABLES');
 
 			return tpl::render('redirect', array(
 				'redirect_message' => '<p>The page has been successfully added. You will be redirected to the previous page in 2 seconds.</p>',

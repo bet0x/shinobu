@@ -17,8 +17,7 @@ class options_controller extends CmsWebController
 			$this->redirect(SYSTEM_BASE_URL);
 
 		// Fetch list of pages
-		$result = $this->db->query('SELECT id, title FROM '.DB_PREFIX.'pages WHERE is_published=1 AND is_private=0')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT id, title FROM '.DB_PREFIX.'pages WHERE is_published=1 AND is_private=0');
 
 		if ($result->num_rows > 0)
 		{
@@ -27,8 +26,7 @@ class options_controller extends CmsWebController
 		}
 
 		// Fetch list of usergroups
-		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups')
-			or error($this->db->error);
+		$result = $this->db->query('SELECT id, name FROM '.DB_PREFIX.'usergroups');
 
 		if ($result->num_rows > 0)
 		{
@@ -114,8 +112,7 @@ class options_controller extends CmsWebController
 
 		if (empty($errors))
 		{
-			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'config SET value=? WHERE name=?')
-				or error($this->db->error);
+			$stmt = $this->db->prepare('UPDATE '.DB_PREFIX.'config SET value=? WHERE name=?');
 
 			foreach ($args['form'] as $name => $value)
 			{

@@ -20,8 +20,7 @@ class edit_controller extends CmsWebController
 		$this->request['args'] = intval($this->request['args']);
 		$result = $this->db->query('SELECT p.id, p.title, p.content, p.is_published, p.is_private, p.pub_date,
 			p.edit_date, p.show_toc, p.show_meta
-			FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1')
-			or error($this->db->error);
+			FROM '.DB_PREFIX.'pages AS p WHERE p.id='.$this->request['args'].' LIMIT 1');
 
 		$this->_page_data = $result->fetch_assoc();
 		if (is_null($this->_page_data))
@@ -82,8 +81,7 @@ class edit_controller extends CmsWebController
 				is_private='.$args['form']['is_private'].',
 				show_toc='.$args['form']['show_toc'].',
 				show_meta='.$args['form']['show_meta'].',
-				edit_date='.$now.' WHERE id='.$this->request['args'])
-				or error($this->db->error);
+				edit_date='.$now.' WHERE id='.$this->request['args']);
 
 			cache::clear('page_'.$this->request['args'].'.json');
 
