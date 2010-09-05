@@ -91,8 +91,7 @@ class user
 		if ($result->num_rows === 0)
 			return false;
 
-		$permissions = $result->fetch_row();
-		$this->permissions[$set_id] = (int) $permissions[0];
+		$this->permissions[$set_id] = (int) $result->fetch_offset();
 
 		return $this->permissions[$set_id];
 	}

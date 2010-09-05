@@ -24,12 +24,12 @@ class db extends MySQLi
 
 		// Setup the client-server character set (UTF-8)
 		if (!$this->options(MYSQLI_INIT_COMMAND, 'SET NAMES "utf8"'))
-			error('Setting MYSQLI_INIT_COMMAND failed.');
+			throw new Exception('Setting MYSQLI_INIT_COMMAND failed.');
 
 		// Make a connection
 		if (!$this->real_connect($persistent.conf::$db_host, conf::$db_user,
 		    conf::$db_password, conf::$db_name, $port, false, conf::$db_flags))
-			error('Connection error ('.mysqli_connect_errno().'): '.mysqli_connect_error());
+			throw new Exception('Connection error ('.mysqli_connect_errno().'): '.mysqli_connect_error());
 	}
 
 	public function __destruct()
@@ -44,17 +44,44 @@ class db extends MySQLi
 
 	public function query($query, $resultmode = MYSQLI_STORE_RESULT)
 	{
-		if (!$result = parent::query($query, $resultmode))
+		//if (!$result = parent::query($query, $resultmode))
+			//throw new Exception($this->error);
+
+		if (!$this->real_query($query))
 			throw new Exception($this->error);
 
+		$result = new db_result($this, $resultmode);
 		return $result;
 	}
 
 	public function prepare($query)
 	{
-		if (!$stmt = parent::prepare($query))
+		//if (!$stmt = parent::prepare($query))
+			//throw new Exception($this->error);
+
+		if (!$stmt = new db_stmt($this, $query))
 			throw new Exception($this->error);
 
 		return $stmt;
 	}
+}
+
+class db_result extends MySQLi_Result
+{
+	public function fetch_offset($row_offset = 0, $col_offset = 0)
+	{
+		if ($row_offset !== 0 && $this->data_seek($row_offset) === false)
+			return false;
+
+		$cur_row = $this->fetch_row();
+		if ($cur_row === false)
+			return false;
+
+		return $cur_row[$col_offset];
+	}
+}
+
+class db_stmt extends MySQLi_Stmt
+{
+
 }

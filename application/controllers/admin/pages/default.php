@@ -74,7 +74,7 @@ class default_controller extends CmsWebController
 			return $this->send_error(404);
 
 		$result = $this->db->query('SELECT FOUND_ROWS()');
-		list($page_count) = $result->fetch_row();
+		$page_count = $result->fetch_offset();
 
 		$pagination = pagination($current_page, $page_count, url('admin/pages:%d'));
 

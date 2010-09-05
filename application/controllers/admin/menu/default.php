@@ -30,7 +30,7 @@ class default_controller extends CmsWebController
 			return $this->send_error(404);
 
 		$result = $this->db->query('SELECT FOUND_ROWS()');
-		list($item_count) = $result->fetch_row();
+		$item_count = $result->fetch_offset();
 
 		$pagination = pagination($current_page, $item_count, url('admin/menu:%d'));
 

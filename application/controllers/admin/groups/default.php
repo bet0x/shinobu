@@ -30,7 +30,7 @@ class default_controller extends CmsWebController
 			return $this->send_error(404);
 
 		$result = $this->db->query('SELECT FOUND_ROWS()');
-		list($group_count) = $result->fetch_row();
+		$group_count = $result->fetch_offset();
 
 		$pagination = pagination($current_page, $group_count, url('admin/groups:%d'));
 

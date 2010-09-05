@@ -22,14 +22,13 @@ class delete_controller extends CmsWebController
 		$result = $this->db->query('SELECT COUNT(u.group_id) FROM '.DB_PREFIX.'usergroups AS g LEFT JOIN '.DB_PREFIX.'users AS u
 			ON u.group_id=g.id WHERE g.id='.$this->request['args'].' GROUP BY g.id LIMIT 1');
 
-		$group_data = $result->fetch_row();
-		if (is_null($group_data))
+		$member_count = $result->fetch_offset();
+		if (is_null($member_count))
 			return $this->send_error(404);
 
 		// Check if group has any members before it's deleted
-		if ($group_data[0] == '0')
+		if ($member_count == '0')
 		{
-			// Delete usergroup and ACL groups
 			$this->db->query('DELETE FROM '.DB_PREFIX.'usergroups WHERE id='.$this->request['args']);
 			$this->db->query('DELETE FROM '.DB_PREFIX.'permissions WHERE group_id='.$this->request['args']);
 
