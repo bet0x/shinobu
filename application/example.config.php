@@ -37,7 +37,8 @@ class conf
 	              $db_name = 'shinobu',
 	              $db_user = 'root',
 	              $db_password = 'password',
-	              $db_flags = 0;
+	              $db_flags = 0,
+				  $db_persistent = false;
 
 	// Cookie settings
 	static public $cookie_name = 'shinobu_xampp_cookie',
