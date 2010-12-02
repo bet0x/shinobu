@@ -34,9 +34,11 @@ Installation
  3. Rename `site/sample.config.php` to `site/config.php`
  4. Adjust database and cookie settings in `site/config.php`.
  5. Create a directory, called `cache`, in `site/` and make it writable.
- 6. Go to the URL where Shinobu is installed.
+ 6. Now run the following commands to install the php-utf8 library:
+    `git submodule init` and then `git submodule update`.
+ 7. Go to the URL where Shinobu is installed.
 
-There are a umber of example users imported in the database. All these users
+There are a number of example users imported in the database. All these users
 have the same password, `password`.
 
 Requirements
